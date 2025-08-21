@@ -1,0 +1,236 @@
+/* Custom styles for SteelSnakes documentation */
+
+:root {
+  --md-primary-fg-color:        #37474f;
+  --md-primary-fg-color--light: #62727b;
+  --md-primary-fg-color--dark:  #102027;
+  --md-accent-fg-color:         #ff9800;
+  --steel-blue:                 #455a64;
+  --steel-orange:               #ff6f00;
+  --steel-gray:                 #78909c;
+}
+
+/* Hero section styling */
+.hero {
+  background: linear-gradient(135deg, var(--md-primary-fg-color) 0%, var(--md-primary-fg-color--dark) 100%);
+  color: white;
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: -1.5rem -1.5rem 2rem -1.5rem;
+  border-radius: 0 0 1rem 1rem;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-weight: 700;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-button {
+  display: inline-block;
+  padding: 0.75rem 2rem;
+  background: var(--md-accent-fg-color);
+  color: white !important;
+  text-decoration: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.hero-button:hover {
+  background: var(--steel-orange);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 111, 0, 0.3);
+}
+
+.hero-button--secondary {
+  background: transparent;
+  border-color: white;
+}
+
+.hero-button--secondary:hover {
+  background: white;
+  color: var(--md-primary-fg-color) !important;
+}
+
+/* Feature cards */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin: 3rem 0;
+}
+
+.feature-card {
+  background: var(--md-default-bg-color);
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.75rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-color: var(--md-accent-fg-color);
+}
+
+.feature-card h3 {
+  color: var(--md-primary-fg-color);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.feature-icon {
+  font-size: 3rem;
+  color: var(--md-accent-fg-color);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Code examples styling */
+.code-example {
+  margin: 2rem 0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  border: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.code-example-header {
+  background: var(--md-code-bg-color);
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+  font-weight: 600;
+  color: var(--md-default-fg-color);
+}
+
+/* Section tables */
+.section-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.section-table th,
+.section-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--md-default-fg-color--lightest);
+}
+
+.section-table th {
+  background: var(--md-code-bg-color);
+  font-weight: 600;
+  color: var(--md-primary-fg-color);
+}
+
+.section-table tr:hover {
+  background: var(--md-default-bg-color--light);
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border-radius: 0.25rem;
+  color: white;
+}
+
+.badge--new {
+  background: #4caf50;
+}
+
+.badge--experimental {
+  background: #ff9800;
+}
+
+.badge--deprecated {
+  background: #f44336;
+}
+
+/* Math equations */
+.MathJax {
+  font-size: 1.1em !important;
+}
+
+/* Custom admonitions */
+.md-typeset .admonition.engineering {
+  border-color: var(--steel-blue);
+}
+
+.md-typeset .admonition.engineering > .admonition-title {
+  background-color: var(--steel-blue);
+  border-color: var(--steel-blue);
+}
+
+.md-typeset .admonition.engineering > .admonition-title::before {
+  background-color: currentcolor;
+  -webkit-mask-image: var(--md-admonition-icon--note);
+          mask-image: var(--md-admonition-icon--note);
+}
+
+/* Navigation enhancements */
+.md-nav__title {
+  font-weight: 700;
+}
+
+.md-nav__item--nested > .md-nav__link {
+  font-weight: 600;
+}
+
+/* Footer styling */
+.md-footer {
+  background: var(--md-primary-fg-color--dark);
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .hero h1 {
+    font-size: 2rem;
+  }
+  
+  .hero p {
+    font-size: 1rem;
+  }
+  
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Print styles */
+@media print {
+  .hero {
+    background: none !important;
+    color: black !important;
+  }
+  
+  .feature-card {
+    break-inside: avoid;
+  }
+}

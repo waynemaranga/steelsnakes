@@ -1,0 +1,165 @@
+site_name: SteelSnakes Documentation
+site_description: A Python library for working structural steel sections
+site_author: Wayne Maranga
+site_url: https://steelsnakes.readthedocs.io/
+
+repo_name: steelsnakes
+repo_url: https://github.com/waynemaranga/steelsnakes
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2025 Wayne Maranga
+
+theme:
+  name: material
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: blue grey
+      accent: orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: blue grey
+      accent: orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+    - toc.integrate
+
+  icon:
+    repo: fontawesome/brands/github
+    logo: material/hammer-wrench
+    
+  font:
+    text: Inter
+    code: JetBrains Mono
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            members_order: source
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: false
+            merge_init_into_class: true
+            docstring_options:
+              ignore_init_summary: true
+            filters: ["!^_"]
+            heading_level: 1
+  - autorefs
+
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      normalize_issue_symbols: true
+      repo_url_shorthand: true
+      user: waynemaranga
+      repo: steelsnakes
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          case: lower
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/waynemaranga/steelsnakes
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/steelsnakes/
+  
+  version:
+    provider: mike
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Basic Usage: getting-started/basic-usage.md
+  - User Guide:
+    - Section Types: user-guide/section-types.md
+    - Database System: user-guide/database.md
+    - Factory Pattern: user-guide/factory.md
+    - Search & Filtering: user-guide/search.md
+  - Examples:
+    - Basic Examples: examples/basic.md
+    - Advanced Usage: examples/advanced.md
+    - Steel Design: examples/design.md
+  - API Reference:
+    - Core: reference/core.md
+    - Sections: reference/sections.md
+    - Database: reference/database.md
+  - Contributing:
+    - Development: contributing/development.md
+    - Guidelines: contributing/guidelines.md
+  - Changelog: changelog.md
