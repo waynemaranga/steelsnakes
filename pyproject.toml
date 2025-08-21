@@ -8,7 +8,9 @@ authors = [
     { name = "Wayne Maranga", email = "waynemaranga@gmail.com" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "pydantic>=2.11.7",
+]
 
 [project.scripts]
 steelsnakes = "steelsnakes:main"
@@ -16,3 +18,12 @@ steelsnakes = "steelsnakes:main"
 [build-system]
 requires = ["uv_build>=0.8.6,<0.9.0"]
 build-backend = "uv_build"
+
+[tool.ruff]
+ignore = [
+    "F401",  # Module imported but unused
+    "F841",  # Local variable name is assigned to but never used
+    "E741",  # Ambiguous variable name 'l'
+    # "E742",  # Ambiguous class name 'l'
+    # "E743"   # Ambiguous function name 'l'
+]
