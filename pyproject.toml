@@ -9,7 +9,9 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "coverage>=7.10.4",
     "pydantic>=2.11.7",
+    "pytest>=8.4.1",
 ]
 
 [project.scripts]

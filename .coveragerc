@@ -1,0 +1,23 @@
+[run]
+source = src/steelsnakes
+omit = 
+    */tests/*
+    */test_*
+    */__pycache__/*
+    */venv/*
+    */env/*
+    */.tox/*
+
+[report]
+exclude_lines =
+    pragma: no cover
+    def __repr__
+    if __name__ == .__main__.:
+    raise AssertionError
+    raise NotImplementedError
+    if False:
+    if 0:
+    pass
+
+[html]
+directory = htmlcov
