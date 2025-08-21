@@ -3,13 +3,12 @@ name = "steelsnakes"
 version = "0.0.1"
 description = "Add your description here"
 readme = { file = "README.md", content-type = "text/markdown" }
-license = { file = "LICENSE.md" }
-authors = [
-    { name = "Wayne Maranga", email = "waynemaranga@gmail.com" }
-]
+license = "GPL-2.0 " # https://packaging.python.org/en/latest/glossary/#term-SPDX-Expression
+license-files = ["LICENSE.md"]
+authors = [{ name = "Wayne Maranga", email = "waynemaranga@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = [
-    "coverage>=7.10.4",
+    "coverage==7.10.0",
     "mkdocs>=1.6.1",
     "mkdocs-material>=9.6.17",
     "mkdocs-material-extensions>=1.3.1",
@@ -22,15 +21,24 @@ dependencies = [
 [project.scripts]
 steelsnakes = "steelsnakes:main"
 
+[project.urls]
+Homepage = "https://github.com/waynemaranga/steelsnakes"
+Issues = "https://github.com/waynemaranga/steelsnakes/issues"
+
+# classifiers = [
+#     "Programming Language :: Python :: 3",
+#     "Operating System :: OS Independent",
+# ]
+
 [build-system]
 requires = ["uv_build>=0.8.6,<0.9.0"]
 build-backend = "uv_build"
 
 [tool.ruff]
 ignore = [
-    "F401",  # Module imported but unused
-    "F841",  # Local variable name is assigned to but never used
-    "E741",  # Ambiguous variable name 'l'
+    "F401", # Module imported but unused
+    "F841", # Local variable name is assigned to but never used
+    "E741", # Ambiguous variable name 'l'
     # "E742",  # Ambiguous class name 'l'
     # "E743"   # Ambiguous function name 'l'
 ]
