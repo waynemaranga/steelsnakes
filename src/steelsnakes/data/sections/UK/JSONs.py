@@ -2,8 +2,7 @@ import pathlib # https://www.freecodecamp.org/news/how-to-use-pathlib-module-in-
 from pathlib import Path # https://realpython.com/python-pathlib/
 # https://stackoverflow.com/a/8820636/13807486
 
-DB_DIR: Path = Path.cwd() / "steelsnakesengine/db/"
-OBJECTS_PY: Path = DB_DIR / "OBJECTS.py"
+DB_DIR: Path = Path(__file__).parent.absolute() 
 JSONS_PY: Path = DB_DIR / "JSONs.py"
 
 # --- SECTIONS ---
@@ -85,10 +84,10 @@ if __name__ == "__main__":
     assert DB_DIR.exists() 
     assert DB_DIR.is_dir()
     # assert 0 
-    # print([file.name for file in DB_DIR.iterdir()])
+    print([file.name for file in DB_DIR.iterdir()])
 
     # assert []
     assert [file.exists() for file in JSON_LIST]
     assert [value.exists() for key, value in JSON_DICT.items()]
 
-    print("\n😁", end="\n")
+    print("🐬")

@@ -155,6 +155,7 @@ nav:
     - Basic Examples: examples/basic.md
     - Advanced Usage: examples/advanced.md
     - Steel Design: examples/design.md
+  - API Guide: api.md
   - API Reference:
     - Core: reference/core.md
     - Sections: reference/sections.md
