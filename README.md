@@ -1,7 +1,7 @@
 # `SteelSnakes`
 
 <!-- Centered HTML-image logo -->
-<p align="center"><img src="./docs/logo-4.png" alt="SteelSnakes Logo" width="200"/></p>
+<p align="center"><img src="https://imgur.com/a/xp0MJrV" alt="SteelSnakes Logo" width="200"/></p>
 
 
 [![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)

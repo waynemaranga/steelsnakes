@@ -234,3 +234,8 @@
     break-inside: avoid;
   }
 }
+
+/* Hide heading anchors (pilcrows) */
+/* .md-typeset .anchor {
+  display: none !important;
+} */

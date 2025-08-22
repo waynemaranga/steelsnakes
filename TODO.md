@@ -14,3 +14,8 @@
   - [ ] This will allow searching for sections across types, e.g. "find me a section with depth 300mm, mass 20kg/m, and Iyy > 50000 cm4"
 - [ ]Try use unit conversion libraries like Pint or Pydantic's built-in units or forallpeople and SI
 - [ ] To beat SQLite's case (insensitivity) add units to the column names, e.g. h_mm, b_mm, t_mm, A_cm2, Iyy_cm4, etc.
+- [ ] Have a dev, test and docs and full version to trim the dependencies
+- [ ] Merge pilcrow featurs from old docs to new docs with shadcn
+- [ ] implement mermaid diagrams
+- [ ] Try edit fonts
+- [ ] 
