@@ -20,14 +20,14 @@ class Schema:
 class Database:
     """..."""
     def __init__(self, db_path: pathlib.Path):
-        self.db_path = db_path
+        self.db_path: pathlib.Path = db_path
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
         self._init_database()
 
-    def _init_database(self):
+    def _init_database(self) -> None:
         """Initialize the database with schema."""
         with sqlite3.connect(self.db_path) as conn:
-            cursor = conn.cursor()
+            cursor: sqlite3.Cursor = conn.cursor()
             cursor.executescript(Schema.get_schema())
             # Enable foreign key support
             cursor.execute("PRAGMA foreign_keys = ON;")
@@ -39,7 +39,7 @@ class Database:
         # TODO: use try/except for error handling
         with sqlite3.connect(self.db_path) as conn:
             conn.row_factory = sqlite3.Row
-            cursor = conn.cursor()
+            cursor: sqlite3.Cursor = conn.cursor()
 
             section = cursor.execute(
                 "SELECT * FROM sections WHERE section_type = ? AND designation = ?",
@@ -55,9 +55,9 @@ class Database:
             section_dict['designation'] = section_dict['designation'].upper()   
             return section_dict
 
-    def search_sections(self, section_type: str, designation: Optional[str] = None) -> list[dict[str, Any]]:
+    def search_sections(self, section_type: str, designation: Optional[str] = None):
         """Search for sections by type and optional designation."""
-        return NotImplementedError
+        return NotImplemented
 
 
 # -------------------------
@@ -66,7 +66,7 @@ class Database:
 
 def _sanitize_table_name(name: str) -> str:
     """Return a safe SQLite table name derived from a filename stem."""
-    safe = ''.join(ch if ch.isalnum() or ch == '_' else '_' for ch in name)
+    safe: str = ''.join(ch if ch.isalnum() or ch == '_' else '_' for ch in name)
     # SQLite is case-insensitive for identifiers, keep upper for readability
     return safe.upper()
 

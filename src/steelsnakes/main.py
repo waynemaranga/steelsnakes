@@ -8,7 +8,7 @@ interface for working with all types of steel sections.
 from steelsnakes.core.sections.UK import (
     UB, UC, UBP, PFC, L_EQUAL, L_UNEQUAL, 
     CFCHS, CFSHS, CFRHS, HFCHS, HFSHS, HFRHS, HFEHS,
-    WELD, get_database, get_factory, SectionType
+    Weld, get_database, get_factory, SectionType
 )
 
 
@@ -69,7 +69,7 @@ def demo_various_sections():
         
         cf_shs = CFSHS("100x100x4.0")
         print(f"✅ CF Square: {cf_shs}")
-        print(f"   Size: {cf_shs.hxh}, Thickness: {cf_shs.t} mm")
+        print(f"   Size: {cf_shs.H}, Thickness: {cf_shs.t} mm")
         
         # Hot finished hollow sections
         hf_chs = HFCHS("42.4x3.6")
@@ -77,7 +77,7 @@ def demo_various_sections():
         print(f"   Diameter: {hf_chs.d} mm, Thickness: {hf_chs.t} mm")
         
         # Weld specification
-        weld = WELD("6.0")
+        weld = Weld("6.0")
         print(f"✅ Weld: {weld}")
         print(f"   Throat size: {weld.s} mm, Throat area: {weld.a} mm²/mm")
         

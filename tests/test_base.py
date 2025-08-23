@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, mock_open
 import json
 
-from steelsnakes.core.sections.UK.Base import (
+from steelsnakes.core.sections.UK.base import (
     SectionType, 
     BaseSection, 
     SectionDatabase, 

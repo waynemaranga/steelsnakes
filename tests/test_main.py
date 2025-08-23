@@ -132,7 +132,7 @@ class TestDemoFunctions:
     def test_demo_database_features_runs(self, mock_get_database):
         """Test that demo_database_features runs with mocked database."""
         import steelsnakes.main
-        from steelsnakes.core.sections.UK.Base import SectionType
+        from steelsnakes.core.sections.UK.base import SectionType
         
         # Mock database
         mock_db = Mock()
@@ -161,7 +161,7 @@ class TestDemoFunctions:
     def test_demo_factory_usage_runs(self, mock_get_factory):
         """Test that demo_factory_usage runs with mocked factory."""
         import steelsnakes.main
-        from steelsnakes.core.sections.UK.Base import SectionType
+        from steelsnakes.core.sections.UK.base import SectionType
         
         # Mock factory and sections
         mock_factory = Mock()
