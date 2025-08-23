@@ -1,7 +1,6 @@
-site_name: SteelSnakes Documentation
+site_name: SteelSnakes
 site_description: A Python library for working structural steel sections
 site_author: Wayne Maranga
-site_url: https://steelsnakes.readthedocs.io/
 
 repo_name: steelsnakes
 repo_url: https://github.com/waynemaranga/steelsnakes
@@ -16,7 +15,7 @@ theme:
   pygments_style: # default styles 
         light: shadcn-light
         dark: github-dark
-  icon: "heroicons:rocket-launch" # use the shadcn svg if not defined
+  icon: "heroicons:link" # use the shadcn svg if not defined
   topbar_sections: false # NEW!
   katex_options: # optional
     macros: # example of macros
@@ -42,13 +41,6 @@ theme:
     - toc.follow
     - toc.integrate
 
-  # icon:
-    # repo: fontawesome/brands/github
-    # logo: material/hammer-wrench
-    
-  font:
-    text: Inter
-    code: JetBrains Mono
 
 plugins:
   - search:
@@ -67,6 +59,9 @@ plugins:
               ignore_init_summary: true
             filters: ["!^_"]
             heading_level: 1
+  - mike:
+      alias_type: symlink
+      version_selector: true
   - autorefs
 
 

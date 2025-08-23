@@ -4,13 +4,13 @@ This section provides detailed API documentation for the core SteelSnakes functi
 
 ## Base Classes
 
-::: steelsnakes.core.sections.UK.Base.BaseSection
+::: steelsnakes.core.sections.UK.base.BaseSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 3
 
-::: steelsnakes.core.sections.UK.Base.SectionType
+::: steelsnakes.core.sections.UK.base.SectionType
     options:
       show_source: true
       show_root_heading: true
@@ -18,7 +18,7 @@ This section provides detailed API documentation for the core SteelSnakes functi
 
 ## Database System
 
-::: steelsnakes.core.sections.UK.Base.SectionDatabase
+::: steelsnakes.core.sections.UK.base.SectionDatabase
     options:
       show_source: true
       show_root_heading: true
@@ -26,7 +26,7 @@ This section provides detailed API documentation for the core SteelSnakes functi
 
 ## Factory Pattern
 
-::: steelsnakes.core.sections.UK.Base.SectionFactory
+::: steelsnakes.core.sections.UK.base.SectionFactory
     options:
       show_source: true
       show_root_heading: true
@@ -34,13 +34,13 @@ This section provides detailed API documentation for the core SteelSnakes functi
 
 ## Utility Functions
 
-::: steelsnakes.core.sections.UK.Base.get_database
+::: steelsnakes.core.sections.UK.base.get_database
     options:
       show_source: true
       show_root_heading: true
       heading_level: 3
 
-::: steelsnakes.core.sections.UK.Base.get_factory
+::: steelsnakes.core.sections.UK.base.get_factory
     options:
       show_source: true
       show_root_heading: true

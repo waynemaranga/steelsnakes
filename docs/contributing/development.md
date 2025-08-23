@@ -162,7 +162,7 @@ def calculate_capacity(section: BaseSection, load_type: str) -> float:
 
 ```python
 from dataclasses import dataclass
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType
+from steelsnakes.core.sections.UK.base import BaseSection, SectionType
 
 @dataclass
 class NewSectionType(BaseSection):

@@ -6,7 +6,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Universal Beams
 
-::: steelsnakes.core.sections.UK.Universal.UniversalBeam
+::: steelsnakes.core.sections.UK.universal.UniversalBeam
     options:
       show_source: true
       show_root_heading: true
@@ -14,7 +14,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Universal Columns
 
-::: steelsnakes.core.sections.UK.Universal.UniversalColumn
+::: steelsnakes.core.sections.UK.universal.UniversalColumn
     options:
       show_source: true
       show_root_heading: true
@@ -22,7 +22,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Universal Bearing Piles
 
-::: steelsnakes.core.sections.UK.Universal.UniversalBearingPile
+::: steelsnakes.core.sections.UK.universal.UniversalBearingPile
     options:
       show_source: true
       show_root_heading: true
@@ -30,7 +30,7 @@ This section provides detailed API documentation for all steel section types.
 
 ## Channel Sections
 
-::: steelsnakes.core.sections.UK.Channel.ParallelFlangeChannel
+::: steelsnakes.core.sections.UK.channels.ParallelFlangeChannel
     options:
       show_source: true
       show_root_heading: true
@@ -40,7 +40,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Equal Angles
 
-::: steelsnakes.core.sections.UK.Angle.EqualAngle
+::: steelsnakes.core.sections.UK.angles.EqualAngle
     options:
       show_source: true
       show_root_heading: true
@@ -48,7 +48,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Unequal Angles
 
-::: steelsnakes.core.sections.UK.Angle.UnequalAngle
+::: steelsnakes.core.sections.UK.angles.UnequalAngle
     options:
       show_source: true
       show_root_heading: true
@@ -56,13 +56,13 @@ This section provides detailed API documentation for all steel section types.
 
 ### Back-to-Back Angles
 
-::: steelsnakes.core.sections.UK.Angle.EqualAngleBackToBack
+::: steelsnakes.core.sections.UK.angles.EqualAngleBackToBack
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.Angle.UnequalAngleBackToBack
+::: steelsnakes.core.sections.UK.angles.UnequalAngleBackToBack
     options:
       show_source: true
       show_root_heading: true
@@ -72,25 +72,25 @@ This section provides detailed API documentation for all steel section types.
 
 ### Hot Finished
 
-::: steelsnakes.core.sections.UK.HotFinishedHollow.HotFinishedCircularHollowSection
+::: steelsnakes.core.sections.UK.hf_hollow.HotFinishedCircularHollowSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.HotFinishedHollow.HotFinishedSquareHollowSection
+::: steelsnakes.core.sections.UK.hf_hollow.HotFinishedSquareHollowSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.HotFinishedHollow.HotFinishedRectangularHollowSection
+::: steelsnakes.core.sections.UK.hf_hollow.HotFinishedRectangularHollowSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.HotFinishedHollow.HotFinishedEllipticalHollowSection
+::: steelsnakes.core.sections.UK.hf_hollow.HotFinishedEllipticalHollowSection
     options:
       show_source: true
       show_root_heading: true
@@ -98,19 +98,19 @@ This section provides detailed API documentation for all steel section types.
 
 ### Cold Formed
 
-::: steelsnakes.core.sections.UK.ColdFormedHollow.ColdFormedCircularHollowSection
+::: steelsnakes.core.sections.UK.cf_hollow.ColdFormedCircularHollowSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.ColdFormedHollow.ColdFormedSquareHollowSection
+::: steelsnakes.core.sections.UK.cf_hollow.ColdFormedSquareHollowSection
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.ColdFormedHollow.ColdFormedRectangularHollowSection
+::: steelsnakes.core.sections.UK.cf_hollow.ColdFormedRectangularHollowSection
     options:
       show_source: true
       show_root_heading: true
@@ -120,13 +120,13 @@ This section provides detailed API documentation for all steel section types.
 
 ### Preloaded Bolts
 
-::: steelsnakes.core.sections.UK.PreloadedBolt.PreloadedBolt88
+::: steelsnakes.core.sections.UK.preloaded_bolts.PreloadedBolt88
     options:
       show_source: true
       show_root_heading: true
       heading_level: 4
 
-::: steelsnakes.core.sections.UK.PreloadedBolt.PreloadedBolt109
+::: steelsnakes.core.sections.UK.preloaded_bolts.PreloadedBolt109
     options:
       show_source: true
       show_root_heading: true
@@ -134,7 +134,7 @@ This section provides detailed API documentation for all steel section types.
 
 ### Welds
 
-::: steelsnakes.core.sections.UK.Weld.WeldSpecification
+::: steelsnakes.core.sections.UK.welds.WeldSpecification
     options:
       show_source: true
       show_root_heading: true

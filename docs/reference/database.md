@@ -4,7 +4,7 @@ This section provides detailed API documentation for the database system.
 
 ## Database Classes
 
-::: steelsnakes.core.sections.UK.Base.SectionDatabase
+::: steelsnakes.core.sections.UK.base.SectionDatabase
     options:
       show_source: true
       show_root_heading: true

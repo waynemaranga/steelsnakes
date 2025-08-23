@@ -192,7 +192,7 @@ You can register custom section classes with the factory:
 
 ```python
 from dataclasses import dataclass
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType
+from steelsnakes.core.sections.UK.base import BaseSection, SectionType
 
 # Example: Custom section type (hypothetical)
 @dataclass
