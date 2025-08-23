@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType, get_database, get_factory
+from steelsnakes.core.sections.UK.base import BaseSection, SectionFactory, SectionType, get_database, get_factory
 
 
 @dataclass
@@ -101,7 +101,7 @@ def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlan
         print(f"Channel depth: {channel.h} mm")
         print(f"Shear center: {channel.e0} mm from web")
     """
-    factory = get_factory(data_directory)
+    factory: SectionFactory = get_factory(data_directory)
     
     # Register the class if not already registered
     if SectionType.PFC not in factory._section_classes:

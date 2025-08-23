@@ -6,7 +6,7 @@ All section data is based on UK steel section tables and specifications.
 """
 
 # Import the base classes and infrastructure
-from .Base import (
+from .base import (
     BaseSection,
     SectionType,
     SectionDatabase,
@@ -16,7 +16,7 @@ from .Base import (
 )
 
 # Import Universal sections
-from .Universal import (
+from .universal import (
     UniversalSection,
     UniversalBeam,
     UniversalColumn,
@@ -27,13 +27,13 @@ from .Universal import (
 )
 
 # Import Channel sections
-from .Channel import (
+from .channels import (
     ParallelFlangeChannel,
     PFC,
 )
 
 # Import Angle sections
-from .Angle import (
+from .angles import (
     EqualAngle,
     UnequalAngle,
     EqualAngleBackToBack,
@@ -45,7 +45,7 @@ from .Angle import (
 )
 
 # Import Cold Formed Hollow sections
-from .ColdFormedHollow import (
+from .cf_hollow import (
     ColdFormedCircularHollowSection,
     ColdFormedSquareHollowSection,
     ColdFormedRectangularHollowSection,
@@ -55,7 +55,7 @@ from .ColdFormedHollow import (
 )
 
 # Import Hot Finished Hollow sections
-from .HotFinishedHollow import (
+from .hf_hollow import (
     HotFinishedCircularHollowSection,
     HotFinishedSquareHollowSection,
     HotFinishedRectangularHollowSection,
@@ -67,7 +67,7 @@ from .HotFinishedHollow import (
 )
 
 # Import Preloaded Bolt specifications
-from .PreloadedBolt import (
+from .preloaded_bolts import (
     PreloadedBolt88,
     PreloadedBolt109,
     BOLT_PRE_88,
@@ -75,9 +75,9 @@ from .PreloadedBolt import (
 )
 
 # Import Weld specifications
-from .Weld import (
+from .welds import (
     WeldSpecification,
-    WELD,
+    Weld,
 )
 
 __all__ = [
@@ -138,5 +138,5 @@ __all__ = [
     
     # Weld specifications
     "WeldSpecification",
-    "WELD",
+    "Weld",
 ]

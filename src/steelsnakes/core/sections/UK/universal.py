@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
 
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType, get_database, get_factory
+from steelsnakes.core.sections.UK.base import BaseSection, SectionFactory, SectionType, get_database, get_factory
 
 
 @dataclass
@@ -155,9 +155,9 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
 
 
 # Auto-register classes when module is imported
-def _register_universal_sections():
+def _register_universal_sections() -> None:
     """Register all universal section classes with the global factory."""
-    factory = get_factory()
+    factory: SectionFactory = get_factory()
     factory.register_section_class(UniversalBeam)
     factory.register_section_class(UniversalColumn)
     factory.register_section_class(UniversalBearingPile)

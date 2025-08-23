@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Optional
 
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType, get_database, get_factory
+from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
 
 @dataclass
@@ -38,7 +38,7 @@ class WeldSpecification(BaseSection):
 
 
 # Convenience function for direct instantiation
-def WELD(designation: str, data_directory: Optional[Path] = None) -> WeldSpecification:
+def Weld(designation: str, data_directory: Optional[Path] = None) -> WeldSpecification:
     """Create a Weld specification by designation (weld size)."""
     factory = get_factory(data_directory)
     if SectionType.WELDS not in factory._section_classes:

@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, Optional, Type, Union
+from typing import Any, LiteralString, Optional, Type, Union
 
 
 class SectionType(str, Enum):
@@ -73,7 +73,7 @@ class BaseSection(ABC):
         pass
     
     @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'BaseSection':
+    def from_dict(cls, data: dict[str, Any]) -> 'BaseSection':
         """Create section instance from dictionary data."""
         return cls(**data)
 
@@ -86,7 +86,7 @@ class SectionDatabase:
     and loads section data automatically.
     """
     
-    def __init__(self, data_directory: Optional[Path] = None):
+    def __init__(self, data_directory: Optional[Path] = None) -> None:
         """
         Initialize database with automatic data directory discovery.
         
@@ -94,8 +94,8 @@ class SectionDatabase:
             data_directory: Optional path to sections directory. 
                           If None, auto-discovers based on file location.
         """
-        self.data_directory = self._resolve_data_directory(data_directory)
-        self._cache: Dict[SectionType, Dict[str, Dict[str, Any]]] = {}
+        self.data_directory: Path = self._resolve_data_directory(data_directory)
+        self._cache: dict[SectionType, dict[str, dict[str, Any]]] = {}
         self._load_all_sections()
     
     def _resolve_data_directory(self, data_directory: Optional[Path]) -> Path:
@@ -104,8 +104,8 @@ class SectionDatabase:
             return data_directory
             
         # Auto-discovery based on current file location
-        current_file = Path(__file__).resolve()
-        possible_paths = [
+        current_file: Path = Path(__file__).resolve()
+        possible_paths: list[Path] = [
             # From UK sections module to data/sections/UK
             current_file.parent / "../../../data/sections/UK",
             current_file.parent.parent / "../../data/sections/UK",
@@ -131,15 +131,15 @@ class SectionDatabase:
         matching the SectionType enum values.
         """
         if not self.data_directory.exists():
-            print(f"⚠️  Warning: Data directory not found: {self.data_directory}")
+            print(f"Warning: Data directory not found: {self.data_directory}")
             return
         
         loaded_count = 0
         
         # Try to load each section type
         for section_type in SectionType:
-            filename = f"{section_type.value}.json"
-            file_path = self.data_directory / filename
+            filename: LiteralString = f"{section_type.value}.json"
+            file_path: Path = self.data_directory / filename
             
             try:
                 if file_path.exists():
@@ -157,15 +157,15 @@ class SectionDatabase:
                     self._cache[section_type] = {}
                     
             except json.JSONDecodeError as e:
-                print(f"❌ JSON error in {filename}: {e}")
+                print(f"JSON error in {filename}: {e}")
                 self._cache[section_type] = {}
             except Exception as e:
-                print(f"❌ Error loading {filename}: {e}")
+                print(f"Error loading {filename}: {e}")
                 self._cache[section_type] = {}
         
-        print(f"📊 Loaded {loaded_count} section types total")
+        print(f"Loaded {loaded_count} section types total")
     
-    def get_section_data(self, section_type: SectionType, designation: str) -> Optional[Dict[str, Any]]:
+    def get_section_data(self, section_type: SectionType, designation: str) -> Optional[dict[str, Any]]:
         """Get section data for specific designation and type."""
         return self._cache.get(section_type, {}).get(designation)
     
@@ -173,7 +173,7 @@ class SectionDatabase:
         """List all available sections of given type."""
         return list(self._cache.get(section_type, {}).keys())
     
-    def find_section(self, designation: str) -> Optional[tuple[SectionType, Dict[str, Any]]]:
+    def find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
         """Find a section by designation across all types."""
         for section_type in SectionType:
             data = self.get_section_data(section_type, designation)
@@ -189,7 +189,7 @@ class SectionDatabase:
         self, 
         section_type: SectionType, 
         **criteria: Any
-    ) -> list[tuple[str, Dict[str, Any]]]:
+    ) -> list[tuple[str, dict[str, Any]]]:
         """
         Search sections by property criteria with comparison operators.
         
@@ -203,7 +203,7 @@ class SectionDatabase:
         Returns:
             List of (designation, section_data) tuples matching criteria
         """
-        sections = self._cache.get(section_type, {})
+        sections: dict[str, dict[str, Any]] = self._cache.get(section_type, {})
         results = []
         
         for designation, data in sections.items():
@@ -259,14 +259,14 @@ class SectionFactory:
     provides clean interfaces for section creation.
     """
     
-    def __init__(self, database: SectionDatabase):
+    def __init__(self, database: SectionDatabase) -> None:
         """Initialize factory with database instance."""
-        self.database = database
-        self._section_classes: Dict[SectionType, Type[BaseSection]] = {}
+        self.database: SectionDatabase = database
+        self._section_classes: dict[SectionType, Type[BaseSection]] = {}
     
     def register_section_class(self, section_class: Type[BaseSection]) -> None:
         """Register a section class for automatic creation."""
-        section_type = section_class.get_section_type()
+        section_type: SectionType = section_class.get_section_type()
         self._section_classes[section_type] = section_class
         
     def create_section(
@@ -289,9 +289,9 @@ class SectionFactory:
         """
         if section_type:
             # Use specified type
-            section_data = self.database.get_section_data(section_type, designation)
+            section_data: Optional[dict[str, Any]] = self.database.get_section_data(section_type, designation)
             if not section_data:
-                available = self.database.list_sections(section_type)
+                available: list[str] = self.database.list_sections(section_type)
                 raise ValueError(
                     f"Section '{designation}' not found in {section_type.value} database. "
                     f"Available sections: {len(available)}"
@@ -308,7 +308,7 @@ class SectionFactory:
             section_type, section_data = result
         
         # Get section class
-        section_class = self._section_classes.get(section_type)
+        section_class: Optional[type[BaseSection]] = self._section_classes.get(section_type)
         if not section_class:
             raise ValueError(
                 f"No section class registered for type {section_type.value}. "
@@ -317,7 +317,7 @@ class SectionFactory:
         
         # Create and return instance
         # Remove section_type from data as it's not part of the dataclass
-        clean_data = {k: v for k, v in section_data.items() if k != 'section_type'}
+        clean_data: dict[str, Any] = {k: v for k, v in section_data.items() if k != 'section_type'}
         
         # Add designation if not present (e.g., for WELDS)
         if 'designation' not in clean_data:
@@ -343,6 +343,6 @@ def get_factory(data_directory: Optional[Path] = None) -> SectionFactory:
     """Get or create global factory instance."""
     global _global_factory, _global_database
     if _global_factory is None or data_directory is not None:
-        db = get_database(data_directory)
+        db: SectionDatabase = get_database(data_directory)
         _global_factory = SectionFactory(db)
     return _global_factory

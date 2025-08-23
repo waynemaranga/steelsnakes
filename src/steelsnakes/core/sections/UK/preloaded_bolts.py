@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Optional
 
-from steelsnakes.core.sections.UK.Base import BaseSection, SectionType, get_database, get_factory
+from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
 
 @dataclass
