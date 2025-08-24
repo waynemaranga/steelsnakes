@@ -7,7 +7,7 @@ This guide will get you up and running with SteelSnakes in just a few minutes. W
 Let's start by creating a simple steel beam:
 
 ```python
-from steelsnakes.core.sections.UK import UB
+from steelsnakes.UK.sections import UB
 
 # Create a Universal Beam
 beam = UB("457x191x67")
