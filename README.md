@@ -37,14 +37,14 @@ print(f"Channel shear center: {channel.e0} mm")
 ```
 ## Documentation
 
-- **[Installation Guide](https://steelsnakes.readthedocs.io/getting-started/installation/)** - Get started quickly
-- **[User Guide](https://steelsnakes.readthedocs.io/user-guide/section-types/)** - Comprehensive feature documentation
-- **[Examples](https://steelsnakes.readthedocs.io/examples/basic/)** - Practical usage examples
-- **[API Reference](https://steelsnakes.readthedocs.io/reference/core/)** - Complete API documentation
+- **[Installation Guide](https://steelsnakes.readthedocs.io/en/latest/getting-started/installation/)** - Get started quickly
+- **[User Guide](https://steelsnakes.readthedocs.io/en/latest/user-guide/section-types/)** - Comprehensive feature documentation
+- **[Examples](https://steelsnakes.readthedocs.io/en/latest/examples/basic/)** - Practical usage examples
+- **[API Reference](https://steelsnakes.readthedocs.io/en/latest/reference/core/)** - Complete API documentation
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/contributing/guidelines/) for details.
+We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
 
 ## License
 

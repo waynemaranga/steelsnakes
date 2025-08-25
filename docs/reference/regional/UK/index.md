@@ -1,5 +1,7 @@
 # UK Steel Sections
 
+Explanatory Notes: https://www.steelforlifebluebook.co.uk/explanatory-notes/ec3-ukna/
+
 UK steel sections conforming to BS EN standards. This module provides comprehensive access to British/European steel section data and specifications.
 
 ## Database and Factory

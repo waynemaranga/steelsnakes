@@ -230,7 +230,7 @@ class TestSectionFactoryBase:
     def test_abstract_factory_cannot_instantiate(self):
         """Test that abstract SectionFactory cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            SectionFactory(Mock())
+            SectionFactory(Mock()) # FIXME: Cannot instantiate abstract class "SectionFactory"; "SectionFactory._register_default_classes" is not implemented
 
 
 class TestSectionCreation:

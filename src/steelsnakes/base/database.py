@@ -572,7 +572,7 @@ class SQLiteJSONInterface:
             
         return rows
     
-    def _create_row_from_dict(self, props: dict[str, Any], category: str = None, designation: str = None) -> dict[str, Any]:
+    def _create_row_from_dict(self, props: dict[str, Any], category: Optional[str] = None, designation: Optional[str] = None) -> dict[str, Any]:
         """Create a database row from a properties dictionary."""
         row: dict[str, Any] = {}
         

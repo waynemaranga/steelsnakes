@@ -7,10 +7,10 @@ and Elliptical Hollow Sections.
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 
 @dataclass
@@ -77,23 +77,27 @@ class HotFinishedEllipticalHollowSection(BaseSection):
 # Convenience functions
 def HFCHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedCircularHollowSection:
     """Create a Hot Finished Circular Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.HFCHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.HFCHS) # Older implementation; raised Pylance[reportReturnType]
+    return cast(HotFinishedCircularHollowSection, factory.create_section(designation, SectionType.HFCHS))
 
 
 def HFSHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedSquareHollowSection:
     """Create a Hot Finished Square Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.HFSHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.HFSHS)
+    return cast(HotFinishedSquareHollowSection, factory.create_section(designation, SectionType.HFSHS))
 
 
 def HFRHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedRectangularHollowSection:
     """Create a Hot Finished Rectangular Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.HFRHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.HFRHS)
+    return cast(HotFinishedRectangularHollowSection, factory.create_section(designation, SectionType.HFRHS))
 
 
 def HFEHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedEllipticalHollowSection:
     """Create a Hot Finished Elliptical Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.HFEHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.HFEHS)
+    return cast(HotFinishedEllipticalHollowSection, factory.create_section(designation, SectionType.HFEHS))
