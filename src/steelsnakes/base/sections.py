@@ -14,7 +14,11 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(
 logger: logging.Logger = logging.getLogger(__name__)
 
 class SectionType(Enum):
-    """Global enumeration of all section types available in steelsnakes"""
+    """Global enumeration of all section types available in steelsnakes.
+    Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
+    Developing 🇮🇳 IS.
+    Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
+    """
     
     # --- 🇬🇧 UK ---
     # TODO: Add info here... Provided by Steel Construction Institute (SCI) via Blue Book
@@ -116,6 +120,60 @@ class SectionType(Enum):
     #  Pipes 
     PIPE = "PIPE" # Pipes
 
+    # --- 🇮🇳 IS ---
+    # TODO: Add info here... from IS 808:2021
+    # To reduce reduncancy, the IS for Indian Standard is omitted from section type naming.
+    # so JB is ISJB, see IS 808:2021 clause 5.1
+    # To prevent conflicts with US/Other regions, variations are used.
+    # Beams
+    JB = "JB"       # Junior Beam - ISJB
+    LWB = "LWB"     # Light-weight Beam - ISLB
+    MWB = "MWB"     # Medium-weight Beam - ISMB
+    WFB = "WFB"     # Wide-flange Beam - ISWB
+    NPB = "NPB"     # Narrow Parallel-flange Beam - ISNPB
+    WPB = "WPB"     # Wide Parallel-flange Beam - ISWPB
+
+    # Columns/Heavy-weight Beams
+    SC = "SC" # Column Section - ISSC
+    HB = "HB" # Heavy-weight Beam - ISHB # classified as such in IS 808:2021 clause 5.1
+
+    # Channels
+    JC = "JC" # Junior Channel - ISJC
+    LWC = "LWC" # Light-weight Channel - ISLC
+    MWC = "MWC" # Medium-weight Channel - ISMC
+    MPC = "MPC" # Medium-weight Parallel-flange Channel - ISMPC
+
+    # Angles
+    # In IS 808:2021, angles are classified as "Equal Angles" and "Unequal Angles", but both
+    # are designated ISA. Here, EA is Equal Angle and UA is Unequal Angle.
+    EA = "EA" # Equal Angle - ISA
+    UA = "UA" # Unequal Angle - also ISA
+    # TODO: find IS back-to-back angles
+
+    # Bearing Piles
+    PBP = "PBP" # Parallel-flange Bearing Pile - ISPBP
+
+    # --- 🇦🇺 AU / 🇳🇿 NZ ---
+    # TODO: Add info here... from AS/NZS 3679.1:2010
+
+    # --- 🇯🇵 JP ---
+    # TODO: Add info here... from JIS G 3192:2014
+
+    # --- 🇲🇽 MX ---
+    # TODO: Add info here... from NMX standards
+
+    # --- 🇿🇦 SA ---
+    # TODO: Add info here... from SANS standards
+
+    # --- 🇨🇳 CN ---
+    # TODO: Add info here... from GB standards
+
+    # --- 🇨🇦 CA ---
+    # TODO: Add info here... from CSA standards
+
+    # --- 🇰🇷 KR ---
+    # TODO: Add info here... from KS standards (K004en.pdf available)
+
 
 @dataclass
 class BaseSection(ABC):
@@ -130,18 +188,21 @@ class BaseSection(ABC):
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}(designation={self.designation})"
     
-    @classmethod # A classmetho
-    @abstractmethod
+    # - 🌟 Get section type
+    @classmethod # A classmethod is a method that is bound to the class and not the instance of the class
+    @abstractmethod # An abstractmethod is a method that is declared, but contains no implementation; subclasses must override it
     def get_section_type(cls) -> SectionType:
         """Return the section type as a `SectionType` enum"""
         # TODO: implement...
         pass
-
+    
+    # - 🌟 Create section from dictionary
     @classmethod
     def from_dictionary(cls, data: dict[str, Any]) -> BaseSection:
         """Create a section instance from a dictionary"""
         return cls(**data)
 
+    # - 🌟 Get section properties
     @abstractmethod
     def get_properties(self) -> dict[str, Any]:
         """Return a dictionary of all section properties."""
