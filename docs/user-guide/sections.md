@@ -5,7 +5,7 @@
 
 ## Table of Contents
 
-- [Sections](#sections)
+- [Sections](#section-types)
   - [Table of Contents](#table-of-contents)
   - [Section Types](#section-types)
     - [I-sections](#i-sections)

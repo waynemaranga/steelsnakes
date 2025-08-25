@@ -1,5 +1,5 @@
 site_name: SteelSnakes
-site_description: A Python library for working structural steel sections
+site_description: A Python library for structural steel.
 site_author: Wayne Maranga
 
 repo_name: steelsnakes
@@ -16,7 +16,7 @@ theme:
         light: shadcn-light
         dark: github-dark
   icon: "heroicons:link" # use the shadcn svg if not defined
-  topbar_sections: false # NEW!
+  topbar_sections: false # Keep sections in sidebar for better nested navigation
   katex_options: # optional
     macros: # example of macros
       "\\RR": "\\mathbb{R}" 
@@ -107,7 +107,7 @@ nav:
     - Quick Start: getting-started/quickstart.md
     - Basic Usage: getting-started/basic-usage.md
   - User Guide:
-    - Section Types: user-guide/section-types.md
+    - Section Types: user-guide/sections.md
     - Database System: user-guide/database.md
     - Factory Pattern: user-guide/factory.md
     - Search & Filtering: user-guide/search.md
@@ -117,10 +117,22 @@ nav:
     - Steel Design: examples/design.md
   - API Guide: api.md
   - API Reference:
-    - Core: reference/core.md
-    - Sections: reference/sections.md
-    - Database: reference/database.md
-  - Contributing:
-    - Development: contributing/development.md
-    - Guidelines: contributing/guidelines.md
+    - Overview: reference/index.md
+    - Core Components:
+      - Base Classes: reference/core/base.md
+      - Database System: reference/core/database.md
+      - Factory Pattern: reference/core/factory.md
+    - Regional Sections:
+      - UK (British):
+        - Overview: reference/regional/UK/index.md
+        - Universal Sections: reference/regional/UK/universal/index.md
+        - Channels: reference/regional/UK/channels/index.md
+        - Angles: reference/regional/UK/angles/index.md
+        - Hollow Sections: reference/regional/UK/hollow/index.md
+        - Connections: reference/regional/UK/connections/index.md
+      - US (American): reference/regional/US/index.md
+      - EU (European): reference/regional/EU/index.md
+      - AU (Australian): reference/regional/AU/index.md
+      - IS (Indian): reference/regional/IS/index.md
+  - Contributing: contributing.md
   - Changelog: changelog.md

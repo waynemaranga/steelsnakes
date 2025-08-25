@@ -12,10 +12,13 @@
   - [ ] match depths to depths, flange widths to flange widths,
   - [ ] also match section areas, mass per unit length, section moduli, moments of inertia, radii of gyration, etc.
   - [ ] This will allow searching for sections across types, e.g. "find me a section with depth 300mm, mass 20kg/m, and Iyy > 50000 cm4"
-- [ ]Try use unit conversion libraries like Pint or Pydantic's built-in units or forallpeople and SI
+- [ ] Try use unit conversion libraries like Pint or Pydantic's built-in units or forallpeople and SI
 - [ ] To beat SQLite's case (insensitivity) add units to the column names, e.g. h_mm, b_mm, t_mm, A_cm2, Iyy_cm4, etc.
 - [ ] Have a dev, test and docs and full version to trim the dependencies
 - [ ] Merge pilcrow featurs from old docs to new docs with shadcn
 - [ ] implement mermaid diagrams
 - [ ] Try edit fonts
-- [ ] 
+- [ ] Guides and tutorials will be important, both for how to use the library and for steel design in general. Make tutorials with Jupyter notebooks in Docs, run and save cells with outputs. Have a doc'd branch. See dev/test/full installs
+- [ ] Look into EDI naming conventions for steel sections in AISC and the difference between metric and imperial designations
+- [ ] Have a separate implementation for handcals/forallpeople e.g steelsnakes[calc] with ipy and all it's dependencies and functionality
+- [ ] Consult monash uni prof

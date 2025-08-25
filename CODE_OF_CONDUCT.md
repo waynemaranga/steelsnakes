@@ -1,0 +1,3 @@
+# CODE OF CONDUCT
+
+We are committed to fostering an open and welcoming environment for all contributors. We expect everyone participating in this project to treat others with respect and dignity, regardless of background or identity. This includes using inclusive language, being considerate in communications, accepting constructive feedback gracefully, and focusing on what is best for the community. Harassment, discriminatory comments, and other exclusionary behavior will not be tolerated.

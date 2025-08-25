@@ -55,7 +55,7 @@ We welcome contributions! Please see our [Contributing Guidelines](https://steel
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
