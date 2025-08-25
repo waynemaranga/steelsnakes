@@ -1,14 +1,12 @@
 """
 Angle steel sections for UK module.
-
-This module implements Equal Angles, Unequal Angles, and their Back-to-Back variants
-using the new base system architecture.
+This module implements Equal Angles, Unequal Angles, and their Back-to-Back variants.
 """
 
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import get_uk_factory
@@ -65,7 +63,7 @@ class EqualAngle(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,
@@ -133,7 +131,7 @@ class UnequalAngle(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,
@@ -195,7 +193,7 @@ class EqualAngleBackToBack(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL_B2B
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str,Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,
@@ -259,7 +257,7 @@ class UnequalAngleBackToBack(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL_B2B
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,

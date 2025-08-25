@@ -13,7 +13,6 @@ from typing import Optional
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import get_uk_factory
 
-
 @dataclass
 class UniversalSection(BaseSection):
     """Base class for all universal steel sections (UB, UC, UBP)."""
@@ -124,7 +123,6 @@ def UB(designation: str, data_directory: Optional[Path] = None) -> UniversalBeam
     Args:
         designation: Section designation (e.g., "457x191x67")
         data_directory: Optional path to data directory
-        
     Returns:
         UniversalBeam instance with actual values from database
     """
@@ -139,7 +137,6 @@ def UC(designation: str, data_directory: Optional[Path] = None) -> UniversalColu
     Args:
         designation: Section designation (e.g., "305x305x137")
         data_directory: Optional path to data directory
-        
     Returns:
         UniversalColumn instance with actual values from database
     """
@@ -154,9 +151,13 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
     Args:
         designation: Section designation (e.g., "203x203x45")
         data_directory: Optional path to data directory
-        
     Returns:
         UniversalBearingPile instance with actual values from database
     """
     factory = get_uk_factory(data_directory)
     return factory.create_section(designation, SectionType.UBP)
+
+if __name__ == "__main__":
+    print(UB("457x191x67"))
+    print(UC("305x305x137"))
+    print(UBP("203x203x45"))

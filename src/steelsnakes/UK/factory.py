@@ -1,4 +1,4 @@
-"""UK-specific factory implementation using the new base system."""
+"""UK-specific factory implementation."""
 
 from __future__ import annotations
 from pathlib import Path

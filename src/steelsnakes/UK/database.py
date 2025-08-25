@@ -1,8 +1,8 @@
-"""UK-specific database implementation using the new base system."""
+"""UK-specific database implementation."""
 
 from __future__ import annotations
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Any
 
 from steelsnakes.base.database import SectionDatabase
 from steelsnakes.base.sections import SectionType
@@ -77,7 +77,7 @@ class UKSectionDatabase(SectionDatabase):
             SectionType.BOLT_PRE_109,
         ]
 
-    def _fuzzy_find_section(self, designation: str) -> Optional[Tuple[SectionType, dict[str, any]]]:
+    def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
         """
         UK-specific fuzzy section finding with case-insensitive matching.
         

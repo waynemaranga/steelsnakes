@@ -1,7 +1,5 @@
 """
 Preloaded bolt specifications for UK module.
-
-This module implements Preloaded Bolt specifications using the new base system.
 """
 
 from __future__ import annotations

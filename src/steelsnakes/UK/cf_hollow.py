@@ -1,8 +1,6 @@
 """
 Cold Formed Hollow sections for UK module.
-
-This module implements Cold Formed Circular, Square, and Rectangular 
-Hollow Sections using the new base system.
+This module implements Cold Formed Circular, Square, and Rectangular Hollow Sections.
 """
 
 from __future__ import annotations

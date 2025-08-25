@@ -1,14 +1,13 @@
 """
 Hot Finished Hollow sections for UK module.
-
-This module implements Hot Finished Circular, Square, Rectangular, and Elliptical 
-Hollow Sections using the new base system.
+This module implements Hot Finished Circular, Square, Rectangular,
+and Elliptical Hollow Sections.
 """
 
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import get_uk_factory
@@ -26,7 +25,7 @@ class HotFinishedCircularHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.HFCHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 
@@ -41,7 +40,7 @@ class HotFinishedSquareHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.HFSHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 
@@ -56,7 +55,7 @@ class HotFinishedRectangularHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.HFRHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 
@@ -71,7 +70,7 @@ class HotFinishedEllipticalHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.HFEHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 

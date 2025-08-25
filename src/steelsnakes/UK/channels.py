@@ -1,13 +1,12 @@
 """
 Channel steel sections for UK module.
-
-This module implements Parallel Flange Channels (PFC) using the new base system.
+This module implements Parallel Flange Channels (PFC).
 """
 
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import get_uk_factory
@@ -63,7 +62,7 @@ class ParallelFlangeChannel(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.PFC
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,
