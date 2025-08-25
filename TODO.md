@@ -22,3 +22,5 @@
 - [ ] Look into EDI naming conventions for steel sections in AISC and the difference between metric and imperial designations
 - [ ] Have a separate implementation for handcals/forallpeople e.g steelsnakes[calc] with ipy and all it's dependencies and functionality
 - [ ] Consult monash uni prof
+- [ ] add cli to steelsnakes, use `argparse` or `click`
+- [ ] add `ui` using `streamlit` or `pywebview` or `fastapi`
