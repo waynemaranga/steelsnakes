@@ -6,10 +6,10 @@ This module implements Cold Formed Circular, Square, and Rectangular Hollow Sect
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 
 @dataclass
@@ -60,17 +60,20 @@ class ColdFormedRectangularHollowSection(BaseSection):
 # Convenience functions
 def CFCHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormedCircularHollowSection:
     """Create a Cold Formed Circular Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.CFCHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.CFCHS)
+    return cast(ColdFormedCircularHollowSection, factory.create_section(designation, SectionType.CFCHS))
 
 
 def CFSHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormedSquareHollowSection:
     """Create a Cold Formed Square Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.CFSHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.CFSHS)
+    return cast(ColdFormedSquareHollowSection, factory.create_section(designation, SectionType.CFSHS))
 
 
 def CFRHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormedRectangularHollowSection:
     """Create a Cold Formed Rectangular Hollow Section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.CFRHS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.CFRHS)
+    return cast(ColdFormedRectangularHollowSection, factory.create_section(designation, SectionType.CFRHS))

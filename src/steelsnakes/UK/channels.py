@@ -6,10 +6,10 @@ This module implements Parallel Flange Channels (PFC).
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 
 @dataclass
@@ -81,5 +81,6 @@ class ParallelFlangeChannel(BaseSection):
 # Convenience function for direct instantiation
 def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
     """Create a Parallel Flange Channel section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.PFC)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.PFC)
+    return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
