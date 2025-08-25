@@ -1,17 +1,20 @@
 # `SteelSnakes`
 
 <!-- Centered HTML-image logo -->
-<p align="center"><img src="./logo-4.png" alt="SteelSnakes Logo" width="200"/></p>
+![Logo](./logo-4.png)
 
-[![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md)
-[![PyPI Version](https://img.shields.io/pypi/v/steelsnakes.svg)](https://pypi.org/project/steelsnakes/)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://steelsnakes.readthedocs.io/)
-<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main)]( -->
+<div align="center">
+  <p>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a>
+    <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a>
+    <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
+    <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
+  </p>
+</div>
 
-A Python library for structural steel analysis and design, providing easy access to a comprehensive database of steel sections and their properties. Currently supports UK steel sections according to BS EN 10365.
-
-Currently Developing: US and AUS
+A Python library for structural steel.
+Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 
 ## Quick Start
@@ -25,26 +28,26 @@ pip install steelsnakes
 ### Basic Usage
 
 ```python
-from steelsnakes.UK import UniversalBeam
+from steelsnakes.UK import UB, UC, PFC
+
+# Create section objects using the designations
+beam = UB("457x191x67") # Universal Beam
+column = UC("305x305x137") # Universal Column
+channel = PFC("430x100x64") # Parallel Flange Channel
+
+# Access properties immediately
+print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
+print(f"Column mass: {column.mass_per_metre} kg/m")
+print(f"Channel shear center: {channel.e0} mm")
 ```
 
 ## Documentation
 
-- **[Installation](https://steelsnakes.readthedocs.io/getting-started/installation/)**
-- **[User Guide](https://steelsnakes.readthedocs.io/user-guide/section-types/)**
-- **[Examples](https://steelsnakes.readthedocs.io/examples/basic/)** 
-- **[API Reference](https://steelsnakes.readthedocs.io/reference/core/)**
+- **[Installation Guide](https://steelsnakes.readthedocs.io/getting-started/installation/)** - Get started quickly
+- **[User Guide](https://steelsnakes.readthedocs.io/user-guide/section-types/)** - Comprehensive feature documentation
+- **[Examples](https://steelsnakes.readthedocs.io/examples/basic/)** - Practical usage examples
+- **[API Reference](https://steelsnakes.readthedocs.io/reference/core/)** - Complete API documentation
 
-## Regions
-- 🇬🇧 `UK` - United Kingdom, BS EN 10365
-- 🇺🇸 `US` - United States, AISC v16 
-<!-- - 🇪🇺 `EU` - European Union
-- 🇦🇺 `AU` - Australia
-- 🇨🇦 `CA` - Canada
-- 🇮🇳 `IN` - India
-- 🇲🇽 `MX` - Mexico
-- 🇿🇦 `SA` - South Africa
-- 🇳🇿 `NZ` - New Zealand -->
 
 ## Contributing
 
@@ -52,8 +55,11 @@ We welcome contributions! Please see our [Contributing Guidelines](https://steel
 
 ## License
 
-This project is licensed under the GPLv2 License - see the [LICENSE.md](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
-SCI (The Steel Construction Institute) for the [Interactive Blue Book](https://www.steelforlifebluebook.co.uk/), AISC (American Institute of Steel Construction) for the [AISC Shapes Database](https://www.aisc.org/publications/steel-construction-manual-resources/16th-ed-steel-construction-manual/aisc-shapes-database-v16.0/), ArcelorMittal for the [Orange Book](https://orangebook.arcelormittal.com/taxonomy/term/1)
+- SCI (Steel Construction Institute)
+- ArcelorMittal
+- AISC (American Institute of Steel Construction)
+- ****
