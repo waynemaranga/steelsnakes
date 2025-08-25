@@ -6,7 +6,7 @@
 site_name: SteelSnakes
 site_description: A Python library for structural steel.
 site_author: Wayne Maranga
-site_url: https://steelsnakes.readthedocs.io/
+site_url: ""
 
 repo_name: steelsnakes
 repo_url: https://github.com/waynemaranga/steelsnakes
@@ -28,6 +28,7 @@ theme:
       "\\RR": "\\mathbb{R}" 
       "\\dx": "\\mathrm{d}x"
   show_datetime: false 
+  # language: en
   
   features:
     - navigation.tabs
