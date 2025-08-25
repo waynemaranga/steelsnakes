@@ -8,10 +8,10 @@ using the new base system architecture.
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 @dataclass
 class UniversalSection(BaseSection):
@@ -64,7 +64,7 @@ class UniversalSection(BaseSection):
     I_t: float = 0.0  # Torsional constant (cm⁴)
     A: float = 0.0  # Cross-sectional area (cm²)
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
         return {
             'designation': self.designation,
@@ -126,8 +126,9 @@ def UB(designation: str, data_directory: Optional[Path] = None) -> UniversalBeam
     Returns:
         UniversalBeam instance with actual values from database
     """
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.UB)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.UB)
+    return cast(UniversalBeam, factory.create_section(designation, SectionType.UB))
 
 
 def UC(designation: str, data_directory: Optional[Path] = None) -> UniversalColumn:
@@ -140,8 +141,9 @@ def UC(designation: str, data_directory: Optional[Path] = None) -> UniversalColu
     Returns:
         UniversalColumn instance with actual values from database
     """
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.UC)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.UC)
+    return cast(UniversalColumn, factory.create_section(designation, SectionType.UC))
 
 
 def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBearingPile:
@@ -154,10 +156,11 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
     Returns:
         UniversalBearingPile instance with actual values from database
     """
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.UBP)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.UBP)
+    return cast(UniversalBearingPile, factory.create_section(designation, SectionType.UBP))
 
 if __name__ == "__main__":
-    print(UB("457x191x67"))
-    print(UC("305x305x137"))
+    # print(UB("457x191x67"))
+    # print(UC("305x305x137"))
     print(UBP("203x203x45"))

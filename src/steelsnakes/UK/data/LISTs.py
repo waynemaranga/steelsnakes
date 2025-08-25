@@ -1,8 +1,8 @@
 import json
-from JSONs import CFCHS_JSON, CFRHS_JSON, CFSHS_JSON, HFCHS_JSON, HFEHS_JSON, HFRHS_JSON, HFSHS_JSON, L_EQUAL_JSON, L_UNEQUAL_JSON, L_EQUAL_B2B_JSON, L_UNEQUAL_B2B_JSON, PFC_JSON, UB_JSON, UBP_JSON, UC_JSON # type: ignore
-from JSONs import BOLTS_PRE_88_JSON, BOLTS_PRE_109_JSON
+from JSONs import CFCHS_JSON, CFRHS_JSON, CFSHS_JSON, HFCHS_JSON, HFEHS_JSON, HFRHS_JSON, HFSHS_JSON, L_EQUAL_JSON, L_UNEQUAL_JSON, L_EQUAL_B2B_JSON, L_UNEQUAL_B2B_JSON, PFC_JSON, UB_JSON, UBP_JSON, UC_JSON # type: ignore[import] - Unimportant; SAFE
+from JSONs import BOLTS_PRE_88_JSON, BOLTS_PRE_109_JSON # type: ignore[import] - Unimportant; SAFE
 # from .JSONs import BOLTS_NONPRE_46_JSON, BOLTS_NONPRE_88_JSON, BOLTS_NONPRE_109_JSON
-from JSONs import WELDS_JSON # type: ignore
+from JSONs import WELDS_JSON # type: ignore[import] - Unimportant; SAFE
 
 # --- Cold-formed Circular Hollow Sections
 with open(file=CFCHS_JSON, mode="r") as file_:

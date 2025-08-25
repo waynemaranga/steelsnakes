@@ -7,10 +7,10 @@ This module implements Weld specifications using the new base system.
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 
 @dataclass
@@ -36,5 +36,6 @@ class WeldSpecification(BaseSection):
 # Convenience function
 def WELD(designation: str, data_directory: Optional[Path] = None) -> WeldSpecification:
     """Create a Weld specification by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.WELDS)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.WELDS)
+    return cast(WeldSpecification, factory.create_section(designation, SectionType.WELDS))

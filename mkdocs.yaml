@@ -6,6 +6,7 @@
 site_name: SteelSnakes
 site_description: A Python library for structural steel.
 site_author: Wayne Maranga
+site_url: https://steelsnakes.readthedocs.io/
 
 repo_name: steelsnakes
 repo_url: https://github.com/waynemaranga/steelsnakes
@@ -17,9 +18,9 @@ theme:
   name: shadcn
   show_title: true # show the title in the top bar
   show_stargazers: true # show the stargazers in the top bar
-  pygments_style: # default styles 
-        light: shadcn-light
-        dark: github-dark
+  pygments_style: # https://pygments.org/styles/
+        light: abap
+        dark: monokai
   icon: "heroicons:link" # use the shadcn svg if not defined
   topbar_sections: false # Keep sections in sidebar for better nested navigation
   katex_options: # optional
@@ -64,9 +65,11 @@ plugins:
               ignore_init_summary: true
             filters: ["!^_"]
             heading_level: 1
-  - mike:
-      alias_type: symlink
-      version_selector: true
+  # - mike: # FIXME: One day review this and fix...
+  #     # https://github.com/jimporter/mike?tab=readme-ov-file#usage
+  #     alias_type: symlink
+  #     version_selector: true
+
   - autorefs
 
 
@@ -91,11 +94,12 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/waynemaranga/steelsnakes
-    - icon: fontawesome/brands/python
+    - icon: fontawesome/brands/python  
       link: https://pypi.org/project/steelsnakes/
+    - icon: fontawesome/solid/envelope
+      link: mailto:wayne.maranga@gmail.com
   
-  version:
-    provider: mike
+
 
 extra_css:
   - stylesheets/extra.css
@@ -109,7 +113,7 @@ nav:
   - Home: index.md
   - Getting Started:
     - Installation: getting-started/installation.md
-    - Quick Start: getting-started/quickstart.md
+    # - Quick Start: getting-started/quickstart.md
     - Basic Usage: getting-started/basic-usage.md
   - User Guide:
     - Section Types: user-guide/sections.md
@@ -120,7 +124,7 @@ nav:
     - Basic Examples: examples/basic.md
     - Advanced Usage: examples/advanced.md
     - Steel Design: examples/design.md
-  - API Guide: api.md
+  # - API Guide: api.md
   - API Reference:
     - Overview: reference/index.md
     - Core Components:
@@ -139,5 +143,5 @@ nav:
       - EU (European): reference/regional/EU/index.md
       - AU (Australian): reference/regional/AU/index.md
       - IS (Indian): reference/regional/IS/index.md
-  - Contributing: contributing.md
-  - Changelog: changelog.md
+  # - Contributing: contributing.md
+  # - Changelog: changelog.md

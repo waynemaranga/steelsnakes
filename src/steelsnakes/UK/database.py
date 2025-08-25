@@ -25,14 +25,12 @@ class UKSectionDatabase(SectionDatabase):
             
         # Auto-discovery for UK sections
         current_file: Path = Path(__file__).resolve()
-        possible_paths: list[Path] = [
-            # From UK module to data/sections/UK
-            current_file.parent / "../data/sections/UK",
-            current_file.parent.parent / "data/sections/UK", 
-            current_file.parent.parent.parent / "data/sections/UK",
-            # From project root
-            Path.cwd() / "data/sections/UK",
-            Path.cwd() / "src/steelsnakes/data/sections/UK",
+        possible_paths: list[Path] = [          
+            Path.cwd() / "src/steelsnakes/UK/data/", # from project root
+            current_file.parent / "data/", # from package installation
+            current_file.parent.parent.parent / "data/UK/", # from development environment
+            current_file.parent.parent.parent / "src/steelsnakes/UK/data/", # from source directory
+            current_file.parent.parent.parent.parent / "data/UK/" # from parent directory
         ]
         
         for path in possible_paths:
@@ -41,7 +39,7 @@ class UKSectionDatabase(SectionDatabase):
                 return resolved_path
                 
         # Fallback
-        return current_file.parent / "data/sections/UK"
+        return current_file.parent / "data/"
 
     def get_supported_types(self) -> list[SectionType]:
         """Return all UK-supported section types."""

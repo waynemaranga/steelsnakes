@@ -6,10 +6,10 @@ This module implements Equal Angles, Unequal Angles, and their Back-to-Back vari
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 
 @dataclass
@@ -274,23 +274,27 @@ class UnequalAngleBackToBack(BaseSection):
 # Convenience functions for direct instantiation
 def L_EQUAL(designation: str, data_directory: Optional[Path] = None) -> EqualAngle:
     """Create an Equal Angle section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.L_EQUAL)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.L_EQUAL)
+    return cast(EqualAngle, factory.create_section(designation, SectionType.L_EQUAL))
 
 
 def L_UNEQUAL(designation: str, data_directory: Optional[Path] = None) -> UnequalAngle:
     """Create an Unequal Angle section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.L_UNEQUAL)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.L_UNEQUAL)
+    return cast(UnequalAngle, factory.create_section(designation, SectionType.L_UNEQUAL))
 
 
 def L_EQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> EqualAngleBackToBack:
     """Create a Back-to-Back Equal Angles section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.L_EQUAL_B2B)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.L_EQUAL_B2B)
+    return cast(EqualAngleBackToBack, factory.create_section(designation, SectionType.L_EQUAL_B2B))
 
 
 def L_UNEQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> UnequalAngleBackToBack:
     """Create a Back-to-Back Unequal Angles section by designation."""
-    factory = get_uk_factory(data_directory)
-    return factory.create_section(designation, SectionType.L_UNEQUAL_B2B)
+    factory: UKSectionFactory = get_uk_factory(data_directory)
+    # return factory.create_section(designation, SectionType.L_UNEQUAL_B2B)
+    return cast(UnequalAngleBackToBack, factory.create_section(designation, SectionType.L_UNEQUAL_B2B))
