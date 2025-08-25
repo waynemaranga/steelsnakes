@@ -16,8 +16,8 @@ logger: logging.Logger = logging.getLogger(__name__)
 class SectionFactory(ABC):
     """Abstract base class for section factories.
     Region-specific factories inherit from this and implement:
-    - `` #TODO: redocument this section
-    - ``
+    _register_default_classes() to register all section classes for this region
+    create_section() to create a section instance given its designation and optional type
     """
 
     # -

@@ -27,8 +27,8 @@ class SectionDatabase(ABC):
         """Initialize the database with the data directory.
         
         Args:
-            `data_directory`: Path to data directory containing JSON files
-            `use_sqlite`: If `True`, prefer SQLite database over JSON files (experimental)
+            data_directory: Path to data directory containing JSON files
+            use_sqlite: If `True`, prefer SQLite database over JSON files (experimental)
         """
         self.data_directory: Path = self._resolve_data_directory(data_directory=data_directory)
         self.use_sqlite: bool = use_sqlite

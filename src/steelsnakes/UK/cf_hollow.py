@@ -8,7 +8,7 @@ Hollow Sections using the new base system.
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import get_uk_factory
@@ -25,7 +25,7 @@ class ColdFormedCircularHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.CFCHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 
@@ -40,7 +40,7 @@ class ColdFormedSquareHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.CFSHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 
@@ -55,7 +55,7 @@ class ColdFormedRectangularHollowSection(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.CFRHS
     
-    def get_properties(self) -> dict[str, any]:
+    def get_properties(self) -> dict[str, Any]:
         return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
 
 

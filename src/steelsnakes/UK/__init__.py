@@ -2,13 +2,15 @@
 UK Steel Sections Module.
 """
 
+from typing import Optional
+
 # Import base infrastructure
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.database import UKSectionDatabase, get_uk_database
 from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
 # Import Universal sections
-from steelsnakes.UK.sections.universal import (
+from steelsnakes.UK.universal import (
     UniversalSection,
     UniversalBeam,
     UniversalColumn,
@@ -19,13 +21,13 @@ from steelsnakes.UK.sections.universal import (
 )
 
 # Import Channel sections
-from steelsnakes.UK.sections.channels import (
+from steelsnakes.UK.channels import (
     ParallelFlangeChannel,
     PFC,
 )
 
 # Import Angle sections
-from steelsnakes.UK.sections.angles import (
+from steelsnakes.UK.angles import (
     EqualAngle,
     UnequalAngle,
     EqualAngleBackToBack,
@@ -37,7 +39,7 @@ from steelsnakes.UK.sections.angles import (
 )
 
 # Import Cold Formed Hollow sections
-from steelsnakes.UK.sections.cf_hollow import (
+from steelsnakes.UK.cf_hollow import (
     ColdFormedCircularHollowSection,
     ColdFormedSquareHollowSection,
     ColdFormedRectangularHollowSection,
@@ -47,7 +49,7 @@ from steelsnakes.UK.sections.cf_hollow import (
 )
 
 # Import Hot Finished Hollow sections
-from steelsnakes.UK.sections.hf_hollow import (
+from steelsnakes.UK.hf_hollow import (
     HotFinishedCircularHollowSection,
     HotFinishedSquareHollowSection,
     HotFinishedRectangularHollowSection,
@@ -59,7 +61,7 @@ from steelsnakes.UK.sections.hf_hollow import (
 )
 
 # Import Preloaded Bolt specifications
-from steelsnakes.UK.sections.preloaded_bolts import (
+from steelsnakes.UK.preloaded_bolts import (
     PreloadedBolt88,
     PreloadedBolt109,
     BOLT_PRE_88,
@@ -67,7 +69,7 @@ from steelsnakes.UK.sections.preloaded_bolts import (
 )
 
 # Import Weld specifications
-from steelsnakes.UK.sections.welds import (
+from steelsnakes.UK.welds import (
     WeldSpecification,
     WELD,
 )
@@ -153,7 +155,7 @@ _register_all_uk_sections()
 
 
 # Convenience function for creating sections without specifying type
-def create_section(designation: str, section_type: SectionType = None):
+def create_section(designation: str, section_type: Optional[SectionType] = None):
     """
     Create a section instance by designation, with optional type.
     
