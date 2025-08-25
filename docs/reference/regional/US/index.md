@@ -5,14 +5,18 @@ US steel sections conforming to AISC standards. This module provides access to A
 ::: steelsnakes.US.beams
     options:
         show_root_heading: true
-        show_source: false
-        heading_level: 2
+        show_source: true
+        heading_level: 3
+        members_order: source
+        show_bases: true
 
 ::: steelsnakes.US.channels
     options:
         show_root_heading: true
-        show_source: false
-        heading_level: 2
+        show_source: true
+        heading_level: 3
+        members_order: source
+        show_bases: true
 
 !!! info "Development Status"
     US steel sections are currently under development. More comprehensive documentation will be available in future releases.

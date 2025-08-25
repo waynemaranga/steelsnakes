@@ -1,6 +1,6 @@
 [project]
 name = "steelsnakes"
-version = "0.0.1-alpha-3"
+version = "0.0.1-alpha-4"
 description = "Structural steel for Python."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = "GPL-2.0 " # https://packaging.python.org/en/latest/glossary/#term-SPDX-Expression

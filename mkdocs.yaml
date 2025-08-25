@@ -1,3 +1,8 @@
+# mkdocs: https://www.mkdocs.org/user-guide/configuration/
+# MkDocs-Shadcn: https://www.mkdocs-shadcn.org/reference/admonitions
+# mkdocstrings: https://mkdocstrings.github.io/usage/
+
+
 site_name: SteelSnakes
 site_description: A Python library for structural steel.
 site_author: Wayne Maranga

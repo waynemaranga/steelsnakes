@@ -56,6 +56,62 @@
 # --- Rolled steel flats ---
 # ISFI - Steel flats
 
+# --- Beams ---
+from steelsnakes.IS.beams import (
+    Beam,
+    JuniorBeam,
+    LightWeightBeam,
+    MediumWeightBeam,
+    WideFlangeBeam,
+    NarrowParallelFlangeBeam,
+    WideParallelFlangeBeam,
+    JB,
+    LWB,
+    MWB,
+    WFB,
+    NPB,
+    WPB,
+)
+
+# --- Columns ---
+from steelsnakes.IS.columns import (
+    Column,
+    StandardColumn,
+    HeavyWeightBeam,
+    SC,
+    HWB,
+)
+
+# --- Channels ---
+from steelsnakes.IS.channels import (
+    Channel,
+    JuniorChannel,
+    LightWeightChannel,
+    MediumWeightChannel,
+    MediumWeightParallelFlangeChannel,
+    JC,
+    LWC,
+    MWC,
+    MPC,
+)
+
+# --- Angles ---
+from steelsnakes.IS.angles import (
+    Angle,
+    EqualAngle,
+    UnequalAngle,
+    EA,
+    UA,
+)
+
+# --- Bearing Piles ---
+from steelsnakes.IS.bearing_piles import (
+    BearingPile,
+    ParallelFlangeBearingPile,
+    PBP,
+)
+
+
 __all__ = [
     # Will be populated when Indian sections are implemented
 ]
