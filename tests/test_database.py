@@ -9,7 +9,7 @@ from pathlib import Path
 from unittest.mock import Mock, patch, mock_open
 from typing import Optional, Any
 
-from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.database import SectionDatabase, SQLiteJSONInterface, build_regional_sqlite_db
 from steelsnakes.base.sections import SectionType
 
 
@@ -505,6 +505,122 @@ class TestErrorHandling:
         # Should have empty cache for all types
         for section_type in db.get_supported_types():
             assert len(db._cache.get(section_type, {})) == 0
+
+
+class TestSQLiteJSONInterface:
+    """Test the SQLiteJSONInterface class for JSON to SQLite conversion."""
+    
+    @pytest.fixture
+    def json_files_dir(self, tmp_path):
+        """Create a directory with sample JSON files."""
+        json_dir = tmp_path / "json_data"
+        json_dir.mkdir()
+        
+        # Create UC.json with test data
+        uc_data = {
+            "203x203x46": {
+                "mass_per_metre": 46.0,
+                "h": 203.1,
+                "designation": "203x203x46"
+            }
+        }
+        with open(json_dir / "UC.json", "w") as f:
+            json.dump(uc_data, f)
+        
+        # Create an invalid JSON file to test error handling
+        with open(json_dir / "invalid.json", "w") as f:
+            f.write("{ invalid json")
+        
+        return json_dir
+    
+    @pytest.fixture
+    def sqlite_interface(self, tmp_path):
+        """Create a SQLiteJSONInterface instance."""
+        db_path = tmp_path / "test.sqlite3"
+        return SQLiteJSONInterface(db_path)
+    
+    def test_convert_directory_success(self, sqlite_interface, json_files_dir):
+        """Test successful conversion of JSON directory to SQLite."""
+        result_path = sqlite_interface.convert_directory(json_files_dir)
+        
+        assert result_path == sqlite_interface.db_path
+        assert sqlite_interface.db_path.exists()
+        
+        # Verify database contains expected table and data
+        with sqlite3.connect(sqlite_interface.db_path) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            
+            # Check table exists
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='UC'")
+            assert cursor.fetchone() is not None
+            
+            # Check data was inserted correctly
+            cursor.execute("SELECT * FROM UC WHERE designation = ?", ("203x203x46",))
+            row = cursor.fetchone()
+            assert row["designation"] == "203x203x46"
+            assert row["mass_per_metre"] == 46.0
+    
+    def test_convert_directory_invalid_source(self, sqlite_interface, tmp_path):
+        """Test conversion with non-existent directory."""
+        nonexistent = tmp_path / "does_not_exist"
+        
+        with pytest.raises(ValueError, match="Source directory does not exist"):
+            sqlite_interface.convert_directory(nonexistent)
+    
+    def test_get_section(self, sqlite_interface, json_files_dir):
+        """Test retrieving sections from SQLite database."""
+        sqlite_interface.convert_directory(json_files_dir)
+        
+        # Test existing section
+        section = sqlite_interface.get_section("UC", "203x203x46")
+        assert section is not None
+        assert section["designation"] == "203x203x46"
+        assert section["mass_per_metre"] == 46.0
+        
+        # Test non-existent section
+        section = sqlite_interface.get_section("UC", "999x999x999")
+        assert section is None
+    
+    def test_search_sections(self, sqlite_interface, json_files_dir):
+        """Test searching sections in SQLite database."""
+        sqlite_interface.convert_directory(json_files_dir)
+        
+        # Test successful search
+        results = sqlite_interface.search_sections("UC", mass_per_metre=46.0)
+        assert len(results) == 1
+        assert results[0]["designation"] == "203x203x46"
+        
+        # Test no results
+        results = sqlite_interface.search_sections("UC", mass_per_metre=999.0)
+        assert results == []
+
+
+class TestBuildRegionalSQLiteDB:
+    """Test the build_regional_sqlite_db compatibility function."""
+    
+    def test_build_regional_sqlite_db_success(self, tmp_path):
+        """Test successful database building and backwards compatibility."""
+        # Create test JSON files
+        json_dir = tmp_path / "json_data"
+        json_dir.mkdir()
+        
+        test_data = {"test_section": {"mass": 50.0, "height": 200.0}}
+        with open(json_dir / "TEST.json", "w") as f:
+            json.dump(test_data, f)
+        
+        db_path = tmp_path / "test.sqlite3"
+        
+        result_path = build_regional_sqlite_db(db_path, json_dir)
+        
+        assert result_path == db_path
+        assert db_path.exists()
+        
+        # Verify the database contains expected data
+        with sqlite3.connect(db_path) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='TEST'")
+            assert cursor.fetchone() is not None
 
 
 if __name__ == "__main__":
