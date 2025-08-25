@@ -1,3 +1,9 @@
+*.db-shm
+*.db-wal
+*.session.sql
+*.sqlite3
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[codz]

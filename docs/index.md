@@ -1,17 +1,20 @@
 # `SteelSnakes`
 
 <!-- Centered HTML-image logo -->
-<p align="center"><img src="./logo-4.png" alt="SteelSnakes Logo" width="200"/></p>
+![Logo](./logo-4.png)
 
-[![Python Version](https://img.shields.io/badge/python-3.11+-blue.svg)](https://python.org)
-[![License](https://img.shields.io/badge/license-GPLv2-blue.svg)](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md)
-[![PyPI Version](https://img.shields.io/pypi/v/steelsnakes.svg)](https://pypi.org/project/steelsnakes/)
-[![Documentation](https://img.shields.io/badge/docs-mkdocs-blue.svg)](https://steelsnakes.readthedocs.io/)
-<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main)]( -->
+<div align="center">
+  <p>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a>
+    <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a>
+    <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
+    <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
+  </p>
+</div>
 
-A Python library for structural steel analysis and design, providing easy access to a comprehensive database of steel sections and their properties. Currently supports UK steel sections according to BS EN 10365.
-
-Currently Developing: US and AUS
+A Python library for structural steel.
+Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 
 ## Quick Start
@@ -25,7 +28,7 @@ pip install steelsnakes
 ### Basic Usage
 
 ```python
-from steelsnakes.core.sections.UK import UB, UC, PFC
+from steelsnakes.UK import UB, UC, PFC
 
 # Create section objects using the designations
 beam = UB("457x191x67") # Universal Beam
@@ -38,21 +41,6 @@ print(f"Column mass: {column.mass_per_metre} kg/m")
 print(f"Channel shear center: {channel.e0} mm")
 ```
 
-<!-- ### Advanced Search
-
-```python
-from steelsnakes.core.sections.UK import get_database, SectionType
-
-database = get_database()
-
-# Find heavy beams
-heavy_beams = database.search_sections(SectionType.UB, mass_per_metre__gt=200)
-
-# Find deep channels
-deep_channels = database.search_sections(SectionType.PFC, h__gt=300,b__gt=100
-)
-``` -->
-
 ## Documentation
 
 - **[Installation Guide](https://steelsnakes.readthedocs.io/getting-started/installation/)** - Get started quickly
@@ -60,17 +48,6 @@ deep_channels = database.search_sections(SectionType.PFC, h__gt=300,b__gt=100
 - **[Examples](https://steelsnakes.readthedocs.io/examples/basic/)** - Practical usage examples
 - **[API Reference](https://steelsnakes.readthedocs.io/reference/core/)** - Complete API documentation
 
-## Section Types Supported
-### UK Sections
-
-| Category                | Types                             | Standards       |
-| ----------------------- | --------------------------------- | --------------- |
-| **Universal Sections**  | UB, UC, UBP                       | BS EN 10365     |
-| **Channels**            | PFC                               | BS EN 10365     |
-| **Angles**              | L_EQUAL, L_UNEQUAL, B2B variants  | BS EN 10365     |
-| **Hot Finished Hollow** | HFCHS, HFRHS, HFSHS, HFEHS        | BS EN 10365     |
-| **Cold Formed Hollow**  | CFCHS, CFRHS, CFSHS               | BS EN 10365     |
-| **Connection Elements** | PreloadedBolts (8.8, 10.9), Welds | BS EN standards |
 
 ## Contributing
 
@@ -78,10 +55,11 @@ We welcome contributions! Please see our [Contributing Guidelines](https://steel
 
 ## License
 
-This project is licensed under the GPLv2 License - see the [LICENSE.md](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
-- SCI (The Steel Construction Institute) for the [Interactive Blue Book](https://www.steelforlifebluebook.co.uk/)
-- AISC (American Institute of Steel Construction) for the [AISC Shapes Database](https://www.aisc.org/publications/steel-construction-manual-resources/16th-ed-steel-construction-manual/aisc-shapes-database-v16.0/)
-- [Steelweb.info](http://www.steelweb.info/) for Australian steel section data
+- SCI (Steel Construction Institute)
+- ArcelorMittal
+- AISC (American Institute of Steel Construction)
+- ****
