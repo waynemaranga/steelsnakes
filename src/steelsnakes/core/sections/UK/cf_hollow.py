@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
@@ -162,7 +162,7 @@ def CFCHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormed
     factory = get_factory(data_directory)
     if SectionType.CFCHS not in factory._section_classes:
         factory.register_section_class(ColdFormedCircularHollowSection)
-    return factory.create_section(designation, SectionType.CFCHS)
+    return cast(ColdFormedCircularHollowSection, factory.create_section(designation, SectionType.CFCHS))
 
 
 def CFSHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormedSquareHollowSection:
@@ -170,7 +170,7 @@ def CFSHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormed
     factory = get_factory(data_directory)
     if SectionType.CFSHS not in factory._section_classes:
         factory.register_section_class(ColdFormedSquareHollowSection)
-    return factory.create_section(designation, SectionType.CFSHS)
+    return cast(ColdFormedSquareHollowSection, factory.create_section(designation, SectionType.CFSHS))
 
 
 def CFRHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormedRectangularHollowSection:
@@ -178,7 +178,7 @@ def CFRHS(designation: str, data_directory: Optional[Path] = None) -> ColdFormed
     factory = get_factory(data_directory)
     if SectionType.CFRHS not in factory._section_classes:
         factory.register_section_class(ColdFormedRectangularHollowSection)
-    return factory.create_section(designation, SectionType.CFRHS)
+    return cast(ColdFormedRectangularHollowSection, factory.create_section(designation, SectionType.CFRHS))
 
 
 # Auto-register classes when module is imported
