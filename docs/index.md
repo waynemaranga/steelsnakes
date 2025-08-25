@@ -14,8 +14,7 @@
 </div>
 
 A Python library for structural steel.
-Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
-
+Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US. Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 ## Quick Start
 
@@ -40,18 +39,16 @@ print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
 print(f"Column mass: {column.mass_per_metre} kg/m")
 print(f"Channel shear center: {channel.e0} mm")
 ```
-
 ## Documentation
 
-- **[Installation Guide](https://steelsnakes.readthedocs.io/getting-started/installation/)** - Get started quickly
-- **[User Guide](https://steelsnakes.readthedocs.io/user-guide/section-types/)** - Comprehensive feature documentation
-- **[Examples](https://steelsnakes.readthedocs.io/examples/basic/)** - Practical usage examples
-- **[API Reference](https://steelsnakes.readthedocs.io/reference/core/)** - Complete API documentation
-
+- **[Installation Guide](getting-started/installation.md)** - Get started quickly <!-- Relative links -->
+- **[User Guide](user-guide/sections.md)** - Comprehensive feature documentation
+- **[Examples](examples/basic.md)** - Practical usage examples
+- **[API Reference](reference/index.md)** - Complete API documentation
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/contributing/guidelines/) for details.
+We welcome contributions! Please see our [Contributing Guidelines](contributing.md) for details.
 
 ## License
 
@@ -62,4 +59,3 @@ This project is licensed under the GNU General Public License v2.0. See the [LIC
 - SCI (Steel Construction Institute)
 - ArcelorMittal
 - AISC (American Institute of Steel Construction)
-- ****
