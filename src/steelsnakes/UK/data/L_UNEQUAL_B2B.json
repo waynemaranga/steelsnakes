@@ -1,0 +1,610 @@
+{
+  "200x150x18": {
+    "designation": "200x150x18",
+    "hxb": "200x150",
+    "t": 18,
+    "is_additional": true,
+    "total_mass_per_metre": 94.2,
+    "n_y": 13.7,
+    "total_area": 120.0,
+    "I_yy": 4760.0,
+    "i_yy": 6.29,
+    "W_el_yy": 348.0,
+    "i_zz": {
+      "0": 5.83,
+      "8": 6.1,
+      "10": 6.17,
+      "12": 6.24,
+      "15": 6.35
+    }
+  },
+  "200x150x15": {
+    "designation": "200x150x15",
+    "hxb": "200x150",
+    "t": 15,
+    "is_additional": false,
+    "total_mass_per_metre": 79.2,
+    "n_y": 13.8,
+    "total_area": 101.0,
+    "I_yy": 4040.0,
+    "i_yy": 6.33,
+    "W_el_yy": 294.0,
+    "i_zz": {
+      "0": 5.77,
+      "8": 6.04,
+      "10": 6.11,
+      "12": 6.18,
+      "15": 6.28
+    }
+  },
+  "200x150x12": {
+    "designation": "200x150x12",
+    "hxb": "200x150",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 64.0,
+    "n_y": 13.9,
+    "total_area": 81.6,
+    "I_yy": 3300.0,
+    "i_yy": 6.36,
+    "W_el_yy": 238.0,
+    "i_zz": {
+      "0": 5.72,
+      "8": 5.98,
+      "10": 6.05,
+      "12": 6.12,
+      "15": 6.22
+    }
+  },
+  "200x100x15": {
+    "designation": "200x100x15",
+    "hxb": "200x100",
+    "t": 15,
+    "is_additional": false,
+    "total_mass_per_metre": 67.6,
+    "n_y": 12.8,
+    "total_area": 86.0,
+    "I_yy": 3520.0,
+    "i_yy": 6.4,
+    "W_el_yy": 274.0,
+    "i_zz": {
+      "0": 3.45,
+      "8": 3.72,
+      "10": 3.79,
+      "12": 3.86,
+      "15": 3.97
+    }
+  },
+  "200x100x12": {
+    "designation": "200x100x12",
+    "hxb": "200x100",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 54.6,
+    "n_y": 13.0,
+    "total_area": 69.6,
+    "I_yy": 2880.0,
+    "i_yy": 6.43,
+    "W_el_yy": 222.0,
+    "i_zz": {
+      "0": 3.39,
+      "8": 3.65,
+      "10": 3.72,
+      "12": 3.79,
+      "15": 3.9
+    }
+  },
+  "200x100x10": {
+    "designation": "200x100x10",
+    "hxb": "200x100",
+    "t": 10,
+    "is_additional": false,
+    "total_mass_per_metre": 46.0,
+    "n_y": 13.1,
+    "total_area": 58.4,
+    "I_yy": 2440.0,
+    "i_yy": 6.46,
+    "W_el_yy": 186.0,
+    "i_zz": {
+      "0": 3.35,
+      "8": 3.61,
+      "10": 3.67,
+      "12": 3.74,
+      "15": 3.85
+    }
+  },
+  "150x90x15": {
+    "designation": "150x90x15",
+    "hxb": "150x90",
+    "t": 15,
+    "is_additional": false,
+    "total_mass_per_metre": 53.2,
+    "n_y": 9.79,
+    "total_area": 67.8,
+    "I_yy": 1520.0,
+    "i_yy": 4.74,
+    "W_el_yy": 155.0,
+    "i_zz": {
+      "0": 3.32,
+      "8": 3.6,
+      "10": 3.67,
+      "12": 3.75,
+      "15": 3.86
+    }
+  },
+  "150x90x12": {
+    "designation": "150x90x12",
+    "hxb": "150x90",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 43.2,
+    "n_y": 9.92,
+    "total_area": 55.0,
+    "I_yy": 1250.0,
+    "i_yy": 4.77,
+    "W_el_yy": 127.0,
+    "i_zz": {
+      "0": 3.27,
+      "8": 3.55,
+      "10": 3.62,
+      "12": 3.69,
+      "15": 3.8
+    }
+  },
+  "150x90x10": {
+    "designation": "150x90x10",
+    "hxb": "150x90",
+    "t": 10,
+    "is_additional": false,
+    "total_mass_per_metre": 36.4,
+    "n_y": 10.0,
+    "total_area": 46.4,
+    "I_yy": 1070.0,
+    "i_yy": 4.8,
+    "W_el_yy": 107.0,
+    "i_zz": {
+      "0": 3.23,
+      "8": 3.5,
+      "10": 3.57,
+      "12": 3.64,
+      "15": 3.75
+    }
+  },
+  "150x75x15": {
+    "designation": "150x75x15",
+    "hxb": "150x75",
+    "t": 15,
+    "is_additional": false,
+    "total_mass_per_metre": 49.6,
+    "n_y": 9.48,
+    "total_area": 63.4,
+    "I_yy": 1430.0,
+    "i_yy": 4.75,
+    "W_el_yy": 150.0,
+    "i_zz": {
+      "0": 2.65,
+      "8": 2.94,
+      "10": 3.01,
+      "12": 3.09,
+      "15": 3.21
+    }
+  },
+  "150x75x12": {
+    "designation": "150x75x12",
+    "hxb": "150x75",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 40.4,
+    "n_y": 9.6,
+    "total_area": 51.4,
+    "I_yy": 1180.0,
+    "i_yy": 4.78,
+    "W_el_yy": 123.0,
+    "i_zz": {
+      "0": 2.59,
+      "8": 2.87,
+      "10": 2.94,
+      "12": 3.02,
+      "15": 3.14
+    }
+  },
+  "150x75x10": {
+    "designation": "150x75x10",
+    "hxb": "150x75",
+    "t": 10,
+    "is_additional": false,
+    "total_mass_per_metre": 34.0,
+    "n_y": 9.69,
+    "total_area": 43.4,
+    "I_yy": 1000.0,
+    "i_yy": 4.81,
+    "W_el_yy": 103.0,
+    "i_zz": {
+      "0": 2.56,
+      "8": 2.83,
+      "10": 2.9,
+      "12": 2.97,
+      "15": 3.08
+    }
+  },
+  "125x75x12": {
+    "designation": "125x75x12",
+    "hxb": "125x75",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 35.6,
+    "n_y": 8.19,
+    "total_area": 45.4,
+    "I_yy": 708.0,
+    "i_yy": 3.95,
+    "W_el_yy": 86.4,
+    "i_zz": {
+      "0": 2.76,
+      "8": 3.04,
+      "10": 3.11,
+      "12": 3.19,
+      "15": 3.3
+    }
+  },
+  "125x75x10": {
+    "designation": "125x75x10",
+    "hxb": "125x75",
+    "t": 10,
+    "is_additional": false,
+    "total_mass_per_metre": 30.0,
+    "n_y": 8.27,
+    "total_area": 38.2,
+    "I_yy": 604.0,
+    "i_yy": 3.97,
+    "W_el_yy": 73.0,
+    "i_zz": {
+      "0": 2.72,
+      "8": 2.99,
+      "10": 3.07,
+      "12": 3.14,
+      "15": 3.26
+    }
+  },
+  "125x75x8": {
+    "designation": "125x75x8",
+    "hxb": "125x75",
+    "t": 8,
+    "is_additional": false,
+    "total_mass_per_metre": 24.4,
+    "n_y": 8.36,
+    "total_area": 31.0,
+    "I_yy": 494.0,
+    "i_yy": 4.0,
+    "W_el_yy": 59.2,
+    "i_zz": {
+      "0": 2.68,
+      "8": 2.95,
+      "10": 3.02,
+      "12": 3.09,
+      "15": 3.2
+    }
+  },
+  "100x75x12": {
+    "designation": "100x75x12",
+    "hxb": "100x75",
+    "t": 12,
+    "is_additional": false,
+    "total_mass_per_metre": 30.8,
+    "n_y": 6.73,
+    "total_area": 39.4,
+    "I_yy": 378.0,
+    "i_yy": 3.1,
+    "W_el_yy": 56.0,
+    "i_zz": {
+      "0": 2.95,
+      "8": 3.24,
+      "10": 3.31,
+      "12": 3.39,
+      "15": 3.51
+    }
+  },
+  "100x75x10": {
+    "designation": "100x75x10",
+    "hxb": "100x75",
+    "t": 10,
+    "is_additional": false,
+    "total_mass_per_metre": 26.0,
+    "n_y": 6.81,
+    "total_area": 33.2,
+    "I_yy": 324.0,
+    "i_yy": 3.12,
+    "W_el_yy": 47.6,
+    "i_zz": {
+      "0": 2.91,
+      "8": 3.19,
+      "10": 3.27,
+      "12": 3.34,
+      "15": 3.46
+    }
+  },
+  "100x75x8": {
+    "designation": "100x75x8",
+    "hxb": "100x75",
+    "t": 8,
+    "is_additional": false,
+    "total_mass_per_metre": 21.2,
+    "n_y": 6.9,
+    "total_area": 27.0,
+    "I_yy": 266.0,
+    "i_yy": 3.14,
+    "W_el_yy": 38.6,
+    "i_zz": {
+      "0": 2.87,
+      "8": 3.15,
+      "10": 3.22,
+      "12": 3.29,
+      "15": 3.41
+    }
+  },
+  "100x65x10": {
+    "designation": "100x65x10",
+    "hxb": "100x65",
+    "t": 10,
+    "is_additional": true,
+    "total_mass_per_metre": 24.6,
+    "n_y": 6.64,
+    "total_area": 31.2,
+    "I_yy": 308.0,
+    "i_yy": 3.14,
+    "W_el_yy": 46.4,
+    "i_zz": {
+      "0": 2.43,
+      "8": 2.72,
+      "10": 2.79,
+      "12": 2.87,
+      "15": 2.99
+    }
+  },
+  "100x65x8": {
+    "designation": "100x65x8",
+    "hxb": "100x65",
+    "t": 8,
+    "is_additional": true,
+    "total_mass_per_metre": 19.9,
+    "n_y": 6.73,
+    "total_area": 25.4,
+    "I_yy": 254.0,
+    "i_yy": 3.16,
+    "W_el_yy": 37.8,
+    "i_zz": {
+      "0": 2.39,
+      "8": 2.67,
+      "10": 2.74,
+      "12": 2.82,
+      "15": 2.93
+    }
+  },
+  "100x65x7": {
+    "designation": "100x65x7",
+    "hxb": "100x65",
+    "t": 7,
+    "is_additional": true,
+    "total_mass_per_metre": 17.5,
+    "n_y": 6.77,
+    "total_area": 22.4,
+    "I_yy": 226.0,
+    "i_yy": 3.17,
+    "W_el_yy": 33.2,
+    "i_zz": {
+      "0": 2.37,
+      "8": 2.65,
+      "10": 2.72,
+      "12": 2.79,
+      "15": 2.91
+    }
+  },
+  "100x50x8": {
+    "designation": "100x50x8",
+    "hxb": "100x50",
+    "t": 8,
+    "is_additional": false,
+    "total_mass_per_metre": 17.9,
+    "n_y": 6.4,
+    "total_area": 22.8,
+    "I_yy": 232.0,
+    "i_yy": 3.19,
+    "W_el_yy": 36.4,
+    "i_zz": {
+      "0": 1.73,
+      "8": 2.02,
+      "10": 2.09,
+      "12": 2.17,
+      "15": 2.29
+    }
+  },
+  "100x50x6": {
+    "designation": "100x50x6",
+    "hxb": "100x50",
+    "t": 6,
+    "is_additional": false,
+    "total_mass_per_metre": 13.7,
+    "n_y": 6.49,
+    "total_area": 17.4,
+    "I_yy": 180.0,
+    "i_yy": 3.21,
+    "W_el_yy": 27.6,
+    "i_zz": {
+      "0": 1.69,
+      "8": 1.97,
+      "10": 2.04,
+      "12": 2.12,
+      "15": 2.24
+    }
+  },
+  "80x60x7": {
+    "designation": "80x60x7",
+    "hxb": "80x60",
+    "t": 7,
+    "is_additional": false,
+    "total_mass_per_metre": 14.7,
+    "n_y": 5.49,
+    "total_area": 18.8,
+    "I_yy": 118.0,
+    "i_yy": 2.51,
+    "W_el_yy": 21.4,
+    "i_zz": {
+      "0": 2.31,
+      "8": 2.59,
+      "10": 2.67,
+      "12": 2.74,
+      "15": 2.86
+    }
+  },
+  "80x40x8": {
+    "designation": "80x40x8",
+    "hxb": "80x40",
+    "t": 8,
+    "is_additional": false,
+    "total_mass_per_metre": 14.1,
+    "n_y": 5.06,
+    "total_area": 18.0,
+    "I_yy": 115.0,
+    "i_yy": 2.53,
+    "W_el_yy": 22.8,
+    "i_zz": {
+      "0": 1.41,
+      "8": 1.71,
+      "10": 1.79,
+      "12": 1.87,
+      "15": 2.0
+    }
+  },
+  "80x40x6": {
+    "designation": "80x40x6",
+    "hxb": "80x40",
+    "t": 6,
+    "is_additional": false,
+    "total_mass_per_metre": 10.8,
+    "n_y": 5.15,
+    "total_area": 13.8,
+    "I_yy": 89.8,
+    "i_yy": 2.55,
+    "W_el_yy": 17.5,
+    "i_zz": {
+      "0": 1.37,
+      "8": 1.66,
+      "10": 1.74,
+      "12": 1.82,
+      "15": 1.94
+    }
+  },
+  "75x50x8": {
+    "designation": "75x50x8",
+    "hxb": "75x50",
+    "t": 8,
+    "is_additional": false,
+    "total_mass_per_metre": 14.8,
+    "n_y": 4.98,
+    "total_area": 18.8,
+    "I_yy": 104.0,
+    "i_yy": 2.35,
+    "W_el_yy": 20.8,
+    "i_zz": {
+      "0": 1.9,
+      "8": 2.19,
+      "10": 2.27,
+      "12": 2.35,
+      "15": 2.47
+    }
+  },
+  "75x50x6": {
+    "designation": "75x50x6",
+    "hxb": "75x50",
+    "t": 6,
+    "is_additional": false,
+    "total_mass_per_metre": 11.3,
+    "n_y": 5.06,
+    "total_area": 14.4,
+    "I_yy": 81.0,
+    "i_yy": 2.37,
+    "W_el_yy": 16.0,
+    "i_zz": {
+      "0": 1.86,
+      "8": 2.14,
+      "10": 2.22,
+      "12": 2.3,
+      "15": 2.42
+    }
+  },
+  "70x50x6": {
+    "designation": "70x50x6",
+    "hxb": "70x50",
+    "t": 6,
+    "is_additional": false,
+    "total_mass_per_metre": 10.8,
+    "n_y": 4.77,
+    "total_area": 13.8,
+    "I_yy": 66.8,
+    "i_yy": 2.2,
+    "W_el_yy": 14.0,
+    "i_zz": {
+      "0": 1.9,
+      "8": 2.19,
+      "10": 2.26,
+      "12": 2.34,
+      "15": 2.46
+    }
+  },
+  "65x50x5": {
+    "designation": "65x50x5",
+    "hxb": "65x50",
+    "t": 5,
+    "is_additional": false,
+    "total_mass_per_metre": 8.7,
+    "n_y": 4.51,
+    "total_area": 11.1,
+    "I_yy": 46.4,
+    "i_yy": 2.05,
+    "W_el_yy": 10.3,
+    "i_zz": {
+      "0": 1.93,
+      "8": 2.21,
+      "10": 2.28,
+      "12": 2.36,
+      "15": 2.48
+    }
+  },
+  "60x40x6": {
+    "designation": "60x40x6",
+    "hxb": "60x40",
+    "t": 6,
+    "is_additional": false,
+    "total_mass_per_metre": 8.92,
+    "n_y": 4.0,
+    "total_area": 11.4,
+    "I_yy": 40.2,
+    "i_yy": 1.88,
+    "W_el_yy": 10.1,
+    "i_zz": {
+      "0": 1.51,
+      "8": 1.8,
+      "10": 1.88,
+      "12": 1.96,
+      "15": 2.09
+    }
+  },
+  "60x40x5": {
+    "designation": "60x40x5",
+    "hxb": "60x40",
+    "t": 5,
+    "is_additional": false,
+    "total_mass_per_metre": 7.52,
+    "n_y": 4.04,
+    "total_area": 9.58,
+    "I_yy": 34.4,
+    "i_yy": 1.89,
+    "W_el_yy": 8.5,
+    "i_zz": {
+      "0": 1.49,
+      "8": 1.78,
+      "10": 1.86,
+      "12": 1.94,
+      "15": 2.06
+    }
+  }
+}

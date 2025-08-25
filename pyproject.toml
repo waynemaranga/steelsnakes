@@ -24,11 +24,13 @@ dependencies = [
 
 [project.scripts]
 steelsnakes = "steelsnakes:main"
+steelsnakes-db = "steelsnakes.cli:main"
 
 [project.urls]
 homepage = "https://github.com/waynemaranga/steelsnakes"
 issues = "https://github.com/waynemaranga/steelsnakes/issues"
 documentation = "https://steelsnakes.readthedocs.io/en/latest/"
+discussions = "https://github.com/waynemaranga/steelsnakes/discussions"
 
 # classifiers = [
 #     "Programming Language :: Python :: 3",

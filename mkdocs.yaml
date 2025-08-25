@@ -1,0 +1,138 @@
+site_name: SteelSnakes
+site_description: A Python library for structural steel.
+site_author: Wayne Maranga
+
+repo_name: steelsnakes
+repo_url: https://github.com/waynemaranga/steelsnakes
+edit_uri: edit/main/docs/
+
+copyright: Copyright &copy; 2025 Wayne Maranga
+
+theme:
+  name: shadcn
+  show_title: true # show the title in the top bar
+  show_stargazers: true # show the stargazers in the top bar
+  pygments_style: # default styles 
+        light: shadcn-light
+        dark: github-dark
+  icon: "heroicons:link" # use the shadcn svg if not defined
+  topbar_sections: false # Keep sections in sidebar for better nested navigation
+  katex_options: # optional
+    macros: # example of macros
+      "\\RR": "\\mathbb{R}" 
+      "\\dx": "\\mathrm{d}x"
+  show_datetime: false 
+  
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.path
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.select
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+    - toc.integrate
+
+
+plugins:
+  - search:
+      separator: '[\s\-,:!=\[\]()"`/]+|\.(?!\d)|&[lg]t;|(?!\b)(?=[A-Z][a-z])'
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            members_order: source
+            show_source: true
+            show_root_heading: true
+            show_root_toc_entry: false
+            merge_init_into_class: true
+            docstring_options:
+              ignore_init_summary: true
+            filters: ["!^_"]
+            heading_level: 1
+  - mike:
+      alias_type: symlink
+      version_selector: true
+  - autorefs
+
+
+markdown_extensions:
+  admonition:
+  codehilite:
+  fenced_code:
+  footnotes:
+  extra:
+  pymdownx.blocks.details:
+  pymdownx.tabbed:
+  pymdownx.blocks.tab:
+    combine_header_slug: true
+    separator: ___
+  pymdownx.progressbar:
+  pymdownx.snippets:
+  pymdownx.arithmatex:
+    generic: true
+  shadcn.extensions.echarts.alpha:
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/waynemaranga/steelsnakes
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/steelsnakes/
+  
+  version:
+    provider: mike
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quick Start: getting-started/quickstart.md
+    - Basic Usage: getting-started/basic-usage.md
+  - User Guide:
+    - Section Types: user-guide/sections.md
+    - Database System: user-guide/database.md
+    - Factory Pattern: user-guide/factory.md
+    - Search & Filtering: user-guide/search.md
+  - Examples:
+    - Basic Examples: examples/basic.md
+    - Advanced Usage: examples/advanced.md
+    - Steel Design: examples/design.md
+  - API Guide: api.md
+  - API Reference:
+    - Overview: reference/index.md
+    - Core Components:
+      - Base Classes: reference/core/base.md
+      - Database System: reference/core/database.md
+      - Factory Pattern: reference/core/factory.md
+    - Regional Sections:
+      - UK (British):
+        - Overview: reference/regional/UK/index.md
+        - Universal Sections: reference/regional/UK/universal/index.md
+        - Channels: reference/regional/UK/channels/index.md
+        - Angles: reference/regional/UK/angles/index.md
+        - Hollow Sections: reference/regional/UK/hollow/index.md
+        - Connections: reference/regional/UK/connections/index.md
+      - US (American): reference/regional/US/index.md
+      - EU (European): reference/regional/EU/index.md
+      - AU (Australian): reference/regional/AU/index.md
+      - IS (Indian): reference/regional/IS/index.md
+  - Contributing: contributing.md
+  - Changelog: changelog.md
