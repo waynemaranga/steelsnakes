@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionFactory, SectionType, get_database, get_factory
 
@@ -108,7 +108,7 @@ def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlan
         factory.register_section_class(ParallelFlangeChannel)
         
     # Create and return the section directly from factory
-    return factory.create_section(designation, SectionType.PFC)
+    return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
 
 
 # Auto-register class when module is imported

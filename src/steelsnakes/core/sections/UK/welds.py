@@ -9,7 +9,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
@@ -43,7 +43,7 @@ def Weld(designation: str, data_directory: Optional[Path] = None) -> WeldSpecifi
     factory = get_factory(data_directory)
     if SectionType.WELDS not in factory._section_classes:
         factory.register_section_class(WeldSpecification)
-    return factory.create_section(designation, SectionType.WELDS)
+    return cast(WeldSpecification, factory.create_section(designation, SectionType.WELDS))
 
 
 # Auto-register class when module is imported

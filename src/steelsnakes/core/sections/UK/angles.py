@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
@@ -226,7 +226,7 @@ def L_EQUAL(designation: str, data_directory: Optional[Path] = None) -> EqualAng
     factory = get_factory(data_directory)
     if SectionType.L_EQUAL not in factory._section_classes:
         factory.register_section_class(EqualAngle)
-    return factory.create_section(designation, SectionType.L_EQUAL)
+    return cast(EqualAngle, factory.create_section(designation, SectionType.L_EQUAL))
 
 
 def L_UNEQUAL(designation: str, data_directory: Optional[Path] = None) -> UnequalAngle:
@@ -234,7 +234,7 @@ def L_UNEQUAL(designation: str, data_directory: Optional[Path] = None) -> Unequa
     factory = get_factory(data_directory)
     if SectionType.L_UNEQUAL not in factory._section_classes:
         factory.register_section_class(UnequalAngle)
-    return factory.create_section(designation, SectionType.L_UNEQUAL)
+    return cast(UnequalAngle, factory.create_section(designation, SectionType.L_UNEQUAL))
 
 
 def L_EQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> EqualAngleBackToBack:
@@ -242,7 +242,7 @@ def L_EQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> Equa
     factory = get_factory(data_directory)
     if SectionType.L_EQUAL_B2B not in factory._section_classes:
         factory.register_section_class(EqualAngleBackToBack)
-    return factory.create_section(designation, SectionType.L_EQUAL_B2B)
+    return cast(EqualAngleBackToBack, factory.create_section(designation, SectionType.L_EQUAL_B2B))
 
 
 def L_UNEQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> UnequalAngleBackToBack:
@@ -250,7 +250,7 @@ def L_UNEQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> Un
     factory = get_factory(data_directory)
     if SectionType.L_UNEQUAL_B2B not in factory._section_classes:
         factory.register_section_class(UnequalAngleBackToBack)
-    return factory.create_section(designation, SectionType.L_UNEQUAL_B2B)
+    return cast(UnequalAngleBackToBack, factory.create_section(designation, SectionType.L_UNEQUAL_B2B))
 
 
 # Auto-register classes when module is imported

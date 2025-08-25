@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict, Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
@@ -75,7 +75,7 @@ def BOLT_PRE_88(designation: str, data_directory: Optional[Path] = None) -> Prel
     factory = get_factory(data_directory)
     if SectionType.BOLT_PRE_88 not in factory._section_classes:
         factory.register_section_class(PreloadedBolt88)
-    return factory.create_section(designation, SectionType.BOLT_PRE_88)
+    return cast(PreloadedBolt88, factory.create_section(designation, SectionType.BOLT_PRE_88))
 
 
 def BOLT_PRE_109(designation: str, data_directory: Optional[Path] = None) -> PreloadedBolt109:
@@ -83,7 +83,7 @@ def BOLT_PRE_109(designation: str, data_directory: Optional[Path] = None) -> Pre
     factory = get_factory(data_directory)
     if SectionType.BOLT_PRE_109 not in factory._section_classes:
         factory.register_section_class(PreloadedBolt109)
-    return factory.create_section(designation, SectionType.BOLT_PRE_109)
+    return cast(PreloadedBolt109, factory.create_section(designation, SectionType.BOLT_PRE_109))
 
 
 # Auto-register classes when module is imported

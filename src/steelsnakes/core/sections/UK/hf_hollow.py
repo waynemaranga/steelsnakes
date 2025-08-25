@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, cast
 
 from steelsnakes.core.sections.UK.base import BaseSection, SectionType, get_database, get_factory
 
@@ -191,7 +191,7 @@ def HFCHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishe
     factory = get_factory(data_directory)
     if SectionType.HFCHS not in factory._section_classes:
         factory.register_section_class(HotFinishedCircularHollowSection)
-    return factory.create_section(designation, SectionType.HFCHS)
+    return cast(HotFinishedCircularHollowSection, factory.create_section(designation, SectionType.HFCHS))
 
 
 def HFSHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedSquareHollowSection:
@@ -199,7 +199,7 @@ def HFSHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishe
     factory = get_factory(data_directory)
     if SectionType.HFSHS not in factory._section_classes:
         factory.register_section_class(HotFinishedSquareHollowSection)
-    return factory.create_section(designation, SectionType.HFSHS)
+    return cast(HotFinishedSquareHollowSection, factory.create_section(designation, SectionType.HFSHS))
 
 
 def HFRHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedRectangularHollowSection:
@@ -207,7 +207,7 @@ def HFRHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishe
     factory = get_factory(data_directory)
     if SectionType.HFRHS not in factory._section_classes:
         factory.register_section_class(HotFinishedRectangularHollowSection)
-    return factory.create_section(designation, SectionType.HFRHS)
+    return cast(HotFinishedRectangularHollowSection, factory.create_section(designation, SectionType.HFRHS))
 
 
 def HFEHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishedEllipticalHollowSection:
@@ -215,7 +215,7 @@ def HFEHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishe
     factory = get_factory(data_directory)
     if SectionType.HFEHS not in factory._section_classes:
         factory.register_section_class(HotFinishedEllipticalHollowSection)
-    return factory.create_section(designation, SectionType.HFEHS)
+    return cast(HotFinishedEllipticalHollowSection, factory.create_section(designation, SectionType.HFEHS))
 
 
 # Auto-register classes when module is imported

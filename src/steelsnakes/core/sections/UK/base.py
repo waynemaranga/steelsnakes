@@ -12,7 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
 from pathlib import Path
-from typing import Any, LiteralString, Optional, Type, Union
+from typing import Any, LiteralString, Optional, Type, Union, cast
 
 
 class SectionType(str, Enum):
