@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 import logging
+import traceback
 
 from steelsnakes.base.factory import SectionFactory
 from steelsnakes.base.sections import SectionType
@@ -25,62 +26,51 @@ class UKSectionFactory(SectionFactory):
         super().__init__(database)
 
     def _register_default_classes(self) -> None:
-        """Register all UK section classes automatically."""
-        # Import and register all UK section classes
-        try:
+        """Register mappings from section types to their classes for lazy loading."""
+        # Register mappings from section types to module paths and class names
+        self._section_mappings = {
             # Universal sections
-            from steelsnakes.UK.universal import (
-                UniversalBeam, UniversalColumn, UniversalBearingPile
-            )
-            self.register_section_class(UniversalBeam)
-            self.register_section_class(UniversalColumn)
-            self.register_section_class(UniversalBearingPile)
+            SectionType.UB: ('steelsnakes.UK.universal', 'UniversalBeam'),
+            SectionType.UC: ('steelsnakes.UK.universal', 'UniversalColumn'),
+            SectionType.UBP: ('steelsnakes.UK.universal', 'UniversalBearingPile'),
             
             # Channel sections 
-            from steelsnakes.UK.channels import ParallelFlangeChannel
-            self.register_section_class(ParallelFlangeChannel)
+            SectionType.PFC: ('steelsnakes.UK.channels', 'ParallelFlangeChannel'),
             
             # Angle sections
-            from steelsnakes.UK.angles import (
-                EqualAngle, UnequalAngle, EqualAngleBackToBack, UnequalAngleBackToBack
-            )
-            self.register_section_class(EqualAngle)
-            self.register_section_class(UnequalAngle)
-            self.register_section_class(EqualAngleBackToBack)
-            self.register_section_class(UnequalAngleBackToBack)
+            SectionType.L_EQUAL: ('steelsnakes.UK.angles', 'EqualAngle'),
+            SectionType.L_UNEQUAL: ('steelsnakes.UK.angles', 'UnequalAngle'),
+            SectionType.L_EQUAL_B2B: ('steelsnakes.UK.angles', 'EqualAngleBackToBack'),
+            SectionType.L_UNEQUAL_B2B: ('steelsnakes.UK.angles', 'UnequalAngleBackToBack'),
             
             # Hot Finished Hollow sections
-            from steelsnakes.UK.hf_hollow import (
-                HotFinishedCircularHollowSection,
-                HotFinishedSquareHollowSection,
-                HotFinishedRectangularHollowSection,
-                HotFinishedEllipticalHollowSection
-            )
-            self.register_section_class(HotFinishedCircularHollowSection)
-            self.register_section_class(HotFinishedSquareHollowSection)
-            self.register_section_class(HotFinishedRectangularHollowSection)
-            self.register_section_class(HotFinishedEllipticalHollowSection)
+            SectionType.HFCHS: ('steelsnakes.UK.hf_hollow', 'HotFinishedCircularHollowSection'),
+            SectionType.HFSHS: ('steelsnakes.UK.hf_hollow', 'HotFinishedSquareHollowSection'),
+            SectionType.HFRHS: ('steelsnakes.UK.hf_hollow', 'HotFinishedRectangularHollowSection'),
+            SectionType.HFEHS: ('steelsnakes.UK.hf_hollow', 'HotFinishedEllipticalHollowSection'),
             
             # Cold Formed Hollow sections
-            from steelsnakes.UK.cf_hollow import (
-                ColdFormedCircularHollowSection,
-                ColdFormedSquareHollowSection,
-                ColdFormedRectangularHollowSection
-            )
-            self.register_section_class(ColdFormedCircularHollowSection)
-            self.register_section_class(ColdFormedSquareHollowSection)
-            self.register_section_class(ColdFormedRectangularHollowSection)
+            SectionType.CFCHS: ('steelsnakes.UK.cf_hollow', 'ColdFormedCircularHollowSection'),
+            SectionType.CFSHS: ('steelsnakes.UK.cf_hollow', 'ColdFormedSquareHollowSection'),
+            SectionType.CFRHS: ('steelsnakes.UK.cf_hollow', 'ColdFormedRectangularHollowSection'),
             
             # Connection components
-            from steelsnakes.UK.welds import WeldSpecification
-            from steelsnakes.UK.preloaded_bolts import PreloadedBolt88, PreloadedBolt109
-            self.register_section_class(WeldSpecification)
-            self.register_section_class(PreloadedBolt88)
-            self.register_section_class(PreloadedBolt109)
-            
+            SectionType.WELDS: ('steelsnakes.UK.welds', 'WeldSpecification'),
+            SectionType.BOLT_PRE_88: ('steelsnakes.UK.preloaded_bolts', 'PreloadedBolt88'),
+            SectionType.BOLT_PRE_109: ('steelsnakes.UK.preloaded_bolts', 'PreloadedBolt109'),
+        }
+        
+        # For backward compatibility and testing, we can optionally try to preload some classes
+        # but gracefully handle any import failures with better error logging
+        try:
+            # Try to load a few common section types to verify modules are available
+            # This is optional and mainly for compatibility with existing tests
+            from steelsnakes.UK.universal import UniversalBeam
+            self.register_section_class(UniversalBeam)
         except ImportError as e:
-            # Some section modules may not exist yet - gracefully handle
-            logger.warning(f"Warning: Could not import some UK section classes: {e}")
+            # Log full traceback for debugging import issues
+            logger.warning(f"Could not preload UniversalBeam class: {e}")
+            logger.debug(f"Full traceback:\n{traceback.format_exc()}")
 
 
 # Global instance for convenience
