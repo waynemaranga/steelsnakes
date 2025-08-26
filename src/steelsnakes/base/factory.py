@@ -9,7 +9,6 @@ from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
 
 # -
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 # -
