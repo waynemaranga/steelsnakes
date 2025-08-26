@@ -4,6 +4,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Optional
 import logging
+import threading
 
 from steelsnakes.base.factory import SectionFactory
 from steelsnakes.base.sections import SectionType
@@ -85,14 +86,32 @@ class UKSectionFactory(SectionFactory):
 
 # Global instance for convenience
 _global_uk_factory: Optional[UKSectionFactory] = None
+_factory_lock = threading.Lock()
 
 
 def get_uk_factory(data_directory: Optional[Path] = None) -> UKSectionFactory:
-    """Get or create global UK factory instance."""
+    """Get or create global UK factory instance.
+    
+    Args:
+        data_directory: Optional path to data directory. If provided, returns a new
+                       factory instance without updating the global singleton.
+    
+    Returns:
+        UKSectionFactory instance - either the global singleton or a new instance.
+    """
     global _global_uk_factory
-    if _global_uk_factory is None or data_directory is not None:
-        database = get_uk_database(data_directory) if data_directory else None
-        _global_uk_factory = UKSectionFactory(database)
+    
+    # If data_directory is provided, always return a new instance
+    if data_directory is not None:
+        database = get_uk_database(data_directory)
+        return UKSectionFactory(database)
+    
+    # For global singleton, use double-checked locking pattern
+    if _global_uk_factory is None:
+        with _factory_lock:
+            if _global_uk_factory is None:
+                _global_uk_factory = UKSectionFactory()
+    
     return _global_uk_factory
 
 if __name__ == "__main__":

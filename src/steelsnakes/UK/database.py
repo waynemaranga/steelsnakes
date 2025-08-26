@@ -3,6 +3,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Optional, Any
+import threading
 
 from steelsnakes.base.database import SectionDatabase
 from steelsnakes.base.sections import SectionType
@@ -112,11 +113,30 @@ class UKSectionDatabase(SectionDatabase):
 
 # Global instance for convenience
 _global_uk_database: Optional[UKSectionDatabase] = None
+_database_lock = threading.Lock()
 
 
 def get_uk_database(data_directory: Optional[Path] = None, use_sqlite: bool = False) -> UKSectionDatabase:
-    """Get or create global UK database instance. Uses JSON by default."""
+    """Get or create global UK database instance. Uses JSON by default.
+    
+    Args:
+        data_directory: Optional path to data directory. If provided, returns a new
+                       database instance without updating the global singleton.
+        use_sqlite: Whether to use SQLite database format.
+    
+    Returns:
+        UKSectionDatabase instance - either the global singleton or a new instance.
+    """
     global _global_uk_database
-    if _global_uk_database is None or data_directory is not None:
-        _global_uk_database = UKSectionDatabase(data_directory, use_sqlite=use_sqlite)
+    
+    # If data_directory is provided, always return a new instance
+    if data_directory is not None:
+        return UKSectionDatabase(data_directory, use_sqlite=use_sqlite)
+    
+    # For global singleton, use double-checked locking pattern
+    if _global_uk_database is None:
+        with _database_lock:
+            if _global_uk_database is None:
+                _global_uk_database = UKSectionDatabase(None, use_sqlite=use_sqlite)
+    
     return _global_uk_database
