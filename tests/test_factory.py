@@ -231,7 +231,8 @@ class TestSectionFactoryBase:
     def test_abstract_factory_cannot_instantiate(self):
         """Test that abstract SectionFactory cannot be instantiated directly."""
         with pytest.raises(TypeError):
-            SectionFactory(Mock()) # FIXME: Cannot instantiate abstract class "SectionFactory"; "SectionFactory._register_default_classes" is not implemented
+            # FIXME: Cannot instantiate abstract class "SectionFactory"; "SectionFactory._register_default_classes" is not implemented
+            SectionFactory(Mock()) 
 
 
 class TestSectionCreation:
@@ -252,8 +253,8 @@ class TestSectionCreation:
         assert isinstance(section, MockUniversalBeam)
         assert section.designation == "254x146x31"
         assert section.mass_per_metre == 31.0
-        assert section.depth == 254
-        assert section.width == 146
+        assert section.depth == 254 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
+        assert section.width == 146 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
     
     def test_create_section_with_auto_detection(self, factory):
         """Test creating section with automatic type detection."""
@@ -262,8 +263,8 @@ class TestSectionCreation:
         assert isinstance(section, MockParallelFlangeChannel)
         assert section.designation == "150x75x18"
         assert section.mass_per_metre == 18.0
-        assert section.depth == 150
-        assert section.width == 75
+        assert section.depth == 150 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
+        assert section.width == 75 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
     
     def test_create_section_with_missing_designation(self, factory):
         """Test creating section where designation needs to be added."""
@@ -272,7 +273,7 @@ class TestSectionCreation:
         assert isinstance(section, MockWeldSpecification)
         assert section.designation == "BUTT_WELD_6"  # Should be added automatically
         assert section.weld_type == "BUTT"
-        assert section.throat_thickness == 6.0
+        assert section.throat_thickness == 6.0 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
     
     def test_create_section_filters_metadata(self, factory):
         """Test that metadata fields starting with '_' are filtered out."""

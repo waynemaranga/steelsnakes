@@ -106,7 +106,7 @@ class TestFuzzyMatchingErrorMessages:
 
         msg = str(exc_info.value)
         assert "Section '150x75x18' of type 'UB' not found" in msg
-        assert "Note: designation exists under type 'PFC'" in msg
+        assert "\nNote: designation exists under type 'PFC'" in msg
 
     def test_wrong_type_case_insensitive_cross_type_note(self, factory):
         """Cross-type note should work case-insensitively."""
@@ -115,7 +115,7 @@ class TestFuzzyMatchingErrorMessages:
         with pytest.raises(ValueError) as exc_info:
             factory.create_section("150X75X18", SectionType.UB)
         msg = str(exc_info.value)
-        assert "Note: designation exists under type 'PFC'" in msg
+        assert "\nNote: designation exists under type 'PFC'" in msg
 
 
 class TestFuzzyMatchingUtilityMethod:

@@ -92,7 +92,7 @@ class SectionFactory(ABC):
                 if cross_result is not None:
                     found_type, found_data = cross_result
                     if found_type != section_type:
-                        cross_type_note = f" Note: designation exists under type '{found_type.value}'."
+                        cross_type_note = f"\nNote: designation exists under type '{found_type.value}'."
                 
                 error_msg = f"Section '{designation}' of type '{section_type.value}' not found"
                 if similar_sections:
