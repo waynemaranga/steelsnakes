@@ -10,7 +10,6 @@ from steelsnakes.base.database import SectionDatabase
 from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 
 # -
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 # -
