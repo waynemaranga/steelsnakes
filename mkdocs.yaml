@@ -6,7 +6,7 @@
 site_name: SteelSnakes
 site_description: A Python library for structural steel.
 site_author: Wayne Maranga
-site_url: ""
+site_url: https://steelsnakes.readthedocs.io/en/latest/
 
 repo_name: steelsnakes
 repo_url: https://github.com/waynemaranga/steelsnakes
@@ -21,7 +21,7 @@ theme:
   pygments_style: # https://pygments.org/styles/
         light: abap
         dark: monokai
-  icon: "heroicons:link" # use the shadcn svg if not defined
+  icon: "heroicons:arrows-pointing-out" # https://heroicons.com/solid # use the shadcn svg if not defined
   topbar_sections: false # Keep sections in sidebar for better nested navigation
   katex_options: # optional
     macros: # example of macros
