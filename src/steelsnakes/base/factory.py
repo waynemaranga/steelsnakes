@@ -8,9 +8,9 @@ import difflib
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 
 # -
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 # -
@@ -104,7 +104,8 @@ class SectionFactory(ABC):
                 if cross_type_note:
                     error_msg += cross_type_note
                 
-                raise ValueError(error_msg) # TODO: paginate if too many
+                raise SectionNotFoundError(f"Section '{designation}' of type '{section_type.value}' not found. Available sections: {len(available)}") # TODO: paginate if too many
+
                 # TODO: compare raise vs log warning + return None
         
         else:
@@ -121,14 +122,15 @@ class SectionFactory(ABC):
                 else:
                     error_msg += f". Available types: {[t.value for t in available_types]}"
                 
-                raise ValueError(error_msg)
+                raise SectionNotFoundError(f"Section '{designation}' not found in any type. Available types: {[t.value for t in available_types]}")
+
          
             section_type, section_data = result
 
         # Get the section class
         section_class: Optional[Type[BaseSection]] = self._section_classes.get(section_type)
         if not section_class:
-            raise ValueError(f"No registered class for section type '{section_type.value}'. Available types: {[t.value for t in self._section_classes.keys()]}")
+            raise SectionTypeNotRegisteredError(f"No registered class for section type '{section_type.value}'. Available types: {[t.value for t in self._section_classes.keys()]}")
             # TODO: compare raise vs log warning + return None
 
         # Create and return instance
