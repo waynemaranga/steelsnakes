@@ -275,17 +275,30 @@ class TestUKSectionFactory:
         factory = UKSectionFactory(database=uk_database)
         assert factory.database is uk_database
         assert isinstance(factory._section_classes, dict)
+        assert isinstance(factory._section_mappings, dict)
         
-        # Check that UK section classes are registered
+        # Check that section mappings are registered for lazy loading
+        assert SectionType.UB in factory._section_mappings
+        assert SectionType.UC in factory._section_mappings
+        assert SectionType.PFC in factory._section_mappings
+        assert SectionType.L_EQUAL in factory._section_mappings
+        
+        # Verify that lazy loading works by getting section classes
+        ub_class = factory._get_section_class(SectionType.UB)
+        uc_class = factory._get_section_class(SectionType.UC)
+        pfc_class = factory._get_section_class(SectionType.PFC)
+        l_equal_class = factory._get_section_class(SectionType.L_EQUAL)
+        
+        assert ub_class is UniversalBeam
+        assert uc_class is UniversalColumn
+        assert pfc_class is ParallelFlangeChannel
+        assert l_equal_class is EqualAngle
+        
+        # After lazy loading, classes should be in the _section_classes dict
         assert SectionType.UB in factory._section_classes
         assert SectionType.UC in factory._section_classes
         assert SectionType.PFC in factory._section_classes
         assert SectionType.L_EQUAL in factory._section_classes
-        
-        assert factory._section_classes[SectionType.UB] is UniversalBeam
-        assert factory._section_classes[SectionType.UC] is UniversalColumn
-        assert factory._section_classes[SectionType.PFC] is ParallelFlangeChannel
-        assert factory._section_classes[SectionType.L_EQUAL] is EqualAngle
     
     def test_factory_without_database(self):
         """Test factory initialization without providing database."""
@@ -304,8 +317,11 @@ class TestUKSectionFactory:
         factory = UKSectionFactory(database=Mock())
         assert factory.database is not None
         assert hasattr(factory, '_section_classes')
-        # Should have successfully registered at least some classes
-        assert len(factory._section_classes) > 0
+        assert hasattr(factory, '_section_mappings')
+        # Should have successfully registered section mappings for lazy loading
+        assert len(factory._section_mappings) > 0
+        # May have some preloaded classes, but not necessarily all
+        assert len(factory._section_classes) >= 0
 
 
 class TestUniversalSections:
@@ -706,6 +722,30 @@ class TestErrorHandling:
                 except ImportError:
                     # If import error propagates, that's acceptable too
                     pass
+
+    def test_lazy_loading_import_error_with_traceback(self):
+        """Test that lazy loading logs full traceback on import errors."""
+        factory = UKSectionFactory(database=Mock())
+        
+        # Create a fake mapping that will fail to import
+        from steelsnakes.base.sections import SectionType
+        factory._section_mappings[SectionType.UC] = ('nonexistent.module', 'NonexistentClass')
+        
+        # Make sure UC is not preloaded
+        if SectionType.UC in factory._section_classes:
+            del factory._section_classes[SectionType.UC]
+        
+        with patch('steelsnakes.base.factory.logger') as mock_logger:
+            with pytest.raises(ValueError, match="Failed to load section class"):
+                factory._get_section_class(SectionType.UC)
+            
+            # Verify that error logging was called
+            assert mock_logger.error.call_count >= 1
+            
+            # Check that traceback was logged (should contain "Full traceback:")
+            calls = mock_logger.error.call_args_list
+            traceback_logged = any("Full traceback:" in str(call) for call in calls)
+            assert traceback_logged, f"Expected traceback to be logged. Calls: {calls}"
 
 
 if __name__ == "__main__":
