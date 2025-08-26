@@ -48,7 +48,6 @@ class SectionFactory(ABC):
             designation: The section designation to find similar matches for
             section_type: Optional section type to limit search to
             n: Maximum number of suggestions to return
-            
         Returns:
             List of similar section designations
         """
@@ -69,7 +68,7 @@ class SectionFactory(ABC):
             designation, 
             all_sections, 
             n=n, 
-            cutoff=0.3  # Lower cutoff to be more inclusive with suggestions
+            cutoff=0.6  # Stricter cutoff to avoid noisy suggestions
         )
         
         return close_matches
@@ -83,7 +82,7 @@ class SectionFactory(ABC):
             section_data: Optional[dict[str, Any]] = self.database.get_section_data(designation=designation, section_type=section_type)
             if not section_data:
                 available: list[str] = self.database.list_sections(section_type=section_type)
-                similar_sections = self._get_similar_sections(designation, section_type)
+                similar_sections = self._get_similar_sections(designation, section_type, n=5)
                 # Check if the designation exists under a different section type
                 cross_type_note = ""
                 try:
@@ -97,14 +96,15 @@ class SectionFactory(ABC):
                 
                 error_msg = f"Section '{designation}' of type '{section_type.value}' not found"
                 if similar_sections:
-                    suggestions = "', '".join(similar_sections)
-                    error_msg += f". Did you mean: '{suggestions}'?"
+                    # For a specific type, suggest up to top 5 close matches
+                    suggestions = "', '".join(similar_sections[:5])
+                    error_msg += f".\nTry: '{suggestions}'?"
                 else:
                     error_msg += f". Available sections: {len(available)}"
                 if cross_type_note:
                     error_msg += cross_type_note
-                
-                raise SectionNotFoundError(f"Section '{designation}' of type '{section_type.value}' not found. Available sections: {len(available)}") # TODO: paginate if too many
+
+                raise SectionNotFoundError(error_msg) # TODO: paginate if too many
 
                 # TODO: compare raise vs log warning + return None
         
@@ -118,11 +118,11 @@ class SectionFactory(ABC):
                 error_msg = f"Section '{designation}' not found in any type"
                 if similar_sections:
                     suggestions = "', '".join(similar_sections)
-                    error_msg += f". Did you mean: '{suggestions}'?"
+                    error_msg += f".\nTry: '{suggestions}'?"
                 else:
                     error_msg += f". Available types: {[t.value for t in available_types]}"
-                
-                raise SectionNotFoundError(f"Section '{designation}' not found in any type. Available types: {[t.value for t in available_types]}")
+
+                raise SectionNotFoundError(error_msg)
 
          
             section_type, section_data = result

@@ -28,7 +28,7 @@ class TestFuzzyMatchingErrorMessages:
         
         error_msg = str(exc_info.value)
         assert "Section '254x146x30' of type 'UB' not found" in error_msg
-        assert "Did you mean: '254x146x31'?" in error_msg
+        assert "\nTry: '254x146x31'?" in error_msg
         # Should not contain the old message format
         assert "Available sections:" not in error_msg
     
@@ -40,7 +40,7 @@ class TestFuzzyMatchingErrorMessages:
         error_msg = str(exc_info.value)
         assert "Section 'COMPLETELY_DIFFERENT' of type 'UB' not found" in error_msg
         assert "Available sections: 2" in error_msg
-        assert "Did you mean:" not in error_msg
+        assert "\nTry:" not in error_msg
     
     def test_fuzzy_match_auto_detect_close_match(self, factory):
         """Test fuzzy matching across all types when no type specified."""
@@ -49,7 +49,7 @@ class TestFuzzyMatchingErrorMessages:
         
         error_msg = str(exc_info.value)
         assert "Section '254x146x30' not found in any type" in error_msg
-        assert "Did you mean:" in error_msg
+        assert "\nTry:" in error_msg
         assert "254x146x31" in error_msg
         # Should not contain the old message format
         assert "Available types:" not in error_msg
@@ -62,7 +62,7 @@ class TestFuzzyMatchingErrorMessages:
         error_msg = str(exc_info.value)
         assert "Section 'COMPLETELY_DIFFERENT' not found in any type" in error_msg
         assert "Available types: ['UB', 'PFC', 'WELDS']" in error_msg
-        assert "Did you mean:" not in error_msg
+        assert "\nTry:" not in error_msg
     
     def test_fuzzy_match_case_insensitive(self, factory):
         """Test that fuzzy matching works with different cases."""
@@ -70,7 +70,7 @@ class TestFuzzyMatchingErrorMessages:
             factory.create_section("254X146X30", SectionType.UB)  # Upper case
         
         error_msg = str(exc_info.value)
-        assert "Did you mean: '254x146x31'?" in error_msg
+        assert "\nTry: '254x146x31'?" in error_msg
     
     def test_fuzzy_match_partial_designation(self, factory):
         """Test fuzzy matching with partial designation."""
@@ -78,7 +78,7 @@ class TestFuzzyMatchingErrorMessages:
             factory.create_section("150x75", SectionType.PFC)  # Missing x18 part
         
         error_msg = str(exc_info.value)
-        assert "Did you mean: '150x75x18'?" in error_msg
+        assert "\nTry: '150x75x18'?" in error_msg
     
     def test_fuzzy_match_typo_correction(self, factory):
         """Test fuzzy matching corrects typos."""
@@ -86,7 +86,7 @@ class TestFuzzyMatchingErrorMessages:
             factory.create_section("BUTT_WALD_6", SectionType.WELDS)  # Typo in WELD
         
         error_msg = str(exc_info.value)
-        assert "Did you mean: 'BUTT_WELD_6'?" in error_msg
+        assert "\nTry: 'BUTT_WELD_6'?" in error_msg
     
     def test_fuzzy_match_multiple_suggestions(self, factory):
         """Test that multiple suggestions are provided when available."""
@@ -94,7 +94,7 @@ class TestFuzzyMatchingErrorMessages:
             factory.create_section("x146x")  # Should match multiple UB sections
         
         error_msg = str(exc_info.value)
-        assert "Did you mean:" in error_msg
+        assert "\nTry:" in error_msg
         # Should contain multiple suggestions separated by ', '
         assert "', '" in error_msg or "254x146x31" in error_msg
 

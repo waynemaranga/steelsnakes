@@ -1,6 +1,16 @@
 """Custom exception classes for steelsnakes section factory."""
+# TODO: add custom exceptions for SectionDatabase and other necessary exceptions
 
+# -- SectionDatabaseError
+class SectionDatabaseError(Exception):
+    """Base exception class for section database errors.
+    
+    This serves as the base class for all section database-related errors,
+    allowing callers to catch any database error or specific subtypes.
+    """
+    pass
 
+# -- SectionFactoryError
 class SectionFactoryError(Exception):
     """Base exception class for section factory errors.
     
@@ -10,7 +20,7 @@ class SectionFactoryError(Exception):
     pass
 
 
-class SectionNotFoundError(SectionFactoryError):
+class SectionNotFoundError(SectionFactoryError, ValueError):
     """Exception raised when a requested section cannot be found.
     
     This includes cases where:
