@@ -7,6 +7,7 @@ import logging
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.adapter import SectionDataAdapter
 
 # -
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
@@ -68,12 +69,8 @@ class SectionFactory(ABC):
             # TODO: compare raise vs log warning + return None
 
         # Create and return instance
-        # Remove metadata from data as it's not part of the dataclass
-        clean_data: dict[str, Any] = {k: v for k, v in section_data.items() if not k.startswith('_')}
-        
-        # Add designation if not present (e.g., for WELDS)
-        if 'designation' not in clean_data:
-            clean_data['designation'] = designation
+        # Transform data using adapter (remove metadata, ensure designation)
+        clean_data: dict[str, Any] = SectionDataAdapter.transform_section_data(section_data, designation)
             
         return section_class(**clean_data)
 
