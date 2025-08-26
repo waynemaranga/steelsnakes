@@ -7,6 +7,7 @@ import logging
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 
 # -
 logger: logging.Logger = logging.getLogger(__name__)
@@ -48,7 +49,7 @@ class SectionFactory(ABC):
             section_data: Optional[dict[str, Any]] = self.database.get_section_data(designation=designation, section_type=section_type)
             if not section_data:
                 available: list[str] = self.database.list_sections(section_type=section_type)
-                raise ValueError(f"Section '{designation}' of type '{section_type.value}' not found. Available sections: {len(available)}") # TODO: paginate if too many
+                raise SectionNotFoundError(f"Section '{designation}' of type '{section_type.value}' not found. Available sections: {len(available)}") # TODO: paginate if too many
                 # TODO: compare raise vs log warning + return None
         
         else:
@@ -56,14 +57,14 @@ class SectionFactory(ABC):
             result = self.database.find_section(designation=designation)
             if not result:
                 available_types: list[SectionType] = self.database.get_available_section_types()
-                raise ValueError(f"Section '{designation}' not found in any type. Available types: {[t.value for t in available_types]}")
+                raise SectionNotFoundError(f"Section '{designation}' not found in any type. Available types: {[t.value for t in available_types]}")
          
             section_type, section_data = result
 
         # Get the section class
         section_class: Optional[Type[BaseSection]] = self._section_classes.get(section_type)
         if not section_class:
-            raise ValueError(f"No registered class for section type '{section_type.value}'. Available types: {[t.value for t in self._section_classes.keys()]}")
+            raise SectionTypeNotRegisteredError(f"No registered class for section type '{section_type.value}'. Available types: {[t.value for t in self._section_classes.keys()]}")
             # TODO: compare raise vs log warning + return None
 
         # Create and return instance

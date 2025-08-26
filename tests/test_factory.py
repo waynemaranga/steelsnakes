@@ -9,6 +9,7 @@ from typing import Optional, Any, Dict, Type
 from steelsnakes.base.factory import SectionFactory
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 
 
 # Mock Section Classes for Testing
@@ -296,7 +297,7 @@ class TestErrorHandling:
     
     def test_section_not_found_with_type(self, factory):
         """Test error when section not found with specified type."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             factory.create_section("NONEXISTENT", SectionType.UB)
         
         assert "Section 'NONEXISTENT' of type 'UB' not found" in str(exc_info.value)
@@ -304,7 +305,7 @@ class TestErrorHandling:
     
     def test_section_not_found_auto_detect(self, factory):
         """Test error when section not found in any type."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             factory.create_section("TOTALLY_NONEXISTENT")
         
         assert "Section 'TOTALLY_NONEXISTENT' not found in any type" in str(exc_info.value)
@@ -320,7 +321,7 @@ class TestErrorHandling:
             "203x203x46": {"designation": "203x203x46", "mass_per_metre": 46.0}
         }
         
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionTypeNotRegisteredError) as exc_info:
             factory.create_section("203x203x46", SectionType.UC)
         
         assert "No registered class for section type 'UC'" in str(exc_info.value)
@@ -332,7 +333,7 @@ class TestErrorHandling:
         factory.database.get_section_data = Mock(return_value=None)
         factory.database.list_sections = Mock(return_value=["254x146x31", "305x165x40"])
         
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             factory.create_section("MISSING", SectionType.UB)
         
         assert "Section 'MISSING' of type 'UB' not found" in str(exc_info.value)
@@ -342,7 +343,7 @@ class TestErrorHandling:
         factory.database.find_section = Mock(return_value=None)
         factory.database.get_available_section_types = Mock(return_value=[SectionType.UB, SectionType.PFC])
         
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             factory.create_section("MISSING")
         
         assert "Section 'MISSING' not found in any type" in str(exc_info.value)
