@@ -13,6 +13,7 @@ from typing import Optional, Any, Dict
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 from steelsnakes.UK.database import UKSectionDatabase, get_uk_database
 from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
 
@@ -669,14 +670,14 @@ class TestErrorHandling:
     
     def test_section_creation_with_invalid_designation(self, uk_factory):
         """Test error handling for invalid section designation."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             uk_factory.create_section("INVALID_SECTION", SectionType.UB)
         
         assert "Section 'INVALID_SECTION' of type 'UB' not found" in str(exc_info.value)
     
     def test_section_creation_with_invalid_type(self, uk_factory):
         """Test error handling for invalid section type."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises((SectionNotFoundError, SectionTypeNotRegisteredError)) as exc_info:
             uk_factory.create_section("457x191x67", SectionType.W)  # US section type
         
         # Should either be "No registered class" or "not found" error
