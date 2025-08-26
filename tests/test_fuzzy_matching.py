@@ -4,7 +4,10 @@ Tests for fuzzy matching functionality in error messages.
 
 import pytest
 from steelsnakes.base.sections import SectionType
-from tests.test_factory import MockSectionFactory, MockSectionDatabase
+
+import sys
+sys.path.append('tests')
+from test_factory import MockSectionFactory, MockSectionDatabase
 
 
 class TestFuzzyMatchingErrorMessages:
@@ -94,6 +97,25 @@ class TestFuzzyMatchingErrorMessages:
         assert "Did you mean:" in error_msg
         # Should contain multiple suggestions separated by ', '
         assert "', '" in error_msg or "254x146x31" in error_msg
+
+    def test_wrong_type_exact_match_cross_type_note(self, factory):
+        """If designation exists under different type, error should mention that type."""
+        # Use a PFC designation but ask for UB
+        with pytest.raises(ValueError) as exc_info:
+            factory.create_section("150x75x18", SectionType.UB)
+
+        msg = str(exc_info.value)
+        assert "Section '150x75x18' of type 'UB' not found" in msg
+        assert "Note: designation exists under type 'PFC'" in msg
+
+    def test_wrong_type_case_insensitive_cross_type_note(self, factory):
+        """Cross-type note should work case-insensitively."""
+        # Ensure database contains uppercase alias
+        factory.database._cache[SectionType.PFC]["150X75X18"] = factory.database._cache[SectionType.PFC]["150x75x18"].copy()
+        with pytest.raises(ValueError) as exc_info:
+            factory.create_section("150X75X18", SectionType.UB)
+        msg = str(exc_info.value)
+        assert "Note: designation exists under type 'PFC'" in msg
 
 
 class TestFuzzyMatchingUtilityMethod:

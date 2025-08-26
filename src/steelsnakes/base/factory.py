@@ -84,6 +84,16 @@ class SectionFactory(ABC):
             if not section_data:
                 available: list[str] = self.database.list_sections(section_type=section_type)
                 similar_sections = self._get_similar_sections(designation, section_type)
+                # Check if the designation exists under a different section type
+                cross_type_note = ""
+                try:
+                    cross_result = self.database.find_section(designation=designation)
+                except Exception:
+                    cross_result = None
+                if cross_result is not None:
+                    found_type, found_data = cross_result
+                    if found_type != section_type:
+                        cross_type_note = f" Note: designation exists under type '{found_type.value}'."
                 
                 error_msg = f"Section '{designation}' of type '{section_type.value}' not found"
                 if similar_sections:
@@ -91,6 +101,8 @@ class SectionFactory(ABC):
                     error_msg += f". Did you mean: '{suggestions}'?"
                 else:
                     error_msg += f". Available sections: {len(available)}"
+                if cross_type_note:
+                    error_msg += cross_type_note
                 
                 raise ValueError(error_msg) # TODO: paginate if too many
                 # TODO: compare raise vs log warning + return None
