@@ -96,4 +96,14 @@ def get_uk_factory(data_directory: Optional[Path] = None) -> UKSectionFactory:
 
 if __name__ == "__main__":
     factory = get_uk_factory()
-    logger.info(factory.create_section("457x191x67"))
+    # Trigger fuzzy matching with a close-but-incorrect designation
+    try:
+        factory.create_section("254x146x30", SectionType.UB)  # Close to 254x146x31
+    except ValueError as e: # TODO: update with new SectionNotFoundError in previous PR
+        logger.error(e)
+
+    # Also test auto-detect mode across all types
+    try:
+        factory.create_section("254x146x30")  # Close to 254x146x31
+    except ValueError as e: # TODO: update with new SectionNotFoundError in previous PR
+        logger.error(e)
