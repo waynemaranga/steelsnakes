@@ -9,7 +9,6 @@ from steelsnakes.base.factory import SectionFactory
 from steelsnakes.base.sections import SectionType
 from steelsnakes.UK.database import UKSectionDatabase, get_uk_database
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 class UKSectionFactory(SectionFactory):
