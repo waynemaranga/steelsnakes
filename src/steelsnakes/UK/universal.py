@@ -66,27 +66,10 @@ class UniversalSection(BaseSection):
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return {
-            'designation': self.designation,
-            'serial_size': self.serial_size,
-            'mass_per_metre': self.mass_per_metre,
-            'h': self.h,
-            'b': self.b,
-            'tw': self.tw,
-            'tf': self.tf,
-            'r': self.r,
-            'd': self.d,
-            'A': self.A,
-            'I_yy': self.I_yy,
-            'I_zz': self.I_zz,
-            'W_el_yy': self.W_el_yy,
-            'W_el_zz': self.W_el_zz,
-            'W_pl_yy': self.W_pl_yy,
-            'W_pl_zz': self.W_pl_zz,
-            'i_yy': self.i_yy,
-            'i_zz': self.i_zz,
-        }
 
+        # return self.__dict__ # DANGEROUS: live reference; caller can modify internal state
+        return vars(self).copy() # SAFE: returns a shallow copy, doesn't expose live references to the instance
+        
 
 @dataclass
 class UniversalBeam(UniversalSection):
@@ -163,4 +146,4 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
 if __name__ == "__main__":
     # print(UB("457x191x67"))
     # print(UC("305x305x137"))
-    print(UBP("203x203x45"))
+    print(UBP("203x203x45").get_properties())

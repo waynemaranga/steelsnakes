@@ -99,7 +99,17 @@ if __name__ == "__main__":
     factory = get_uk_factory()
     # Trigger fuzzy matching with a close-but-incorrect designation
     try:
-        test = factory.create_section("254x146x30", SectionType.UB)
-        print(test.get_properties())
+        test_1 = factory.create_section("30x30x3.0", SectionType.L_EQUAL)
+        print(test_1.get_properties())
     except Exception as e: # Working :D
-        logger.error(f"{e} -- {type(e)}") # prints out SectionNotFoundError, so, accurate :D
+        # logger.error(f"{e} -- {type(e)}") # prints out SectionNotFoundError, so, accurate :D
+        logger.error(f"{e}")
+   
+    print("---------------------------")
+
+    try:
+        test_2 = factory.create_section("254x146x30", SectionType.UB)
+        print(test_2.get_properties())
+    except Exception as e: # Working :D
+        # logger.error(f"{e} -- {type(e)}") # prints out SectionNotFoundError, so, accurate :D
+        logger.error(f"{e}")
