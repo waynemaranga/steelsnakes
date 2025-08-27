@@ -1,7 +1,0 @@
-Collecting polars
-  Downloading polars-1.32.3-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
-     - 15.0 kB ? 0:00:00
-Downloading polars-1.32.3-cp39-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-   | 38.4 MB 232.9 MB/s 0:00:00
-Installing collected packages: polars
-Successfully installed polars-1.32.3
