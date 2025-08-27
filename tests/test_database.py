@@ -12,14 +12,19 @@ from typing import Optional, Any
 from steelsnakes.base.database import SectionDatabase, SQLiteJSONInterface, build_regional_sqlite_db
 from steelsnakes.base.sections import SectionType
 
+try:
+    from steelsnakes.base.polars_search import POLARS_AVAILABLE
+except ImportError:
+    POLARS_AVAILABLE = False
+
 
 class MockSectionDatabase(SectionDatabase):
     """Mock implementation of SectionDatabase for testing."""
     
-    def __init__(self, data_directory: Optional[Path] = None, use_sqlite: bool = False):
+    def __init__(self, data_directory: Optional[Path] = None, use_sqlite: bool = False, use_polars: bool = True):
         # Override _resolve_data_directory to prevent it from being called during super().__init__
         self._mock_data_directory = data_directory
-        super().__init__(data_directory=data_directory, use_sqlite=use_sqlite)
+        super().__init__(data_directory=data_directory, use_sqlite=use_sqlite, use_polars=use_polars)
     
     def _resolve_data_directory(self, data_directory: Optional[Path]) -> Path:
         """Mock implementation that returns the provided directory or a default."""
@@ -621,6 +626,99 @@ class TestBuildRegionalSQLiteDB:
             cursor = conn.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='TEST'")
             assert cursor.fetchone() is not None
+
+
+class TestPolarsFunctionality:
+    """Test Polars-specific functionality and performance features."""
+    
+    def test_polars_engine_initialization(self, mock_data_dir):
+        """Test that Polars engine initializes correctly when available."""
+        db = MockSectionDatabase(data_directory=mock_data_dir, use_polars=True)
+        
+        if POLARS_AVAILABLE:
+            assert db.use_polars is True
+            assert db._polars_engine is not None
+        else:
+            assert db.use_polars is False
+    
+    def test_polars_vs_standard_search_consistency(self, mock_data_dir):
+        """Test that Polars and standard search produce identical results."""
+        # Create databases with different backends
+        db_polars = MockSectionDatabase(data_directory=mock_data_dir, use_polars=True)
+        db_standard = MockSectionDatabase(data_directory=mock_data_dir, use_polars=False)
+        
+        # Test various search criteria
+        test_cases = [
+            {"mass_per_metre__gt": 100},
+            {"mass_per_metre__lt": 100},
+            {"mass_per_metre__gte": 67.1},
+            {"mass_per_metre__lte": 137.0},
+            {"mass_per_metre__eq": 67.1},
+            {"mass_per_metre__ne": 67.1},
+            {"h": 457.0},
+            {"h": 457.0, "b": 191.0},  # Multiple criteria
+            {"mass_per_metre__unknown": 67.1},  # Unknown operator
+            {"nonexistent_field": 999},  # Nonexistent field
+        ]
+        
+        for criteria in test_cases:
+            results_polars = db_polars.search_sections(SectionType.UB, **criteria)
+            results_standard = db_standard.search_sections(SectionType.UB, **criteria)
+            
+            # Sort results by designation for comparison
+            results_polars.sort(key=lambda x: x[0])
+            results_standard.sort(key=lambda x: x[0])
+            
+            assert len(results_polars) == len(results_standard), f"Length mismatch for {criteria}"
+            assert results_polars == results_standard, f"Results mismatch for {criteria}"
+    
+    def test_polars_engine_cache_management(self, mock_data_dir):
+        """Test that Polars engine manages DataFrame cache correctly."""
+        if not POLARS_AVAILABLE:
+            pytest.skip("Polars not available")
+            
+        db = MockSectionDatabase(data_directory=mock_data_dir, use_polars=True)
+        engine = db._polars_engine
+        
+        # Initially no DataFrames cached
+        assert len(engine._dataframes) == 0
+        
+        # First search should create DataFrame
+        results = db.search_sections(SectionType.UB, mass_per_metre__gt=50)
+        assert SectionType.UB in engine._dataframes
+        assert len(results) == 2
+        
+        # Get available columns
+        columns = engine.get_available_columns(SectionType.UB)
+        expected_columns = ['designation', 'mass_per_metre', 'h', 'b', 'I_yy', '_section_type']
+        for col in expected_columns:
+            assert col in columns
+        
+        # Clear cache
+        engine.clear_cache(SectionType.UB)
+        assert SectionType.UB not in engine._dataframes
+    
+    def test_polars_engine_error_handling(self, mock_data_dir):
+        """Test that Polars engine handles errors gracefully and falls back."""
+        if not POLARS_AVAILABLE:
+            pytest.skip("Polars not available")
+            
+        db = MockSectionDatabase(data_directory=mock_data_dir, use_polars=True)
+        
+        # Test with invalid section type (empty cache)
+        results = db.search_sections(SectionType.L_EQUAL, mass_per_metre__gt=50)
+        assert results == []
+    
+    def test_polars_disabled_fallback(self, mock_data_dir):
+        """Test that disabling Polars falls back to standard search."""
+        db = MockSectionDatabase(data_directory=mock_data_dir, use_polars=False)
+        
+        assert db.use_polars is False
+        
+        # Should still work with standard search
+        results = db.search_sections(SectionType.UB, mass_per_metre__gt=100)
+        assert len(results) == 1
+        assert results[0][0] == "305x305x137"
 
 
 if __name__ == "__main__":
