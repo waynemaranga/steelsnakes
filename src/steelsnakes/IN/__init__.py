@@ -57,7 +57,7 @@
 # ISFI - Steel flats
 
 # --- Beams ---
-from steelsnakes.IS.beams import (
+from steelsnakes.IN.beams import (
     Beam,
     JuniorBeam,
     LightWeightBeam,
@@ -74,7 +74,7 @@ from steelsnakes.IS.beams import (
 )
 
 # --- Columns ---
-from steelsnakes.IS.columns import (
+from steelsnakes.IN.columns import (
     Column,
     StandardColumn,
     HeavyWeightBeam,
@@ -83,7 +83,7 @@ from steelsnakes.IS.columns import (
 )
 
 # --- Channels ---
-from steelsnakes.IS.channels import (
+from steelsnakes.IN.channels import (
     Channel,
     JuniorChannel,
     LightWeightChannel,
@@ -96,7 +96,7 @@ from steelsnakes.IS.channels import (
 )
 
 # --- Angles ---
-from steelsnakes.IS.angles import (
+from steelsnakes.IN.angles import (
     Angle,
     EqualAngle,
     UnequalAngle,
@@ -105,7 +105,7 @@ from steelsnakes.IS.angles import (
 )
 
 # --- Bearing Piles ---
-from steelsnakes.IS.bearing_piles import (
+from steelsnakes.IN.bearing_piles import (
     BearingPile,
     ParallelFlangeBearingPile,
     PBP,
