@@ -10,6 +10,12 @@ from typing import Any, Optional, Type, Iterable
 
 from steelsnakes.base.sections import SectionType
 
+try:
+    from steelsnakes.base.polars_search import PolarsSearchEngine, POLARS_AVAILABLE
+except ImportError:
+    POLARS_AVAILABLE = False
+    PolarsSearchEngine = None
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -23,17 +29,30 @@ class SectionDatabase(ABC):
     - override `_fuzzy_find_section()`
     """
 
-    def __init__(self, data_directory: Optional[Path] = None, use_sqlite: bool = False) -> None:
+    def __init__(self, data_directory: Optional[Path] = None, use_sqlite: bool = False, use_polars: bool = True) -> None:
         """Initialize the database with the data directory.
         
         Args:
             data_directory: Path to data directory containing JSON files
             use_sqlite: If `True`, prefer SQLite database over JSON files (experimental)
+            use_polars: If `True`, use Polars for vectorized search operations (default: True)
         """
         self.data_directory: Path = self._resolve_data_directory(data_directory=data_directory)
         self.use_sqlite: bool = use_sqlite
+        self.use_polars: bool = use_polars and POLARS_AVAILABLE
         self._cache: dict[SectionType, dict[str, dict[str, Any]]] = {}
         self._sqlite_db_path: Optional[Path] = None
+        
+        # Initialize Polars search engine if available and enabled
+        self._polars_engine: Optional[PolarsSearchEngine] = None
+        if self.use_polars:
+            try:
+                self._polars_engine = PolarsSearchEngine()
+                logger.debug("Polars search engine initialized")
+            except ImportError:
+                logger.warning("Polars not available, falling back to standard search")
+                self.use_polars = False
+        
         self._load_sections()
 
     # ------- Abstract Methods -------
@@ -155,8 +174,31 @@ class SectionDatabase(ABC):
             **criteria: Any
         ) -> list[tuple[str, dict[str, Any]]]:
 
-        """Search sections by criteria with comparison operators."""
+        """Search sections by criteria with comparison operators.
+        
+        Uses Polars vectorized operations when available for O(n) performance,
+        otherwise falls back to the original O(n × m) dictionary-based search.
+        """
         sections: dict[str, dict[str, Any]] = self._cache.get(section_type, {})
+        
+        if not sections or not criteria:
+            return []
+        
+        # Use Polars search engine if available and enabled
+        if self.use_polars and self._polars_engine is not None:
+            try:
+                return self._polars_engine.search_sections(section_type, sections, **criteria)
+            except Exception as e:
+                logger.warning(f"Polars search failed, falling back to standard search: {e}")
+                # Fall through to standard search
+        
+        # Original implementation (fallback)
+        return self._search_sections_standard(sections, **criteria)
+    
+    def _search_sections_standard(self, 
+                                 sections: dict[str, dict[str, Any]], 
+                                 **criteria: Any) -> list[tuple[str, dict[str, Any]]]:
+        """Original O(n × m) search implementation as fallback."""
         results = []
 
         for designation, data in sections.items():
