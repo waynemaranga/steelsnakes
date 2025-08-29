@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
 @dataclass
 class UniversalSection(BaseSection):
@@ -109,7 +109,7 @@ def UB(designation: str, data_directory: Optional[Path] = None) -> UniversalBeam
     Returns:
         UniversalBeam instance with actual values from database
     """
-    factory: UKSectionFactory = get_uk_factory(data_directory)
+    factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.UB)
     return cast(UniversalBeam, factory.create_section(designation, SectionType.UB))
 
@@ -124,7 +124,7 @@ def UC(designation: str, data_directory: Optional[Path] = None) -> UniversalColu
     Returns:
         UniversalColumn instance with actual values from database
     """
-    factory: UKSectionFactory = get_uk_factory(data_directory)
+    factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.UC)
     return cast(UniversalColumn, factory.create_section(designation, SectionType.UC))
 
@@ -139,7 +139,7 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
     Returns:
         UniversalBearingPile instance with actual values from database
     """
-    factory: UKSectionFactory = get_uk_factory(data_directory)
+    factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.UBP)
     return cast(UniversalBearingPile, factory.create_section(designation, SectionType.UBP))
 

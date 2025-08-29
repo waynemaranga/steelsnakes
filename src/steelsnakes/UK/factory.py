@@ -86,7 +86,7 @@ class UKSectionFactory(SectionFactory):
 _global_uk_factory: Optional[UKSectionFactory] = None
 
 
-def get_uk_factory(data_directory: Optional[Path] = None) -> UKSectionFactory:
+def get_UK_factory(data_directory: Optional[Path] = None) -> UKSectionFactory:
     """Get or create global UK factory instance."""
     global _global_uk_factory
     if _global_uk_factory is None or data_directory is not None:
@@ -96,7 +96,7 @@ def get_uk_factory(data_directory: Optional[Path] = None) -> UKSectionFactory:
 
 if __name__ == "__main__":
     from steelsnakes.base.exceptions import SectionNotFoundError
-    factory = get_uk_factory()
+    factory: UKSectionFactory = get_UK_factory()
     # Trigger fuzzy matching with a close-but-incorrect designation
     try:
         test_1 = factory.create_section("30x30x3.0", SectionType.L_EQUAL)

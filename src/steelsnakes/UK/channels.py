@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
 
 @dataclass
@@ -81,6 +81,6 @@ class ParallelFlangeChannel(BaseSection):
 # Convenience function for direct instantiation
 def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
     """Create a Parallel Flange Channel section by designation."""
-    factory: UKSectionFactory = get_uk_factory(data_directory)
+    factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.PFC)
     return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))

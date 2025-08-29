@@ -7,7 +7,7 @@ from typing import Optional
 # Import base infrastructure
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.database import UKSectionDatabase, get_uk_database
-from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
 # Import Universal sections
 from steelsnakes.UK.universal import (
@@ -81,7 +81,7 @@ __all__ = [
     "UKSectionDatabase",
     "UKSectionFactory",
     "get_uk_database",
-    "get_uk_factory",
+    "get_UK_factory",
     
     # Universal sections
     "UniversalSection",
@@ -143,7 +143,7 @@ __all__ = [
 def _register_all_uk_sections():
     """Register all UK section classes with the global factory."""
     try:
-        factory = get_uk_factory()
+        factory = get_UK_factory()
         # Factory constructor automatically calls _register_default_classes()
         # which registers all available section classes
     except Exception as e:
@@ -166,7 +166,7 @@ def create_section(designation: str, section_type: Optional[SectionType] = None)
     Returns:
         Section instance of appropriate type
     """
-    factory = get_uk_factory()
+    factory = get_UK_factory()
     return factory.create_section(designation, section_type)
 
 
