@@ -663,6 +663,66 @@ class TestGlobalInstances:
                 assert factory1 is factory2
                 assert factory1 is mock_instance
                 mock_factory_class.assert_called_once()
+    
+    def test_get_uk_factory_with_directory_returns_new_instance(self, tmp_path):
+        """Test that get_uk_factory with data_directory returns new instance."""
+        test_dir = tmp_path / "test"
+        test_dir.mkdir()
+        
+        with patch('steelsnakes.UK.factory.get_uk_database') as mock_get_db:
+            with patch('steelsnakes.UK.factory.UKSectionFactory') as mock_factory_class:
+                mock_db = Mock()
+                mock_instance = Mock()
+                mock_get_db.return_value = mock_db
+                mock_factory_class.return_value = mock_instance
+                
+                factory = get_uk_factory(test_dir)
+                
+                assert factory is mock_instance
+                mock_get_db.assert_called_once_with(test_dir)
+                mock_factory_class.assert_called_once_with(mock_db)
+    
+    def test_thread_safety_of_global_factory(self):
+        """Test that global factory creation is thread-safe."""
+        import threading
+        import time
+        
+        # Clear global instance
+        import steelsnakes.UK.factory
+        steelsnakes.UK.factory._global_uk_factory = None
+        
+        created_instances = []
+        exception_caught = []
+        
+        def create_factory():
+            """Thread function to create factory."""
+            try:
+                # Add small delay to increase chance of race condition
+                time.sleep(0.001)
+                factory = get_uk_factory()
+                created_instances.append(factory)
+            except Exception as e:
+                exception_caught.append(e)
+        
+        # Start multiple threads
+        threads = []
+        for _ in range(10):
+            thread = threading.Thread(target=create_factory)
+            threads.append(thread)
+            thread.start()
+        
+        # Wait for all threads to complete
+        for thread in threads:
+            thread.join()
+        
+        # No exceptions should have been caught
+        assert len(exception_caught) == 0, f"Unexpected exceptions: {exception_caught}"
+        
+        # All threads should get the same instance (singleton behavior)
+        assert len(created_instances) == 10, "All threads should have created an instance"
+        first_instance = created_instances[0]
+        for i, instance in enumerate(created_instances[1:], 1):
+            assert instance is first_instance, f"Thread {i} got different instance than thread 0"
 
 
 class TestErrorHandling:
