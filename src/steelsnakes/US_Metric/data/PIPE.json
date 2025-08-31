@@ -1,5 +1,6 @@
 {
   "Pipe650STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe650STD",
     "W": 153.0,
     "A": 18200.0,
@@ -19,6 +20,7 @@
     "J": 1930000.0
   },
   "Pipe600STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe600STD",
     "W": 141.0,
     "A": 16800.0,
@@ -38,6 +40,7 @@
     "J": 1510000.0
   },
   "Pipe500STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe500STD",
     "W": 117.0,
     "A": 13900.0,
@@ -57,6 +60,7 @@
     "J": 870000.0
   },
   "Pipe450STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe450STD",
     "W": 105.0,
     "A": 12500.0,
@@ -76,6 +80,7 @@
     "J": 628000.0
   },
   "Pipe400STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe400STD",
     "W": 93.1,
     "A": 11100.0,
@@ -95,6 +100,7 @@
     "J": 437000.0
   },
   "Pipe350STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe350STD",
     "W": 81.2,
     "A": 9680.0,
@@ -114,6 +120,7 @@
     "J": 291000.0
   },
   "Pipe300STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe300STD",
     "W": 73.8,
     "A": 8840.0,
@@ -133,6 +140,7 @@
     "J": 218000.0
   },
   "Pipe250STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe250STD",
     "W": 60.2,
     "A": 7420.0,
@@ -152,6 +160,7 @@
     "J": 126000.0
   },
   "Pipe200STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe200STD",
     "W": 42.5,
     "A": 5060.0,
@@ -171,6 +180,7 @@
     "J": 56600.0
   },
   "Pipe150STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe150STD",
     "W": 28.3,
     "A": 3350.0,
@@ -190,6 +200,7 @@
     "J": 22000.0
   },
   "Pipe125STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe125STD",
     "W": 21.7,
     "A": 2590.0,
@@ -209,6 +220,7 @@
     "J": 11900.0
   },
   "Pipe100STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe100STD",
     "W": 16.1,
     "A": 1910.0,
@@ -228,6 +240,7 @@
     "J": 5660.0
   },
   "Pipe90STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe90STD",
     "W": 13.6,
     "A": 1610.0,
@@ -247,6 +260,7 @@
     "J": 3760.0
   },
   "Pipe80STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe80STD",
     "W": 11.3,
     "A": 1340.0,
@@ -266,6 +280,7 @@
     "J": 2370.0
   },
   "Pipe65STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe65STD",
     "W": 8.62,
     "A": 1040.0,
@@ -285,6 +300,7 @@
     "J": 1200.0
   },
   "Pipe50STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe50STD",
     "W": 5.44,
     "A": 658.0,
@@ -304,6 +320,7 @@
     "J": 520.0
   },
   "Pipe40STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe40STD",
     "W": 4.04,
     "A": 483.0,
@@ -323,6 +340,7 @@
     "J": 244.0
   },
   "Pipe32STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe32STD",
     "W": 3.38,
     "A": 403.0,
@@ -342,6 +360,7 @@
     "J": 153.0
   },
   "Pipe25STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe25STD",
     "W": 2.5,
     "A": 303.0,
@@ -361,6 +380,7 @@
     "J": 69.1
   },
   "Pipe20STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe20STD",
     "W": 1.68,
     "A": 201.0,
@@ -380,6 +400,7 @@
     "J": 29.1
   },
   "Pipe15STD": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe15STD",
     "W": 1.26,
     "A": 151.0,
@@ -399,6 +420,7 @@
     "J": 13.3
   },
   "Pipe650XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe650XS",
     "W": 202.0,
     "A": 23300.0,
@@ -418,6 +440,7 @@
     "J": 2460000.0
   },
   "Pipe600XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe600XS",
     "W": 187.0,
     "A": 21500.0,
@@ -437,6 +460,7 @@
     "J": 1920000.0
   },
   "Pipe500XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe500XS",
     "W": 155.0,
     "A": 17800.0,
@@ -456,6 +480,7 @@
     "J": 1100000.0
   },
   "Pipe450XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe450XS",
     "W": 139.0,
     "A": 16000.0,
@@ -475,6 +500,7 @@
     "J": 795000.0
   },
   "Pipe400XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe400XS",
     "W": 123.0,
     "A": 14200.0,
@@ -494,6 +520,7 @@
     "J": 554000.0
   },
   "Pipe350XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe350XS",
     "W": 107.0,
     "A": 12400.0,
@@ -513,6 +540,7 @@
     "J": 366000.0
   },
   "Pipe300XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe300XS",
     "W": 97.4,
     "A": 11300.0,
@@ -532,6 +560,7 @@
     "J": 282000.0
   },
   "Pipe250XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe250XS",
     "W": 81.5,
     "A": 9740.0,
@@ -551,6 +580,7 @@
     "J": 166000.0
   },
   "Pipe200XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe200XS",
     "W": 64.5,
     "A": 7680.0,
@@ -570,6 +600,7 @@
     "J": 82800.0
   },
   "Pipe150XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe150XS",
     "W": 42.5,
     "A": 5050.0,
@@ -589,6 +620,7 @@
     "J": 31900.0
   },
   "Pipe125XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe125XS",
     "W": 30.9,
     "A": 3700.0,
@@ -608,6 +640,7 @@
     "J": 16200.0
   },
   "Pipe100XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe100XS",
     "W": 22.3,
     "A": 2670.0,
@@ -627,6 +660,7 @@
     "J": 7580.0
   },
   "Pipe90XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe90XS",
     "W": 18.6,
     "A": 2210.0,
@@ -646,6 +680,7 @@
     "J": 4950.0
   },
   "Pipe80XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe80XS",
     "W": 15.3,
     "A": 1830.0,
@@ -665,6 +700,7 @@
     "J": 3080.0
   },
   "Pipe65XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe65XS",
     "W": 11.4,
     "A": 1350.0,
@@ -684,6 +720,7 @@
     "J": 1520.0
   },
   "Pipe50XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe50XS",
     "W": 7.48,
     "A": 903.0,
@@ -703,6 +740,7 @@
     "J": 687.0
   },
   "Pipe40XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe40XS",
     "W": 5.4,
     "A": 645.0,
@@ -722,6 +760,7 @@
     "J": 310.0
   },
   "Pipe32XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe32XS",
     "W": 4.46,
     "A": 540.0,
@@ -741,6 +780,7 @@
     "J": 192.0
   },
   "Pipe25XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe25XS",
     "W": 3.23,
     "A": 388.0,
@@ -760,6 +800,7 @@
     "J": 84.1
   },
   "Pipe20XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe20XS",
     "W": 2.2,
     "A": 263.0,
@@ -779,6 +820,7 @@
     "J": 35.8
   },
   "Pipe15XS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe15XS",
     "W": 1.62,
     "A": 195.0,
@@ -798,6 +840,7 @@
     "J": 15.8
   },
   "Pipe300XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe300XXS",
     "W": 187.0,
     "A": 22800.0,
@@ -817,6 +860,7 @@
     "J": 520000.0
   },
   "Pipe250XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe250XXS",
     "W": 155.0,
     "A": 18600.0,
@@ -836,6 +880,7 @@
     "J": 295000.0
   },
   "Pipe200XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe200XXS",
     "W": 108.0,
     "A": 12900.0,
@@ -855,6 +900,7 @@
     "J": 128000.0
   },
   "Pipe150XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe150XXS",
     "W": 79.1,
     "A": 9480.0,
@@ -874,6 +920,7 @@
     "J": 52900.0
   },
   "Pipe125XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe125XXS",
     "W": 57.4,
     "A": 6900.0,
@@ -893,6 +940,7 @@
     "J": 26800.0
   },
   "Pipe100XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe100XXS",
     "W": 41.0,
     "A": 4940.0,
@@ -912,6 +960,7 @@
     "J": 12200.0
   },
   "Pipe80XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe80XXS",
     "W": 27.7,
     "A": 3340.0,
@@ -931,6 +980,7 @@
     "J": 4830.0
   },
   "Pipe65XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe65XXS",
     "W": 20.4,
     "A": 2470.0,
@@ -950,6 +1000,7 @@
     "J": 2310.0
   },
   "Pipe50XXS": {
+    "section_type": "PIPE",
     "EDI_Std_Nomenclature": "Pipe50XXS",
     "W": 13.4,
     "A": 1620.0,

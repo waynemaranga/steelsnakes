@@ -1,5 +1,6 @@
 {
   "MT159X9.25": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT159X9.25",
     "W": 9.25,
     "A": 1170.0,
@@ -32,6 +33,7 @@
     "H": 0.634
   },
   "MT159X8.65": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT159X8.65",
     "W": 8.65,
     "A": 1100.0,
@@ -64,6 +66,7 @@
     "H": 0.602
   },
   "MT155X8.8": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT155X8.8",
     "W": 8.8,
     "A": 1120.0,
@@ -96,6 +99,7 @@
     "H": 0.567
   },
   "MT155X8.05": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT155X8.05",
     "W": 8.05,
     "A": 1030.0,
@@ -128,6 +132,7 @@
     "H": 0.574
   },
   "MT155X7.45": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT155X7.45",
     "W": 7.45,
     "A": 955.0,
@@ -160,6 +165,7 @@
     "H": 0.572
   },
   "MT125X6.7": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT125X6.7",
     "W": 6.7,
     "A": 858.0,
@@ -192,6 +198,7 @@
     "H": 0.585
   },
   "MT125X5.95": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT125X5.95",
     "W": 5.95,
     "A": 768.0,
@@ -224,6 +231,7 @@
     "H": 0.583
   },
   "MT125X5.6": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT125X5.6",
     "W": 5.6,
     "A": 716.0,
@@ -256,6 +264,7 @@
     "H": 0.588
   },
   "MT100X4.85": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT100X4.85",
     "W": 4.85,
     "A": 619.0,
@@ -288,6 +297,7 @@
     "H": 0.612
   },
   "MT100X4.6": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT100X4.6",
     "W": 4.6,
     "A": 588.0,
@@ -320,6 +330,7 @@
     "H": 0.608
   },
   "MT75X3.3": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT75X3.3",
     "W": 3.3,
     "A": 417.0,
@@ -352,6 +363,7 @@
     "H": 0.646
   },
   "MT75X2.75": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT75X2.75",
     "W": 2.75,
     "A": 352.0,
@@ -384,6 +396,7 @@
     "H": 0.644
   },
   "MT65X14.05": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT65X14.05",
     "W": 14.1,
     "A": 1790.0,
@@ -417,6 +430,7 @@
     "WGi": 69.9
   },
   "MT50X4.45": {
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT50X4.45",
     "W": 4.45,
     "A": 565.0,

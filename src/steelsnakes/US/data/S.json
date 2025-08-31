@@ -1,6 +1,6 @@
 {
   "S24X121": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S24X121",
     "W": 121.0,
     "A": 35.5,
@@ -41,7 +41,7 @@
     "WGi": 4.0
   },
   "S24X106": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S24X106",
     "W": 106.0,
     "A": 31.1,
@@ -82,7 +82,7 @@
     "WGi": 4.0
   },
   "S24X100": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S24X100",
     "W": 100.0,
     "A": 29.3,
@@ -123,7 +123,7 @@
     "WGi": 4.0
   },
   "S24X90": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S24X90",
     "W": 90.0,
     "A": 26.5,
@@ -164,7 +164,7 @@
     "WGi": 4.0
   },
   "S24X80": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S24X80",
     "W": 80.0,
     "A": 23.5,
@@ -205,7 +205,7 @@
     "WGi": 4.0
   },
   "S20X96": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S20X96",
     "W": 96.0,
     "A": 28.2,
@@ -246,7 +246,7 @@
     "WGi": 4.0
   },
   "S20X86": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S20X86",
     "W": 86.0,
     "A": 25.3,
@@ -287,7 +287,7 @@
     "WGi": 4.0
   },
   "S20X75": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S20X75",
     "W": 75.0,
     "A": 22.0,
@@ -328,7 +328,7 @@
     "WGi": 3.5
   },
   "S20X66": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S20X66",
     "W": 66.0,
     "A": 19.4,
@@ -369,7 +369,7 @@
     "WGi": 3.5
   },
   "S18X70": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S18X70",
     "W": 70.0,
     "A": 20.5,
@@ -410,7 +410,7 @@
     "WGi": 3.5
   },
   "S18X54.7": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S18X54.7",
     "W": 54.7,
     "A": 16.0,
@@ -451,7 +451,7 @@
     "WGi": 3.5
   },
   "S15X50": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S15X50",
     "W": 50.0,
     "A": 14.7,
@@ -492,7 +492,7 @@
     "WGi": 3.5
   },
   "S15X42.9": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S15X42.9",
     "W": 42.9,
     "A": 12.6,
@@ -533,7 +533,7 @@
     "WGi": 3.5
   },
   "S12X50": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S12X50",
     "W": 50.0,
     "A": 14.7,
@@ -574,7 +574,7 @@
     "WGi": 3.0
   },
   "S12X40.8": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S12X40.8",
     "W": 40.8,
     "A": 11.9,
@@ -615,7 +615,7 @@
     "WGi": 3.0
   },
   "S12X35": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S12X35",
     "W": 35.0,
     "A": 10.2,
@@ -656,7 +656,7 @@
     "WGi": 3.0
   },
   "S12X31.8": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S12X31.8",
     "W": 31.8,
     "A": 9.31,
@@ -697,7 +697,7 @@
     "WGi": 3.0
   },
   "S10X35": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S10X35",
     "W": 35.0,
     "A": 10.3,
@@ -738,7 +738,7 @@
     "WGi": 2.75
   },
   "S10X25.4": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S10X25.4",
     "W": 25.4,
     "A": 7.45,
@@ -779,7 +779,7 @@
     "WGi": 2.75
   },
   "S8X23": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S8X23",
     "W": 23.0,
     "A": 6.76,
@@ -820,7 +820,7 @@
     "WGi": 2.25
   },
   "S8X18.4": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S8X18.4",
     "W": 18.4,
     "A": 5.4,
@@ -861,7 +861,7 @@
     "WGi": 2.25
   },
   "S6X17.25": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S6X17.25",
     "W": 17.25,
     "A": 5.05,
@@ -901,7 +901,7 @@
     "T": 4.375
   },
   "S6X12.5": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S6X12.5",
     "W": 12.5,
     "A": 3.66,
@@ -941,7 +941,7 @@
     "T": 4.375
   },
   "S5X10": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S5X10",
     "W": 10.0,
     "A": 2.93,
@@ -981,7 +981,7 @@
     "T": 3.5
   },
   "S4X9.5": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S4X9.5",
     "W": 9.5,
     "A": 2.79,
@@ -1021,7 +1021,7 @@
     "T": 2.5
   },
   "S4X7.7": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S4X7.7",
     "W": 7.7,
     "A": 2.26,
@@ -1061,7 +1061,7 @@
     "T": 2.5
   },
   "S3X7.5": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S3X7.5",
     "W": 7.5,
     "A": 2.2,
@@ -1101,7 +1101,7 @@
     "T": 1.75
   },
   "S3X5.7": {
-    "Type": "S",
+    "section_type": "S",
     "EDI_Std_Nomenclature": "S3X5.7",
     "W": 5.7,
     "A": 1.66,

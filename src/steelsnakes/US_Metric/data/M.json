@@ -1,5 +1,6 @@
 {
   "M318X18.5": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M318X18.5",
     "W": 18.5,
     "A": 2340.0,
@@ -40,6 +41,7 @@
     "T": 289.0
   },
   "M318X17.3": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M318X17.3",
     "W": 17.3,
     "A": 2190.0,
@@ -80,6 +82,7 @@
     "T": 289.0
   },
   "M310X17.6": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M310X17.6",
     "W": 17.6,
     "A": 2240.0,
@@ -120,6 +123,7 @@
     "T": 276.0
   },
   "M310X16.1": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M310X16.1",
     "W": 16.1,
     "A": 2050.0,
@@ -160,6 +164,7 @@
     "T": 276.0
   },
   "M310X14.9": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M310X14.9",
     "W": 14.9,
     "A": 1900.0,
@@ -200,6 +205,7 @@
     "T": 279.0
   },
   "M250X13.4": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M250X13.4",
     "W": 13.4,
     "A": 1710.0,
@@ -240,6 +246,7 @@
     "T": 225.0
   },
   "M250X11.9": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M250X11.9",
     "W": 11.9,
     "A": 1530.0,
@@ -280,6 +287,7 @@
     "T": 225.0
   },
   "M250X11.2": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M250X11.2",
     "W": 11.2,
     "A": 1430.0,
@@ -320,6 +328,7 @@
     "T": 232.0
   },
   "M200X9.7": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M200X9.7",
     "W": 9.7,
     "A": 1240.0,
@@ -360,6 +369,7 @@
     "T": 175.0
   },
   "M200X9.2": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M200X9.2",
     "W": 9.2,
     "A": 1170.0,
@@ -400,6 +410,7 @@
     "T": 181.0
   },
   "M150X6.6": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M150X6.6",
     "W": 6.6,
     "A": 832.0,
@@ -440,6 +451,7 @@
     "T": 133.0
   },
   "M150X5.5": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M150X5.5",
     "W": 5.5,
     "A": 703.0,
@@ -480,6 +492,7 @@
     "T": 133.0
   },
   "M130X28.1": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M130X28.1",
     "W": 28.1,
     "A": 3590.0,
@@ -521,6 +534,7 @@
     "WGi": 69.9
   },
   "M100X8.9": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M100X8.9",
     "W": 8.9,
     "A": 1130.0,
@@ -561,6 +575,7 @@
     "T": 69.9
   },
   "M100X6.1": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M100X6.1",
     "W": 6.1,
     "A": 819.0,
@@ -601,6 +616,7 @@
     "T": 73.0
   },
   "M100X4.3": {
+    "section_type": "M",
     "EDI_Std_Nomenclature": "M100X4.3",
     "W": 4.3,
     "A": 590.0,

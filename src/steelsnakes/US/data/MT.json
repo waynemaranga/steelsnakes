@@ -1,6 +1,6 @@
 {
   "MT6.25X6.2": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT6.25X6.2",
     "T_F": "F",
     "W": 6.2,
@@ -34,7 +34,7 @@
     "H": 0.634
   },
   "MT6.25X5.8": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT6.25X5.8",
     "T_F": "F",
     "W": 5.8,
@@ -68,7 +68,7 @@
     "H": 0.602
   },
   "MT6X5.9": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT6X5.9",
     "T_F": "F",
     "W": 5.9,
@@ -102,7 +102,7 @@
     "H": 0.567
   },
   "MT6X5.4": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT6X5.4",
     "T_F": "F",
     "W": 5.4,
@@ -136,7 +136,7 @@
     "H": 0.574
   },
   "MT6X5": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT6X5",
     "T_F": "F",
     "W": 5.0,
@@ -170,7 +170,7 @@
     "H": 0.572
   },
   "MT5X4.5": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT5X4.5",
     "T_F": "F",
     "W": 4.5,
@@ -204,7 +204,7 @@
     "H": 0.585
   },
   "MT5X4": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT5X4",
     "T_F": "F",
     "W": 4.0,
@@ -238,7 +238,7 @@
     "H": 0.583
   },
   "MT5X3.75": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT5X3.75",
     "T_F": "F",
     "W": 3.75,
@@ -272,7 +272,7 @@
     "H": 0.588
   },
   "MT4X3.25": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT4X3.25",
     "T_F": "F",
     "W": 3.25,
@@ -306,7 +306,7 @@
     "H": 0.612
   },
   "MT4X3.1": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT4X3.1",
     "T_F": "F",
     "W": 3.1,
@@ -340,7 +340,7 @@
     "H": 0.608
   },
   "MT3X2.2": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT3X2.2",
     "T_F": "F",
     "W": 2.2,
@@ -374,7 +374,7 @@
     "H": 0.646
   },
   "MT3X1.85": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT3X1.85",
     "T_F": "F",
     "W": 1.85,
@@ -408,7 +408,7 @@
     "H": 0.644
   },
   "MT2.5X9.45": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT2.5X9.45",
     "T_F": "T",
     "W": 9.45,
@@ -443,7 +443,7 @@
     "WGi": 2.75
   },
   "MT2X3": {
-    "Type": "MT",
+    "section_type": "MT",
     "EDI_Std_Nomenclature": "MT2X3",
     "T_F": "F",
     "W": 3.0,

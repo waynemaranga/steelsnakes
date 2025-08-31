@@ -1,5 +1,6 @@
 {
   "HP460X304": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP460X304",
     "W": 304.0,
     "A": 38800.0,
@@ -41,6 +42,7 @@
     "WGi": 191.0
   },
   "HP460X269": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP460X269",
     "W": 269.0,
     "A": 34300.0,
@@ -82,6 +84,7 @@
     "WGi": 191.0
   },
   "HP460X234": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP460X234",
     "W": 234.0,
     "A": 29800.0,
@@ -123,6 +126,7 @@
     "WGi": 191.0
   },
   "HP460X202": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP460X202",
     "W": 202.0,
     "A": 25700.0,
@@ -164,6 +168,7 @@
     "WGi": 191.0
   },
   "HP410X272": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X272",
     "W": 272.0,
     "A": 34900.0,
@@ -205,6 +210,7 @@
     "WGi": 140.0
   },
   "HP410X242": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X242",
     "W": 242.0,
     "A": 30800.0,
@@ -246,6 +252,7 @@
     "WGi": 140.0
   },
   "HP410X211": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X211",
     "W": 211.0,
     "A": 26900.0,
@@ -287,6 +294,7 @@
     "WGi": 140.0
   },
   "HP410X181": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X181",
     "W": 181.0,
     "A": 23100.0,
@@ -328,6 +336,7 @@
     "WGi": 140.0
   },
   "HP410X151": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X151",
     "W": 151.0,
     "A": 19300.0,
@@ -369,6 +378,7 @@
     "WGi": 140.0
   },
   "HP410X131": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP410X131",
     "W": 131.0,
     "A": 16600.0,
@@ -410,6 +420,7 @@
     "WGi": 140.0
   },
   "HP360X174": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP360X174",
     "W": 174.0,
     "A": 22200.0,
@@ -451,6 +462,7 @@
     "WGi": 140.0
   },
   "HP360X152": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP360X152",
     "W": 152.0,
     "A": 19400.0,
@@ -492,6 +504,7 @@
     "WGi": 140.0
   },
   "HP360X132": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP360X132",
     "W": 132.0,
     "A": 16800.0,
@@ -533,6 +546,7 @@
     "WGi": 140.0
   },
   "HP360X108": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP360X108",
     "W": 108.0,
     "A": 13800.0,
@@ -574,6 +588,7 @@
     "WGi": 140.0
   },
   "HP310X132": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP310X132",
     "W": 132.0,
     "A": 16700.0,
@@ -615,6 +630,7 @@
     "WGi": 140.0
   },
   "HP310X125": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP310X125",
     "W": 125.0,
     "A": 15900.0,
@@ -656,6 +672,7 @@
     "WGi": 140.0
   },
   "HP310X110": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP310X110",
     "W": 110.0,
     "A": 14100.0,
@@ -697,6 +714,7 @@
     "WGi": 140.0
   },
   "HP310X93": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP310X93",
     "W": 93.0,
     "A": 11900.0,
@@ -738,6 +756,7 @@
     "WGi": 140.0
   },
   "HP310X79": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP310X79",
     "W": 79.0,
     "A": 10000.0,
@@ -779,6 +798,7 @@
     "WGi": 140.0
   },
   "HP250X85": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP250X85",
     "W": 85.0,
     "A": 10800.0,
@@ -820,6 +840,7 @@
     "WGi": 140.0
   },
   "HP250X62": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP250X62",
     "W": 62.0,
     "A": 8000.0,
@@ -861,6 +882,7 @@
     "WGi": 140.0
   },
   "HP200X53": {
+    "section_type": "HP",
     "EDI_Std_Nomenclature": "HP200X53",
     "W": 53.0,
     "A": 6840.0,
