@@ -3,7 +3,7 @@
 # mkdocstrings: https://mkdocstrings.github.io/usage/
 
 
-site_name: SteelSnakes
+site_name: steelsnakes
 site_description: A Python library for structural steel.
 site_author: Wayne Maranga
 site_url: https://steelsnakes.readthedocs.io/en/latest/
@@ -112,6 +112,7 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - API Reference: reference/index.md
   - Getting Started:
     - Installation: getting-started/installation.md
     # - Quick Start: getting-started/quickstart.md
@@ -143,6 +144,7 @@ nav:
       - US (American): reference/regional/US/index.md
       - EU (European): reference/regional/EU/index.md
       - AU (Australian): reference/regional/AU/index.md
-      - IS (Indian): reference/regional/IS/index.md
+      - IN (Indian): reference/regional/IS/index.md
+  
   # - Contributing: contributing.md
   # - Changelog: changelog.md

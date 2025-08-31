@@ -1,8 +1,10 @@
-from dataclasses import dataclass
-from steelsnakes.core.sections.US.base import BaseSection
+from dataclasses import dataclass, asdict
+from steelsnakes.base import BaseSection, SectionType
+from typing import Any, cast, Optional
+from steelsnakes.US.factory import USSectionFactory, get_US_factory
 
 @dataclass
-class USChannel(BaseSection):
+class Channel(BaseSection):
     # Identification
     designation: str
     section_type: str # read as 'type' in database # TODO: change to section_type in database
@@ -27,14 +29,14 @@ class USChannel(BaseSection):
     b_t: float = 0.0 # 
     h_tw: float = 0.0 #
 
-    I_xx: float = 0.0 # Moment of inertia, major axis (in^4)
-    Z_xx: float = 0.0 # Plastic section modulus, major axis (in^3)
-    S_xx: float = 0.0 # Elastic section modulus, major axis (in^3)
-    r_xx: float = 0.0 # Radius of gyration
-    I_yy: float = 0.0 # Moment of inertia, minor axis (in^4)
-    Z_yy: float = 0.0 # Plastic section modulus, minor axis (in^3)
-    S_yy: float = 0.0 # Elastic section modulus, minor axis (in^3)
-    r_yy: float = 0.0 # Radius of gyration
+    Ix: float = 0.0 # Moment of inertia, major axis (in^4)
+    Zx: float = 0.0 # Plastic section modulus, major axis (in^3)
+    Sx: float = 0.0 # Elastic section modulus, major axis (in^3)
+    rx: float = 0.0 # Radius of gyration
+    Iy: float = 0.0 # Moment of inertia, minor axis (in^4)
+    Zy: float = 0.0 # Plastic section modulus, minor axis (in^3)
+    Sy: float = 0.0 # Elastic section modulus, minor axis (in^3)
+    ry: float = 0.0 # Radius of gyration
 
     J: float = 0.0 # Torsional constant (in^4)
     Cw: float = 0.0 # Warping constant (in^6)
@@ -54,3 +56,41 @@ class USChannel(BaseSection):
     PD: float = 0.0 #
     T: float = 0.0 #
     WGi: float = 0.0 #
+
+    def get_properties(self) -> dict[str, Any]:
+        """Return all section properties as a dictionary."""
+        return asdict(self)
+
+
+
+@dataclass
+class StandardChannel(Channel):
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.C
+
+@dataclass
+class MiscellaneousChannel(Channel):
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.MC
+
+@dataclass
+class DoubleStandardChannel(Channel):
+    # TODO: Find way to implement Double Channel properties
+    pass
+
+@dataclass
+class DoubleMiscellaneousChannel(Channel):
+    pass
+
+def C(designation: str) -> Channel:
+    return cast(Channel, get_US_factory().create_section(designation, SectionType.C))
+
+def MC(designation: str) -> MiscellaneousChannel:
+    return cast(MiscellaneousChannel, get_US_factory().create_section(designation, SectionType.MC))
+
+if __name__ == "__main__":
+    print(C("C6X10.5").get_properties())
+    print(MC("MC6X6.5").get_properties())
+    print("🐬")

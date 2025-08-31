@@ -1,12 +1,13 @@
 [project]
 name = "steelsnakes"
-version = "0.0.1-alpha-5"
-description = "Structural steel for Python."
+version = "0.0.1-alpha-6"
+description = "A python library for structural steel."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = "GPL-2.0 " # https://packaging.python.org/en/latest/glossary/#term-SPDX-Expression
 license-files = ["LICENSE.md"]
 authors = [{ name = "Wayne Maranga", email = "waynemaranga@gmail.com" }]
 requires-python = ">=3.11"
+
 dependencies = [
     "coverage==7.10.0",
     "mkdocs>=1.6.1",
@@ -15,12 +16,32 @@ dependencies = [
     "pydantic>=2.11.7",
     "pymdown-extensions>=10.16.1",
     "pytest>=8.4.1",
+    "pytest-cov>=6.2.1",
     "sqlalchemy>=2.0.43",
 ]
 
+# [project.optional-dependencies]
+# extras = [
+#     # Extra features:
+#     # - ui using streamlit and/or fastapi
+#     # - cli using typer/click/argparse, maybe even a tui
+#     # - built-in sqlite with fastapi's sqlmodels (from tiangolo: https://sqlmodel.tiangolo.com/tutorial/)
+#     # - probably: sqlite binary: pysqlite3-binary - since in advanced implementations, the speed of sqlite matters
+#     # - TODO: switch to sqlite for engineering calcs/lookups/ etc...
+
+# ]
+# dev = [
+#     # Standard package + extras
+#     # "steelsnakes[extras]", # ... only if extras has been implemented, otherwise no.
+#     # ...plus...
+#     # - testing: pytest, pytest-cov, coverage
+#     # - documentation: mkdocs, mkdocs-shadcn, mkdocstrings, pymdown-extensions
+# ]
+
+
 [project.scripts]
 steelsnakes = "steelsnakes:main"
-steelsnakes-db = "steelsnakes.cli:main"
+# steelsnakes-db = "steelsnakes.cli:main" # TODO: maybe later
 
 [project.urls]
 homepage = "https://github.com/waynemaranga/steelsnakes"

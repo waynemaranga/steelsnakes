@@ -10,7 +10,6 @@ from typing import Any, Optional, Type, Iterable
 
 from steelsnakes.base.sections import SectionType
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 

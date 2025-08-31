@@ -1,11 +1,12 @@
 from dataclasses import dataclass
-from steelsnakes.core.sections.US.base import BaseSection
+from typing import Any, Optional, cast
+from steelsnakes.base import BaseSection, SectionType
+from steelsnakes.US.factory import USSectionFactory, get_US_factory
 
 @dataclass
-class USBeam(BaseSection):
+class Beam(BaseSection):
     # Identification
-    designation: str
-    section_type: str # read as 'type' in database # TODO: change to section_type in database
+    section_type: str # implement section type in all json
     EDI_Std_Nomenclature: str = ""
     T_F: str = ""
 
@@ -29,15 +30,15 @@ class USBeam(BaseSection):
     bf_2tf: float = 0.0 #
     h_tw: float = 0.0
 
-    I_xx: float = 0.0 # Moment of inertia, major axis (in^4)
-    Z_xx: float = 0.0 # Plastic section modulus, major axis (in^3)
-    S_xx: float = 0.0 # Elastic section modulus, major axis (in^3)
-    r_xx: float = 0.0 # Radius of gyration
+    Ix: float = 0.0 # Moment of inertia, major axis (in^4)
+    Zx: float = 0.0 # Plastic section modulus, major axis (in^3)
+    Sx: float = 0.0 # Elastic section modulus, major axis (in^3)
+    rx: float = 0.0 # Radius of gyration
 
-    I_yy: float = 0.0 # Moment of inertia, minor axis (in^4)
-    Z_yy: float = 0.0 # Plastic section modulus, minor axis (in^3)
-    S_yy: float = 0.0 # Elastic section modulus, minor axis (in^3)
-    r_yy: float = 0.0 # Radius of gyration
+    Iy: float = 0.0 # Moment of inertia, minor axis (in^4)
+    Zy: float = 0.0 # Plastic section modulus, minor axis (in^3)
+    Sy: float = 0.0 # Elastic section modulus, minor axis (in^3)
+    ry: float = 0.0 # Radius of gyration
 
     J: float = 0.0 # Torsional constant (in^4)
     Cw: float = 0.0 # Warping constant (in^6)
@@ -46,7 +47,7 @@ class USBeam(BaseSection):
     Qf: float = 0.0
     Qw: float = 0.0
     rts: float = 0.0
-    h0: float = 0.0
+    ho: float = 0.0
     PA: float = 0.0
     PB: float = 0.0
     PC: float = 0.0
@@ -54,20 +55,46 @@ class USBeam(BaseSection):
     T: float = 0.0
     WGi: float = 0.0
     WGo: float = 0.0
-    
+
+    def get_properties(self) -> dict[str, Any]:
+        """Return all section properties as a dictionary."""
+        from dataclasses import asdict
+        return asdict(self) # SAFE: applies recursively to field values that are dataclass instances.
+
 
 @dataclass
-class WideFlangeBeam(USBeam):
-    pass
+class WideFlangeBeam(Beam):
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.W
+
 
 @dataclass
-class StandardBeam(USBeam):
-    pass
+class StandardBeam(Beam):
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.S
 
 @dataclass
-class MiscellaneousBeam(USBeam):
-    pass
+class MiscellaneousBeam(Beam):
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.M
 
-@dataclass
-class BearingPile(USBeam):
-    pass
+
+def W(designation: str) -> WideFlangeBeam:
+    """Note: Case insensitive - accepts both "x" and "X" separators"""
+    return cast(WideFlangeBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.W))
+
+def S(designation: str) -> StandardBeam:
+    """Note: case insensitive - accepts both "x" and "X" separators"""
+    return cast(StandardBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.S))
+
+def M(designation: str) -> MiscellaneousBeam:
+    """Note: case insensitive - accepts both "x" and "X" separators"""
+    return cast(MiscellaneousBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.M))
+
+if __name__ == "__main__":
+    print(W("W36x350").get_properties())
+    print(S("S10X35").get_properties())
+    print(M("M12x10.8").get_properties())

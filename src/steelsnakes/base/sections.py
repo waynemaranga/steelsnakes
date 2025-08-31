@@ -10,7 +10,6 @@ from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Optional
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s", datefmt="%H:%M:%S")
 logger: logging.Logger = logging.getLogger(__name__)
 
 class SectionType(Enum):
@@ -31,10 +30,10 @@ class SectionType(Enum):
     PFC = "PFC" # Parallel Flange Channel
 
     # Angles
-    L_EQUAL = "L_EQUAL"             # Equal Angle
-    L_UNEQUAL = "L_UNEQUAL"         # Unequal Angle
-    L_EQUAL_B2B = "L_EQUAL_B2B"     # Equal Angle Back-to-Back
-    L_UNEQUAL_B2B = "L_UNEQUAL_B2B" # Unequal Angle Back-to-Back
+    L_EQUAL = "L_EQUAL"             # Equal Angle; also in EU & US
+    L_UNEQUAL = "L_UNEQUAL"         # Unequal Angle; also in EU & US
+    L_EQUAL_B2B = "L_EQUAL_B2B"     # Equal Angle Back-to-Back; also in EU, NOT in US
+    L_UNEQUAL_B2B = "L_UNEQUAL_B2B" # Unequal Angle Back-to-Back; also in EU, NOT in US
     
     # Hollow sections (Hot Finished)
     HFCHS = "HFCHS"     # Hot Finished Circular Hollow Section
@@ -47,17 +46,7 @@ class SectionType(Enum):
     CFRHS = "CFRHS"     # Cold Formed Rectangular Hollow Section
     CFSHS = "CFSHS"     # Cold Formed Square Hollow Section
     
-    # Connection components
-    WELDS = "WELDS"                 # Weld details
-    BOLT_PRE_88 = "BOLT_PRE_88"     # Pre-loaded bolts (8.8 grade)
-    BOLT_PRE_109 = "BOLT_PRE_109"   # Pre-loaded bolts (10.9 grade)
-    # TODO: Implement non-preloaded bolts
-    # BOLT_NON_PRE_CS_46 = "BOLT_NON_PRE_CS_46" # Countersunk, 4.6 grade
-    # BOLT_NON_PRE_CS_88 = "BOLT_NON_PRE_CS_88" # Countersunk, 8.8 grade
-    # BOLT_NON_PRE_CS_109 = "BOLT_NON_PRE_CS_109" # Countersunk, 10.9 grade
-    # BOLT_NON_PRE_HEX_46 = "BOLT_NON_PRE_HEX_46" # Hexagon, 4.6 grade
-    # BOLT_NON_PRE_HEX_88 = "BOLT_NON_PRE_HEX_88" # Hexagon, 8.8 grade
-    # BOLT_NON_PRE_HEX_109 = "BOLT_NON_PRE_HEX_109" # Hexagon, 10.9 grade
+    # Removed connection components (bolts and welds)
 
     # --- 🇪🇺 EU ---
     # TODO: Add info here... Provided by ArcelorMittal via Orange Book
@@ -82,10 +71,10 @@ class SectionType(Enum):
     # PFC = "PFC" # Parallel Flange Channels (UK) (also in UK)
 
     #  Angles 
-    # L_EQUAL = "L_EQUAL"             # Equal Angles (also in UK)
-    # L_UNEQUAL = "L_UNEQUAL"         # Unequal Angles (also in UK)
-    # L_EQUAL_B2B = "L_EQUAL_B2B"     # Back to Back Equal Angles (also in UK)
-    # L_UNEQUAL_B2B = "L_UNEQUAL_B2B" # Back to Back Unequal Angles (also in UK)    
+    # L_EQUAL = "L_EQUAL"             # Equal Angles (also in UK & US)
+    # L_UNEQUAL = "L_UNEQUAL"         # Unequal Angles (also in UK & US)
+    # L_EQUAL_B2B = "L_EQUAL_B2B"     # Back to Back Equal Angles (also in UK, NOT in US)
+    # L_UNEQUAL_B2B = "L_UNEQUAL_B2B" # Back to Back Unequal Angles (also in UK, NOT in US)    
 
     #  Flats 
     Sigma = "Sigma"     # SIGMA # TODO: review with ArcelorMittal database; for effective properties
@@ -106,8 +95,11 @@ class SectionType(Enum):
     MC2C = "MC2C" # Back-to-Back Miscellaneous Channels # TODO: propagate MC2C throughout the codebase
 
     #  Angles 
-    L = "L"   # Standard Angles
-    L2L = "L2L" # Back-to-Back Angles
+    # L_EQUAL = "L_EQUAL"             # Equal Angles (also in UK & EU)
+    # L_UNEQUAL = "L_UNEQUAL"         # Unequal Angles (also in UK & EU)
+    L2L_EQUAL = "L2L_EQUAL"           # Back-to-Back Equal Angles
+    L2L_LLBB = "L2L_LLBB"             # Back-to-Back Unequal Angles, Long Leg Back-to-Back
+    L2L_SLBB = "L2L_SLBB"             # Back-to-
 
     #  Structural Tees 
     WT = "WT" # cut from W shapes
@@ -115,7 +107,10 @@ class SectionType(Enum):
     MT = "MT" # cut from M shapes
 
     #  Hollow sections 
-    HSS = "HSS" # Hollow Structural Sections
+    # HSS = "HSS" # Hollow Structural Sections
+    HSS_RCT = "HSS_RCT" # Rectangular Hollow Structural Sections
+    HSS_SQR = "HSS_SQR" # Square Hollow Structural Sections
+    HSS_RND = "HSS_RND" # Round Hollow Structural Sections
 
     #  Pipes 
     PIPE = "PIPE" # Pipes

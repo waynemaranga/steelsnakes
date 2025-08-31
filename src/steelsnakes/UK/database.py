@@ -7,6 +7,7 @@ from typing import Optional, Any
 from steelsnakes.base.database import SectionDatabase
 from steelsnakes.base.sections import SectionType
 
+# TODO: do the uppercase renaming _uk_ to _UK_ later...
 
 class UKSectionDatabase(SectionDatabase):
     """
@@ -68,11 +69,6 @@ class UKSectionDatabase(SectionDatabase):
             SectionType.CFCHS,
             SectionType.CFRHS,
             SectionType.CFSHS,
-            
-            # Connection components
-            SectionType.WELDS,
-            SectionType.BOLT_PRE_88,
-            SectionType.BOLT_PRE_109,
         ]
 
     def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
@@ -120,3 +116,9 @@ def get_uk_database(data_directory: Optional[Path] = None, use_sqlite: bool = Fa
     if _global_uk_database is None or data_directory is not None:
         _global_uk_database = UKSectionDatabase(data_directory, use_sqlite=use_sqlite)
     return _global_uk_database
+
+if __name__ == "__main__":
+    db = get_uk_database()
+    # print([i.value for i in db.get_supported_types() if type(i) == SectionType]) # Ruff[E721] https://docs.astral.sh/ruff/rules/type-comparison
+    # print([i.value for i in db.get_supported_types() if type(i) is SectionType])
+    print([i.value for i in db.get_supported_types() if isinstance(i, SectionType)])

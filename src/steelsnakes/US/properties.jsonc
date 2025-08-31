@@ -1,0 +1,882 @@
+{
+    "W": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_metric": "", // FIXME: will implement US and US_Metric modules. // TODO: make a module called US_Imperial that is simply a copy/wrapper of US itself.
+        "units_imperial": "", // TODO: modules that try to use wrong units should fail pydantic validation. Looks like I need to design a units library.
+        "description": "Nominal weight, lb/ft (kg/m)"
+    },
+    "A": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Cross-sectional area, in.2 (mm2)"
+    },
+    "d": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Overall depth of member, or width of shorter leg for angles, or width of the outstanding legs of long legs back-to-back double angles, or the width of the back-to-back legs of short legs back-to-back double angles, in. (mm)"
+    },
+    "ddet": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Detailing value of member depth, in. (mm)"
+    },
+    "Ht": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Overall depth of square HSS or longer wall of rectangular HSS, in. (mm)"
+    },
+    "h": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Depth of the flat wall of square HSS or longer flat wall of rectangular HSS, in. (mm)"
+    },
+    "OD": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Outside diameter of round HSS or pipe, in. (mm)"
+    },
+    "bf": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Width of flange, in. (mm)"
+    },
+    "bfdet": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Detailing value of flange width, in. (mm)"
+    },
+    "B": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Overall width of square HSS or shorter wall of rectangular HSS, in. (mm)"
+    },
+    "b": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Width of the flat wall of square HSS or the shorter flat wall of rectangular HSS, or width of the longer leg for angles, or width of the back-to-back legs of long legs back-to-back double angles, or width of the outstanding legs of short legs back-to-back double angles, in. (mm)"
+    },
+    "ID": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Inside diameter of pipe, in. (mm)"
+    },
+    "tw": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Thickness of web, in. (mm)"
+    },
+    "twdet": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Detailing value of web thickness, in. (mm)"
+    },
+    "twdet/2": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Detailing value of tw/2, in. (mm)"
+    },
+    "tf": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Thickness of flange, in. (mm)"
+    },
+    "tfdet": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Detailing value of flange thickness, in. (mm)"
+    },
+    "t": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Thickness of angle leg, in. (mm)"
+    },
+    "tnom": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Nominal thickness of HSS and pipe wall, in. (mm)"
+    },
+    "tdes": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Design thickness of HSS and pipe wall, in. (mm)"
+    },
+    "kdes": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from outer face of flange to web toe of fillet used for design, in. (mm)"
+    },
+    "kdet": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from outer face of flange to web toe of fillet used for detailing, in. (mm)"
+    },
+    "k1": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from web center line to flange toe of fillet used for detailing, in. (mm)"
+    },
+    "x": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Horizontal distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to center of gravity of member, in. (mm)"
+    },
+    "y": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Vertical distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to center of gravity of member, in. (mm)"
+    },
+    "eo": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Horizontal distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to shear center of member, in. (mm)"
+    },
+    "xp": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Horizontal distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to plastic neutral axis of member, in. (mm)"
+    },
+    "yp": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Vertical distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to plastic neutral axis of member, in. (mm)"
+    },
+    "bf/2tf": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for W, M, S, HP, WT, and ST flange"
+    },
+    "b/t": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for angles and channel flange"
+    },
+    "b/tdes": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for square HSS or shorter wall of rectangular HSS"
+    },
+    "h/tw": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for W, M, S, HP, or channel web"
+    },
+    "h/tdes": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for square HSS or longer wall of rectangular HSS"
+    },
+    "D/t": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Slenderness ratio for round HSS and pipe (D = ID), or tee shapes (D = d)"
+    },
+    "Ix": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Moment of inertia about the x-axis, in.4 (´106 mm4)"
+    },
+    "Zx": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Plastic section modulus about the x-axis, in.3 (´103 mm3)"
+    },
+    "Sx": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the x-axis, in.3 (´103 mm3)"
+    },
+    "rx": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Radius of gyration about the x-axis, in. (mm)"
+    },
+    "Iy": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Moment of inertia about the y-axis, in.4 (´106 mm4)"
+    },
+    "Zy": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Plastic section modulus about the y-axis, in.3 (´103 mm3)"
+    },
+    "Sy": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the y-axis, in.3 (´103 mm3)"
+    },
+    "ry": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Radius of gyration about the y-axis (with no separation for double angles back-to-back), in. (mm)"
+    },
+    "Iz": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Moment of inertia about the z-axis, in.4 (´106 mm4)"
+    },
+    "rz": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Radius of gyration about the z-axis, in. (mm)"
+    },
+    "Sz": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the z-axis, in.3 (´103 mm3). For single angles, see SzA, SzB, and SzC."
+    },
+    "J": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Torsional constant, in.4 (´103 mm4)"
+    },
+    "Cw": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Warping constant, in.6 (´109 mm6)"
+    },
+    "C": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "HSS torsional constant, in.3 (´103 mm3)"
+    },
+    "Wno": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Normalized warping function, as used in Design Guide 9, in.2 (mm2)"
+    },
+    "Sw1": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Warping statical moment at point 1 on cross section, as used in AISC Design Guide 9 and shown in Figures 1 and 2, in.4 (´106 mm4)"
+    },
+    "Sw2": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Warping statical moment at point 2 on cross section, as used in AISC Design Guide 9 and shown in Figure 2, in.4  (´106 mm4)"
+    },
+    "Sw3": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Warping statical moment at point 3 on cross section, as used in AISC Design Guide 9 and shown in Figure 2, in.4  (´106 mm4)"
+    },
+    "Qf": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Statical moment for a point in the flange directly above the vertical edge of the web, as used in AISC Design Guide 9, in.3 (´103 mm3)"
+    },
+    "Qw": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Statical moment for a point at mid-depth of the cross section, as used in AISC Design Guide 9, in.3 (´103 mm3)"
+    },
+    "ro": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Polar radius of gyration about the shear center, in. (mm)"
+    },
+    "H": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Flexural constant"
+    },
+    "tan(α)": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Tangent of the angle between the y-y and z-z axes for single angles, where a is shown in Figure 3"
+    },
+    "Iw": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Moment of inertia about the w-axis for single angles, in.4 (´106 mm4)"
+    },
+    "zA": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point A to center of gravity along z-axis, as shown in Figure 3, in. (mm)"
+    },
+    "zB": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point B to center of gravity along z-axis, as shown in Figure 3, in. (mm)"
+    },
+    "zC": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point C to center of gravity along z-axis, as shown in Figure 3, in. (mm)"
+    },
+    "wA": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point A to center of gravity along w-axis, as shown in Figure 3, in. (mm)"
+    },
+    "wB": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point B to center of gravity along w-axis, as shown in Figure 3, in. (mm)"
+    },
+    "wC": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance from point C to center of gravity along w-axis, as shown in Figure 3, in. (mm)"
+    },
+    "SwA": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the w-axis at point A on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "SwB": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the w-axis at point B on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "SwC": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the w-axis at point C on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "SzA": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the z-axis at point A on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "SzB": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the z-axis at point B on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "SzC": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Elastic section modulus about the z-axis at point C on cross section, as shown in Figure 3, in.3 (´103 mm3)"
+    },
+    "rts": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Effective radius of gyration, in. (mm)"
+    },
+    "ho": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance between the flange centroids, in. (mm)"
+    },
+    "PA": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Shape perimeter minus one flange surface (or short leg surface for a single angle), as used in Design Guide 19, in. (mm)"
+    },
+    "PA2": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Single angle shape perimeter minus long leg surface, as used in AISC Design Guide 19, in. (mm)"
+    },
+    "PB": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Shape perimeter, as used in AISC Design Guide 19, in. (mm)"
+    },
+    "PC": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Box perimeter minus one flange surface, as used in Design Guide 19, in. (mm)"
+    },
+    "PD": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Box perimeter, as used in AISC Design Guide 19, in. (mm)"
+    },
+    "T": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "Distance between web toes of fillets at top and bottom of web, in. (mm)"
+    },
+    "WGi": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "The workable gage for the inner fastener holes in the flange that provides for entering and tightening clearances and edge distance and spacing requirements. The actual size, combination, and orientation of fastener components should be compared with the geometry of the cross section to ensure compatibility. See AISC Manual Part 1 for additional information, in. (mm)"
+    },
+    "WGo": {
+        "symbol": "",
+        "variable": "",
+        "aliases": [
+            "",
+            ""
+        ],
+        "units_imperial": "",
+        "units_metric": "",
+        "description": "The bolt spacing between inner and outer fastener holes when the workable gage is compatible with four holes across the flange. See AISC Manual Part 1 for additional information, in. (mm)}"
+    }
+}

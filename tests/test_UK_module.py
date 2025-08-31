@@ -13,8 +13,9 @@ from typing import Optional, Any, Dict
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.base.database import SectionDatabase
+from steelsnakes.base.exceptions import SectionNotFoundError, SectionTypeNotRegisteredError
 from steelsnakes.UK.database import UKSectionDatabase, get_uk_database
-from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
 # Import all UK section classes for testing
 from steelsnakes.UK.universal import (
@@ -35,10 +36,10 @@ from steelsnakes.UK.hf_hollow import (
     HotFinishedRectangularHollowSection, HotFinishedEllipticalHollowSection,
     HFCHS, HFSHS, HFRHS, HFEHS
 )
-from steelsnakes.UK.preloaded_bolts import (
-    PreloadedBolt88, PreloadedBolt109, BOLT_PRE_88, BOLT_PRE_109
-)
-from steelsnakes.UK.welds import WeldSpecification, WELD
+# from steelsnakes.UK.preloaded_bolts import (
+#     PreloadedBolt88, PreloadedBolt109, BOLT_PRE_88, BOLT_PRE_109
+# )
+# from steelsnakes.UK.welds import WeldSpecification, WELD
 
 # Import module-level functions
 from steelsnakes.UK import create_section
@@ -233,9 +234,9 @@ class TestUKSectionDatabase:
         assert SectionType.CFSHS in types
         
         # Connection components
-        assert SectionType.WELDS in types
-        assert SectionType.BOLT_PRE_88 in types
-        assert SectionType.BOLT_PRE_109 in types
+        # assert SectionType.WELDS in types
+        # assert SectionType.BOLT_PRE_88 in types
+        # assert SectionType.BOLT_PRE_109 in types
     
     def test_fuzzy_find_section_case_insensitive(self, uk_database):
         """Test fuzzy finding with case-insensitive matching."""
@@ -353,7 +354,7 @@ class TestUniversalSections:
     
     def test_ub_convenience_function(self, mock_uk_data_dir):
         """Test UB convenience function."""
-        with patch('steelsnakes.UK.universal.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.universal.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_beam = UniversalBeam(designation="457x191x67")
             mock_factory.create_section.return_value = mock_beam
@@ -367,7 +368,7 @@ class TestUniversalSections:
     
     def test_uc_convenience_function(self):
         """Test UC convenience function."""
-        with patch('steelsnakes.UK.universal.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.universal.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_column = UniversalColumn(designation="203x203x46")
             mock_factory.create_section.return_value = mock_column
@@ -380,7 +381,7 @@ class TestUniversalSections:
     
     def test_ubp_convenience_function(self):
         """Test UBP convenience function.""" 
-        with patch('steelsnakes.UK.universal.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.universal.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_pile = UniversalBearingPile(designation="203x203x45")
             mock_factory.create_section.return_value = mock_pile
@@ -411,7 +412,7 @@ class TestChannelSections:
     
     def test_pfc_convenience_function(self):
         """Test PFC convenience function."""
-        with patch('steelsnakes.UK.channels.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.channels.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_channel = ParallelFlangeChannel(designation="430x100x64")
             mock_factory.create_section.return_value = mock_channel
@@ -461,7 +462,7 @@ class TestAngleSections:
     
     def test_l_equal_convenience_function(self):
         """Test L_EQUAL convenience function."""
-        with patch('steelsnakes.UK.angles.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.angles.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_angle = EqualAngle(designation="200x200x24")
             mock_factory.create_section.return_value = mock_angle
@@ -500,7 +501,7 @@ class TestHollowSections:
     
     def test_cfchs_convenience_function(self):
         """Test CFCHS convenience function."""
-        with patch('steelsnakes.UK.cf_hollow.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.cf_hollow.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_section = ColdFormedCircularHollowSection(designation="168.3x5.0")
             mock_factory.create_section.return_value = mock_section
@@ -512,42 +513,42 @@ class TestHollowSections:
             mock_factory.create_section.assert_called_once_with("168.3x5.0", SectionType.CFCHS)
 
 
-class TestConnectionComponents:
-    """Test connection components (bolts and welds)."""
+# class TestConnectionComponents:
+#     """Test connection components (bolts and welds)."""
     
-    def test_preloaded_bolt_88_section_type(self):
-        """Test Preloaded Bolt 8.8 section type."""
-        assert PreloadedBolt88.get_section_type() == SectionType.BOLT_PRE_88
+#     def test_preloaded_bolt_88_section_type(self):
+#         """Test Preloaded Bolt 8.8 section type."""
+#         assert PreloadedBolt88.get_section_type() == SectionType.BOLT_PRE_88
     
-    def test_preloaded_bolt_109_section_type(self):
-        """Test Preloaded Bolt 10.9 section type."""
-        assert PreloadedBolt109.get_section_type() == SectionType.BOLT_PRE_109
+#     def test_preloaded_bolt_109_section_type(self):
+#         """Test Preloaded Bolt 10.9 section type."""
+#         assert PreloadedBolt109.get_section_type() == SectionType.BOLT_PRE_109
     
-    def test_weld_specification_creation(self, uk_factory):
-        """Test creating Weld Specification."""
-        weld = uk_factory.create_section("BUTT_WELD_6", SectionType.WELDS)
+#     def test_weld_specification_creation(self, uk_factory):
+#         """Test creating Weld Specification."""
+#         weld = uk_factory.create_section("BUTT_WELD_6", SectionType.WELDS)
         
-        assert isinstance(weld, WeldSpecification)
-        assert weld.designation == "BUTT_WELD_6"
-        assert weld.weld_type == "BUTT"
-        assert weld.size == 6.0
+#         assert isinstance(weld, WeldSpecification)
+#         assert weld.designation == "BUTT_WELD_6"
+#         assert weld.weld_type == "BUTT"
+#         assert weld.size == 6.0
     
-    def test_weld_specification_section_type(self):
-        """Test Weld Specification section type."""
-        assert WeldSpecification.get_section_type() == SectionType.WELDS
+#     def test_weld_specification_section_type(self):
+#         """Test Weld Specification section type."""
+#         assert WeldSpecification.get_section_type() == SectionType.WELDS
     
-    def test_weld_convenience_function(self):
-        """Test WELD convenience function."""
-        with patch('steelsnakes.UK.welds.get_uk_factory') as mock_get_factory:
-            mock_factory = Mock()
-            mock_weld = WeldSpecification(designation="BUTT_WELD_6")
-            mock_factory.create_section.return_value = mock_weld
-            mock_get_factory.return_value = mock_factory
+#     def test_weld_convenience_function(self):
+#         """Test WELD convenience function."""
+#         with patch('steelsnakes.UK.welds.get_UK_factory') as mock_get_factory:
+#             mock_factory = Mock()
+#             mock_weld = WeldSpecification(designation="BUTT_WELD_6")
+#             mock_factory.create_section.return_value = mock_weld
+#             mock_get_factory.return_value = mock_factory
             
-            weld = WELD("BUTT_WELD_6")
+#             weld = WELD("BUTT_WELD_6")
             
-            assert weld is mock_weld
-            mock_factory.create_section.assert_called_once_with("BUTT_WELD_6", SectionType.WELDS)
+#             assert weld is mock_weld
+#             mock_factory.create_section.assert_called_once_with("BUTT_WELD_6", SectionType.WELDS)
 
 
 class TestModuleIntegration:
@@ -555,7 +556,7 @@ class TestModuleIntegration:
     
     def test_module_level_create_section(self):
         """Test module-level create_section function."""
-        with patch('steelsnakes.UK.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_section = UniversalBeam(designation="457x191x67")
             mock_factory.create_section.return_value = mock_section
@@ -569,7 +570,7 @@ class TestModuleIntegration:
     
     def test_module_level_create_section_auto_detect(self):
         """Test module-level create_section with auto-detection."""
-        with patch('steelsnakes.UK.get_uk_factory') as mock_get_factory:
+        with patch('steelsnakes.UK.get_UK_factory') as mock_get_factory:
             mock_factory = Mock()
             mock_section = UniversalBeam(designation="457x191x67")
             mock_factory.create_section.return_value = mock_section
@@ -601,7 +602,7 @@ class TestModuleIntegration:
     
     def test_auto_register_function_handles_exception(self):
         """Test auto-registration handles exceptions gracefully."""
-        with patch('steelsnakes.UK.get_uk_factory', side_effect=Exception("Test error")):
+        with patch('steelsnakes.UK.get_UK_factory', side_effect=Exception("Test error")):
             with patch('builtins.print') as mock_print:
                 # Import the _register_all_uk_sections function and call it directly
                 from steelsnakes.UK import _register_all_uk_sections
@@ -646,7 +647,7 @@ class TestGlobalInstances:
             mock_db_class.assert_called_once_with(test_dir, use_sqlite=False)
     
     def test_get_uk_factory_singleton(self):
-        """Test that get_uk_factory returns singleton instance."""
+        """Test that get_UK_factory returns singleton instance."""
         with patch('steelsnakes.UK.factory.UKSectionFactory') as mock_factory_class:
             with patch('steelsnakes.UK.factory.get_uk_database') as mock_get_db:
                 mock_instance = Mock()
@@ -656,8 +657,8 @@ class TestGlobalInstances:
                 import steelsnakes.UK.factory
                 steelsnakes.UK.factory._global_uk_factory = None
                 
-                factory1 = get_uk_factory()
-                factory2 = get_uk_factory()
+                factory1 = get_UK_factory()
+                factory2 = get_UK_factory()
                 
                 assert factory1 is factory2
                 assert factory1 is mock_instance
@@ -669,14 +670,14 @@ class TestErrorHandling:
     
     def test_section_creation_with_invalid_designation(self, uk_factory):
         """Test error handling for invalid section designation."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises(SectionNotFoundError) as exc_info:
             uk_factory.create_section("INVALID_SECTION", SectionType.UB)
         
         assert "Section 'INVALID_SECTION' of type 'UB' not found" in str(exc_info.value)
     
     def test_section_creation_with_invalid_type(self, uk_factory):
         """Test error handling for invalid section type."""
-        with pytest.raises(ValueError) as exc_info:
+        with pytest.raises((SectionNotFoundError, SectionTypeNotRegisteredError)) as exc_info:
             uk_factory.create_section("457x191x67", SectionType.W)  # US section type
         
         # Should either be "No registered class" or "not found" error

@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import UKSectionFactory, get_uk_factory
+from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
 
 @dataclass
@@ -21,42 +21,36 @@ class ParallelFlangeChannel(BaseSection):
     secondary beams, purlins, and cladding rails.
     """
     
-    # Identification
     serial_size: str = ""
     is_additional: bool = False
-    
-    # Physical properties
-    mass_per_metre: float = 0.0  # Mass per metre (kg/m)
-    h: float = 0.0  # Overall depth (mm)
-    b: float = 0.0  # Overall width (mm)
-    tw: float = 0.0  # Web thickness (mm)
-    tf: float = 0.0  # Flange thickness (mm)
-    r: float = 0.0  # Root radius (mm)
-    d: float = 0.0  # Depth between fillets (mm)
-    
-    # Surface areas
-    surface_area_per_metre: float = 0.0  # Surface area per metre (m²/m)
-    surface_area_per_tonne: float = 0.0  # Surface area per tonne (m²/t)
-    
-    # Second moments of area
-    I_yy: float = 0.0  # Second moment of area, major axis (cm⁴)
-    I_zz: float = 0.0  # Second moment of area, minor axis (cm⁴)
-    
-    # Radii of gyration
-    i_yy: float = 0.0  # Radius of gyration, major axis (cm)
-    i_zz: float = 0.0  # Radius of gyration, minor axis (cm)
-    
-    # Section moduli
-    W_el_yy: float = 0.0  # Elastic section modulus, major axis (cm³)
-    W_el_zz: float = 0.0  # Elastic section modulus, minor axis (cm³)
-    W_pl_yy: float = 0.0  # Plastic section modulus, major axis (cm³)
-    W_pl_zz: float = 0.0  # Plastic section modulus, minor axis (cm³)
-    
-    # Cross-sectional area
-    A: float = 0.0  # Cross-sectional area (cm²)
-    
-    # Channel-specific properties
-    c_y: float = 0.0  # Distance from web to shear center (mm)
+    mass_per_metre: float = 0.0
+    h: float = 0.0
+    b: float = 0.0
+    tw: float = 0.0
+    tf: float = 0.0
+    r: float = 0.0
+    d: float = 0.0
+    cw_tw: float = 0.0
+    cf_tf: float = 0.0
+    e0: float = 0.0
+    C: float = 0.0
+    N: float = 0.0
+    n: float = 0.0
+    surface_area_per_metre: float = 0.0
+    surface_area_per_tonne: float = 0.0
+    I_yy: float = 0.0
+    I_zz: float = 0.0
+    i_yy: float = 0.0
+    i_zz: float = 0.0
+    W_el_yy: float = 0.0
+    W_el_zz: float = 0.0
+    W_pl_yy: float = 0.0
+    W_pl_zz: float = 0.0
+    U: float = 0.0
+    X: float = 0.0
+    I_w: float = 0.0
+    I_t: float = 0.0
+    A: float = 0.0
     
     @classmethod
     def get_section_type(cls) -> SectionType:
@@ -64,23 +58,18 @@ class ParallelFlangeChannel(BaseSection):
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return {
-            'designation': self.designation,
-            'serial_size': self.serial_size,
-            'mass_per_metre': self.mass_per_metre,
-            'h': self.h,
-            'b': self.b,
-            'tw': self.tw,
-            'tf': self.tf,
-            'A': self.A,
-            'I_yy': self.I_yy,
-            'I_zz': self.I_zz,
-        }
+        from dataclasses import asdict
+        return asdict(self)
+
 
 
 # Convenience function for direct instantiation
 def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
     """Create a Parallel Flange Channel section by designation."""
-    factory: UKSectionFactory = get_uk_factory(data_directory)
+    factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.PFC)
     return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
+
+if __name__ == "__main__":
+    print(PFC("430x100x64").get_properties())
+    print("🐬")

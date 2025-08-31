@@ -1,6 +1,7 @@
 # SECTIONS
 
 ## Table of Contents
+
 - [SECTIONS](#sections)
   - [Table of Contents](#table-of-contents)
   - [Demo](#demo)
@@ -13,7 +14,8 @@
   - `HEM`
   - `HEA`
   - `HEA`
-- `HL_HLZ`
+- `HL`
+- `HLZ`
 - `HP`
 - `IPE`
 - `UB`

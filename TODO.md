@@ -1,18 +1,21 @@
 # TODO
 
-- [ ] In SQLite, columns are being renamed automatically, and aliases have not been used in this project
+- [ ] Add comprehensive disclaimer i.e professional/erroneous
 - [ ] Implement aliases again when double checking the modules
-- [ ] Use actual names in SQLite, and revise api to work between aliases
 - [ ] Parse/Wrangle and document how non-preloaded bolts were done
 - [ ] Document wrangling of American sections
-- [ ] Reading Australian sections from <http://www.steelweb.info/> will make a very interesting webscraping project. In absence of spreadsheets, perform this in a separate repository and link to it.
+- [ ] Maybe the property/units/aliases issue can be solved using a second class
+  - for example we have `UniversalSection`, `UniversalBeam` and `UB`. `UB` can implement Pydantic fields or dictionary fields or options that carry the units and property names and aliases especially in calcuation engines.
+- [x] ~~Reading Australian sections from <http://www.steelweb.info/> will make a very interesting webscraping project. In absence of spreadsheets, perform this in a separate repository and link to it.~~ _insufficient data/parsing too much for too little_
 - [ ] Do similar linking of datapreps/scraping of UK and US
-- [ ] Scraping SkyCiv's <beamdimensions.com> for other sections seems like a good idea
+- [x] ~~Scraping SkyCiv's <beamdimensions.com> for other sections seems like a good idea~~ _insufficient data/parsing too much for too little_
 - [ ] Once all steel sections are done, start normalising dimensional properties across sections:
   - [ ] match depths to depths, flange widths to flange widths,
   - [ ] also match section areas, mass per unit length, section moduli, moments of inertia, radii of gyration, etc.
   - [ ] This will allow searching for sections across types, e.g. "find me a section with depth 300mm, mass 20kg/m, and Iyy > 50000 cm4"
 - [ ] Try use unit conversion libraries like Pint or Pydantic's built-in units or forallpeople and SI
+- [ ] In SQLite, columns are being renamed automatically, and aliases have not been used in this project
+- [ ] Use actual names in SQLite, and revise api to work between aliases
 - [ ] To beat SQLite's case (insensitivity) add units to the column names, e.g. h_mm, b_mm, t_mm, A_cm2, Iyy_cm4, etc.
 - [ ] Have a dev, test and docs and full version to trim the dependencies
 - [ ] Merge pilcrow featurs from old docs to new docs with shadcn
@@ -24,3 +27,22 @@
 - [ ] Consult monash uni prof
 - [ ] add cli to steelsnakes, use `argparse` or `click`
 - [ ] add `ui` using `streamlit` or `pywebview` or `fastapi`
+- [ ] document everything in `docs` while chasing 100% test coverage
+- [ ] save for minor departures, most modules and their exports (functions, classes, constants) are variants of the UK module, so the comments peppered throughout the UK module are a sufficient guide to the rest of the modules.
+- [ ] add `sectionproperties` to the dependencies to do section properties calculations for IN standards
+- [ ] I can make a `properties.json` for each region just like US's [`properties.json`](https://github.com/steelsnakes/steelsnakes/blob/main/src/steelsnakes/US/properties.json). To do this, I need a python script to read all the columns from all the tables i.e in every JSON, under every field. every possible key/column name. After this, I will have all possible columns hence all prossible properties (for ease I won't separate per section, just one long table.) After this, I can now make that full json into a markdown table, just like the US one, with name, symbol, description, units. This json will the key to units and calculability. Good idea.
+- [ ] In this whole business, include in the python script a checker to make sure all the data in a json file is tabular i.e all values are in a dict of dictionaries where the dictionary are column names.
+- [ ] After implementing the above, make sure the key of the dictionary in properties.json is the variable name, NOT the symbol, as this is what developers should use, and it should easily interop/test with the classes/pydantic validation. After this, python can easily read units because it can search the properties.json
+- [ ] Implement Go binaries for performance-critical operations following the Polars model of shipping native binaries. Since maturin/Rust extensions aren't available, design Go APIs that can be called from Python via subprocess or FFI for calculations like section property computations, complex filtering operations, and engineering analysis functions. This will provide significant speed improvements for computational-heavy tasks while maintaining the Python interface for ease of use. Consider using Go's net/http for API servers or building shared libraries (.so/.dll) that Python can interface with directly.
+- [ ] Leave golang code in and make the build reproducible and add not for speed and practice and personal glory.
+- [ ] Further find places like sql and json and testing where go can be used to optimise other than search and filtering. Have it in extras first because of different windows/linux/macos builds etc.
+- [ ] The CLI app should definitely be in go.
+- [ ] Future: use go binaries for calculations. I'm ready. It'll be long structs, but it's simple multiplication and division.
+- [ ] Extra: consider handcla
+- [ ] In documentation, have drop-downs with all available sections and be candid about their quirks when it comes to naming/designations e.g American sections with slashes/inches etc.
+- [ ] handle dataprep for hxh to h, hxb to h and b etc hy having regex/string comprehension then test. May be useful for retrieval and calculation, should be done on multiple scripts at the same time and updating dataclass properties (notfounderrors i.e when json gives new value will be useful)
+- [ ] mm4 is written as mm^4, mm\*\*4, mm4, or mm⁴ or mm^4, ensure all these representations are recognized and mapped consistently on symbol/variable/aliases system. Could even be a separate library/json-file/database; see if upgradable on Pint or forallpeople 😄
+- [ ] for calc engines, users should be able to use aliases esp for some fractions, but too much complexity.
+- [ ] Handle missing column data especially for american sections e.g WGi and SwB in some values
+- [ ] Flattening some UK/EU sections using the american script will require tweaking to handle some missing values and some dict values e.g izz for different lengths.
+- [ ] Remember: CSV files need type handling because they are all strings.

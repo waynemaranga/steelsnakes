@@ -20,3 +20,4 @@
 # IS - India, IS 800:2007 - 
 # JP - Japan, JIS G 3192, https://build-your-vision.eu/japanese-sections.html
 # AU & NZ - Australia & New Zealand, AS/NZS 1554.1:2016 - 
+# SA - South Africa - https://www.saisc.co.za/resources/
