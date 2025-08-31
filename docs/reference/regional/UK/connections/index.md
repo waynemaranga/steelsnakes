@@ -1,4 +1,4 @@
-# Connection Elements
+<!-- # Connection Elements
 
 Connection elements including bolts and weld specifications for UK structural steel.
 
@@ -53,4 +53,4 @@ Connection elements including bolts and weld specifications for UK structural st
         show_root_heading: true
         show_source: true
         heading_level: 3
-        members_order: source
+        members_order: source -->
