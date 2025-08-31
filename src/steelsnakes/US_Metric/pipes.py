@@ -41,9 +41,9 @@ def PIPE(designation: str) -> Pipe:
 
 if __name__ == "__main__":
     # Example usage
-    pipe = PIPE("Pipe360X101.6X6.35")
+    pipe = PIPE("Pipe400STD")
     if pipe:
-        print(f"Successfully created pipe: {pipe.EDI_Std_Nomenclature}")
+        print(f"Successfully created pipe: {pipe.designation}")
         print(pipe.get_properties())
     else:
         print("pipe not found.")

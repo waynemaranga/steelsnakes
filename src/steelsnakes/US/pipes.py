@@ -41,7 +41,7 @@ def PIPE(designation: str) -> Pipe:
 
 if __name__ == "__main__":
     # Example usage
-    pipe = PIPE("Pipe24SCH20")
+    pipe = PIPE("Pipe24STD")
     if pipe:
         print(f"Successfully created pipe: {pipe.designation}")
         print(pipe.get_properties())
