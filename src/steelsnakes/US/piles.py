@@ -1,12 +1,13 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from typing import Any, Optional, cast
 from steelsnakes.base import BaseSection, SectionType
 from steelsnakes.US.factory import USSectionFactory, get_US_factory
 
+
 @dataclass
-class Beam(BaseSection):
+class Pile(BaseSection):
     # Identification
-    section_type: str # implement section type in all json
+    section_type: str #
     EDI_Std_Nomenclature: str = ""
     T_F: str = ""
 
@@ -58,43 +59,23 @@ class Beam(BaseSection):
 
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        from dataclasses import asdict
         return asdict(self) # SAFE: applies recursively to field values that are dataclass instances.
 
-
 @dataclass
-class WideFlangeBeam(Beam):
+class BearingPile(Pile):
     @classmethod
     def get_section_type(cls) -> SectionType:
-        return SectionType.W
-
-
-@dataclass
-class StandardBeam(Beam):
-    @classmethod
-    def get_section_type(cls) -> SectionType:
-        return SectionType.S
-
-@dataclass
-class MiscellaneousBeam(Beam):
-    @classmethod
-    def get_section_type(cls) -> SectionType:
-        return SectionType.M
-
-
-def W(designation: str) -> WideFlangeBeam:
-    """Note: Case insensitive - accepts both "x" and "X" separators"""
-    return cast(WideFlangeBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.W))
-
-def S(designation: str) -> StandardBeam:
-    """Note: case insensitive - accepts both "x" and "X" separators"""
-    return cast(StandardBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.S))
-
-def M(designation: str) -> MiscellaneousBeam:
-    """Note: case insensitive - accepts both "x" and "X" separators"""
-    return cast(MiscellaneousBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.M))
+        return SectionType.HP
+    
+def HP(designation: str) -> BearingPile:
+    return cast(BearingPile, get_US_factory().create_section(designation, SectionType.HP))
+    
 
 if __name__ == "__main__":
-    print(W("W36x350").get_properties())
-    print(S("S10X35").get_properties())
-    print(M("M12x10.8").get_properties())
+    # Example usage
+    pile = HP("HP14X73")
+    if pile:
+        print(f"Successfully created pile: {pile.designation}")
+        print(pile.get_properties())
+    else:
+        print("Pile not found.")

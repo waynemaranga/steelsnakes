@@ -66,13 +66,7 @@ class EUSectionDatabase(SectionDatabase):
             # Flats
             SectionType.Sigma, # SIGMA
             SectionType.Zed, # Zed-butted Sections
-            
-            # Connection components
-            # SectionType.WELDS, # Welds # Not Implemented
-            # SectionType.BOLT_PRE_88, # Bolt Pre-88 # Not Implemented
-            # SectionType.BOLT_PRE_109, # Bolt Pre-109 # Not Implemented
-
-        ]
+            ]
 
     def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
         """
