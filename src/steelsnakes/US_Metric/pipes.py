@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import Any, Optional, cast
 from steelsnakes.base import BaseSection, SectionType
-from steelsnakes.US.factory import USSectionFactory, get_US_factory
+from steelsnakes.US_Metric.factory import USMetricSectionFactory, get_US_Metric_factory
 
 
 @dataclass
@@ -36,12 +36,12 @@ class Pipe(SteelPipe):
         return SectionType.PIPE
     
 def PIPE(designation: str) -> Pipe:
-    return cast(Pipe, get_US_factory().create_section(designation, SectionType.PIPE))
+    return cast(Pipe, get_US_Metric_factory().create_section(designation, SectionType.PIPE))
     
 
 if __name__ == "__main__":
     # Example usage
-    pipe = PIPE("Pipe24STD")
+    pipe = PIPE("Pipe400STD")
     if pipe:
         print(f"Successfully created pipe: {pipe.designation}")
         print(pipe.get_properties())

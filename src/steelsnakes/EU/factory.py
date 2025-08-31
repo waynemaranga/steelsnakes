@@ -36,8 +36,11 @@ class EUSectionFactory(SectionFactory):
             )
             self.register_section_class(ParallelFlangeBeam)
             self.register_section_class(WideFlangeBeam)
-            self.register_section_class(ExtraWideFlangeBeam)
             self.register_section_class(UniversalBeam)
+            
+            # Manual registration for ExtraWideFlangeBeam (supports both HL and HLZ)
+            self._section_classes[SectionType.HL] = ExtraWideFlangeBeam
+            self._section_classes[SectionType.HLZ] = ExtraWideFlangeBeam
 
             # --- Columns ---
             from steelsnakes.EU.columns import (
@@ -61,8 +64,11 @@ class EUSectionFactory(SectionFactory):
                 TaperedFlangeChannel,
 
             )
-            self.register_section_class(ParallelFlangeChannel)
             self.register_section_class(TaperedFlangeChannel)
+            
+            # Manual registration for ParallelFlangeChannel (supports both PFC and UPE)
+            self._section_classes[SectionType.PFC] = ParallelFlangeChannel
+            self._section_classes[SectionType.UPE] = ParallelFlangeChannel
 
             # --- Angles ---
             from steelsnakes.EU.angles import (

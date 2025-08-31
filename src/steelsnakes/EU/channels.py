@@ -18,6 +18,9 @@ class ParallelFlangeChannel(BaseSection):
     
     C-shaped section with parallel flanges, commonly used for 
     secondary beams, purlins, and cladding rails.
+    
+    Supports both PFC and UPE section types through factory registration.
+    The factory will register this class for both SectionType.PFC and SectionType.UPE.
     """
     
     # Identification
@@ -54,7 +57,9 @@ class ParallelFlangeChannel(BaseSection):
     
     @classmethod
     def get_section_type(cls) -> SectionType:
-        return cast(SectionType, Union[SectionType.PFC, SectionType.UPE]) # FIXME: check if Unions are the ussue
+        #// return cast(SectionType, Union[SectionType.PFC, SectionType.UPE])
+        # Return PFC as the primary type - factory will handle both PFC and UPE registration
+        return SectionType.PFC
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -62,6 +67,7 @@ class ParallelFlangeChannel(BaseSection):
         return asdict(self)
 
 
+@dataclass
 class TaperedFlangeChannel(BaseSection):
     
     serial_size: str = ""
@@ -128,7 +134,7 @@ def UPN(designation: str, data_directory: Optional[Path] = None) -> TaperedFlang
     return cast(TaperedFlangeChannel, factory.create_section(designation, SectionType.UPN))
 
 if __name__ == "__main__":
-    print(PFC("430x100x64")) # FIXME: why doesn't this work?
-    print(UPE("UPE-400")) # FIXME: why doesn't this work?
-    print(UPN("UPN-400")) # FIXME: why doesn't this work?
+    print(PFC("430x100x64").get_properties())
+    print(UPE("UPE-400").get_properties())
+    print(UPN("UPN-400").get_properties())
     print("🐬")
