@@ -46,17 +46,7 @@ class SectionType(Enum):
     CFRHS = "CFRHS"     # Cold Formed Rectangular Hollow Section
     CFSHS = "CFSHS"     # Cold Formed Square Hollow Section
     
-    # Connection components
-    WELDS = "WELDS"                 # Weld details
-    BOLT_PRE_88 = "BOLT_PRE_88"     # Pre-loaded bolts (8.8 grade)
-    BOLT_PRE_109 = "BOLT_PRE_109"   # Pre-loaded bolts (10.9 grade)
-    # TODO: Implement non-preloaded bolts
-    # BOLT_NON_PRE_CS_46 = "BOLT_NON_PRE_CS_46" # Countersunk, 4.6 grade
-    # BOLT_NON_PRE_CS_88 = "BOLT_NON_PRE_CS_88" # Countersunk, 8.8 grade
-    # BOLT_NON_PRE_CS_109 = "BOLT_NON_PRE_CS_109" # Countersunk, 10.9 grade
-    # BOLT_NON_PRE_HEX_46 = "BOLT_NON_PRE_HEX_46" # Hexagon, 4.6 grade
-    # BOLT_NON_PRE_HEX_88 = "BOLT_NON_PRE_HEX_88" # Hexagon, 8.8 grade
-    # BOLT_NON_PRE_HEX_109 = "BOLT_NON_PRE_HEX_109" # Hexagon, 10.9 grade
+    # Removed connection components (bolts and welds)
 
     # --- 🇪🇺 EU ---
     # TODO: Add info here... Provided by ArcelorMittal via Orange Book

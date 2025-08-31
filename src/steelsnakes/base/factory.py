@@ -132,6 +132,7 @@ class SectionFactory(ABC):
         if not section_class:
             raise SectionTypeNotRegisteredError(f"No registered class for section type '{section_type.value}'. Available types: {[t.value for t in self._section_classes.keys()]}")
             # TODO: compare raise vs log warning + return None
+            # FIXME: fix error message: doesn't show list of available types
 
         # Create and return instance
         # Remove metadata from data as it's not part of the dataclass
