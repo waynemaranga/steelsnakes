@@ -68,7 +68,10 @@ class UniversalSection(BaseSection):
         """Return all section properties as a dictionary."""
 
         # return self.__dict__ # DANGEROUS: live reference; caller can modify internal state
-        return vars(self).copy() # SAFE: returns a shallow copy, doesn't expose live references to the instance
+        # return vars(self).copy() # SAFE: returns a shallow copy, doesn't expose live references to the instance
+        from dataclasses import asdict
+        return asdict(self) # SAFE: applies recursively to field values that are dataclass instances.
+
         
 
 @dataclass

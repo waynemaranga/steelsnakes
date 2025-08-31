@@ -60,19 +60,6 @@ from steelsnakes.UK.hf_hollow import (
     HFEHS,
 )
 
-# Import Preloaded Bolt specifications
-from steelsnakes.UK.preloaded_bolts import (
-    PreloadedBolt88,
-    PreloadedBolt109,
-    BOLT_PRE_88,
-    BOLT_PRE_109,
-)
-
-# Import Weld specifications
-from steelsnakes.UK.welds import (
-    WeldSpecification,
-    WELD,
-)
 
 __all__ = [
     # Base classes and infrastructure
@@ -123,19 +110,6 @@ __all__ = [
     "HFSHS",
     "HFRHS",
     "HFEHS",
-    
-    # Preloaded Bolt specifications
-    "PreloadedBolt88",
-    "PreloadedBolt109",
-    "BOLT_PRE_88",
-    "BOLT_PRE_109",
-
-    # Non-preloaded Bolt specifications
-    # TODO: Add non-preloaded bolt specifications
-    
-    # Weld specifications
-    "WeldSpecification",
-    "WELD",
 ]
 
 

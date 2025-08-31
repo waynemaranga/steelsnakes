@@ -69,11 +69,6 @@ class UKSectionDatabase(SectionDatabase):
             SectionType.CFCHS,
             SectionType.CFRHS,
             SectionType.CFSHS,
-            
-            # Connection components
-            SectionType.WELDS,
-            SectionType.BOLT_PRE_88,
-            SectionType.BOLT_PRE_109,
         ]
 
     def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:

@@ -56,25 +56,25 @@ class MockParallelFlangeChannel(BaseSection):
         }
 
 
-class MockWeldSpecification(BaseSection):
-    """Mock Weld Specification class for testing designation addition."""
+# class MockWeldSpecification(BaseSection):
+#     """Mock Weld Specification class for testing designation addition."""
     
-    def __init__(self, designation: str = "", weld_type: str = "BUTT", **kwargs):
-        super().__init__(designation=designation)
-        self.weld_type = weld_type
-        for key, value in kwargs.items():
-            setattr(self, key, value)
+#     def __init__(self, designation: str = "", weld_type: str = "BUTT", **kwargs):
+#         super().__init__(designation=designation)
+#         self.weld_type = weld_type
+#         for key, value in kwargs.items():
+#             setattr(self, key, value)
     
-    @classmethod
-    def get_section_type(cls) -> SectionType:
-        return SectionType.WELDS
+#     @classmethod
+#     def get_section_type(cls) -> SectionType:
+#         return SectionType.WELDS
     
-    def get_properties(self) -> dict[str, Any]:
-        return {
-            'designation': self.designation,
-            'weld_type': self.weld_type,
-            'section_type': self.get_section_type().value
-        }
+#     def get_properties(self) -> dict[str, Any]:
+#         return {
+#             'designation': self.designation,
+#             'weld_type': self.weld_type,
+#             'section_type': self.get_section_type().value
+#         }
 
 
 # Mock Database Class
@@ -118,21 +118,12 @@ class MockSectionDatabase(SectionDatabase):
                 "_section_type": "PFC"
             }
         }
-        
-        self._cache[SectionType.WELDS] = {
-            "BUTT_WELD_6": {
-                "weld_type": "BUTT",
-                "throat_thickness": 6.0,
-                "_section_type": "WELDS"
-                # Note: No 'designation' field to test auto-addition
-            }
-        }
     
     def _resolve_data_directory(self, data_directory):
         return data_directory or Mock()
     
     def get_supported_types(self) -> list[SectionType]:
-        return [SectionType.UB, SectionType.PFC, SectionType.WELDS]
+        return [SectionType.UB, SectionType.PFC, SectionType.L_EQUAL_B2B]
     
     def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
         # Simple case-insensitive search for testing
@@ -177,7 +168,7 @@ class MockSectionFactory(SectionFactory):
         """Register mock section classes for testing."""
         self.register_section_class(MockUniversalBeam)
         self.register_section_class(MockParallelFlangeChannel)
-        self.register_section_class(MockWeldSpecification)
+        # self.register_section_class(MockWeldSpecification)
 
 
 class TestSectionFactoryBase:
@@ -203,11 +194,9 @@ class TestSectionFactoryBase:
         # Check that default classes were registered
         assert SectionType.UB in factory._section_classes
         assert SectionType.PFC in factory._section_classes
-        assert SectionType.WELDS in factory._section_classes
         
         assert factory._section_classes[SectionType.UB] is MockUniversalBeam
         assert factory._section_classes[SectionType.PFC] is MockParallelFlangeChannel
-        assert factory._section_classes[SectionType.WELDS] is MockWeldSpecification
     
     def test_register_section_class(self, factory):
         """Test manual registration of section classes."""
@@ -228,11 +217,11 @@ class TestSectionFactoryBase:
         assert SectionType.UC in factory._section_classes
         assert factory._section_classes[SectionType.UC] is MockColumn
     
-    def test_abstract_factory_cannot_instantiate(self):
+    def test_abstract_factory_cannot_instantiate(self) -> None:
         """Test that abstract SectionFactory cannot be instantiated directly."""
         with pytest.raises(TypeError):
             # FIXME: Cannot instantiate abstract class "SectionFactory"; "SectionFactory._register_default_classes" is not implemented
-            SectionFactory(Mock()) 
+            SectionFactory(Mock())  # pyright: ignore[reportAbstractUsage]
 
 
 class TestSectionCreation:
@@ -266,14 +255,14 @@ class TestSectionCreation:
         assert section.depth == 150 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
         assert section.width == 75 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
     
-    def test_create_section_with_missing_designation(self, factory):
-        """Test creating section where designation needs to be added."""
-        section = factory.create_section("BUTT_WELD_6", SectionType.WELDS)
+    # def test_create_section_with_missing_designation(self, factory):
+    #     """Test creating section where designation needs to be added."""
+    #     section = factory.create_section("BUTT_WELD_6", SectionType.WELDS)
         
-        assert isinstance(section, MockWeldSpecification)
-        assert section.designation == "BUTT_WELD_6"  # Should be added automatically
-        assert section.weld_type == "BUTT"
-        assert section.throat_thickness == 6.0 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
+    #     assert isinstance(section, MockWeldSpecification)
+    #     assert section.designation == "BUTT_WELD_6"  # Should be added automatically
+    #     assert section.weld_type == "BUTT"
+    #     assert section.throat_thickness == 6.0 # type: ignore[reportAttributeAccessIssue]; mock property, so SAFE
     
     def test_create_section_filters_metadata(self, factory):
         """Test that metadata fields starting with '_' are filtered out."""
@@ -361,13 +350,13 @@ class TestEdgeCases:
     def factory(self, mock_database):
         return MockSectionFactory(mock_database)
     
-    def test_section_data_with_no_designation_field(self, factory):
-        """Test section creation when data has no designation field."""
-        # This should add designation automatically
-        section = factory.create_section("BUTT_WELD_6", SectionType.WELDS)
+    # def test_section_data_with_no_designation_field(self, factory):
+    #     """Test section creation when data has no designation field."""
+    #     # This should add designation automatically
+    #     section = factory.create_section("BUTT_WELD_6", SectionType.WELDS)
         
-        assert section.designation == "BUTT_WELD_6"
-        assert section.weld_type == "BUTT"
+    #     assert section.designation == "BUTT_WELD_6"
+    #     assert section.weld_type == "BUTT"
     
     def test_section_data_with_existing_designation_field(self, factory):
         """Test section creation when data already has designation field."""

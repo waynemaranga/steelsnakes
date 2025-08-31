@@ -70,13 +70,6 @@ class UKSectionFactory(SectionFactory):
             self.register_section_class(ColdFormedSquareHollowSection)
             self.register_section_class(ColdFormedRectangularHollowSection)
             
-            # Connection components
-            from steelsnakes.UK.welds import WeldSpecification
-            from steelsnakes.UK.preloaded_bolts import PreloadedBolt88, PreloadedBolt109
-            self.register_section_class(WeldSpecification)
-            self.register_section_class(PreloadedBolt88)
-            self.register_section_class(PreloadedBolt109)
-            
         except ImportError as e:
             # Some section modules may not exist yet - gracefully handle
             logger.warning(f"Warning: Could not import some UK section classes: {e}")

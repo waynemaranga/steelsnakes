@@ -61,7 +61,7 @@ class TestFuzzyMatchingErrorMessages:
         
         error_msg = str(exc_info.value)
         assert "Section 'COMPLETELY_DIFFERENT' not found in any type" in error_msg
-        assert "Available types: ['UB', 'PFC', 'WELDS']" in error_msg
+        assert "Available types: ['UB', 'PFC']" in error_msg
         assert "\nTry:" not in error_msg
     
     def test_fuzzy_match_case_insensitive(self, factory):
@@ -83,10 +83,10 @@ class TestFuzzyMatchingErrorMessages:
     def test_fuzzy_match_typo_correction(self, factory):
         """Test fuzzy matching corrects typos."""
         with pytest.raises(ValueError) as exc_info:
-            factory.create_section("BUTT_WALD_6", SectionType.WELDS)  # Typo in WELD
+            factory.create_section("15Ox75x18", SectionType.PFC)  # Typo in WELD
         
         error_msg = str(exc_info.value)
-        assert "\nTry: 'BUTT_WELD_6'?" in error_msg
+        assert "\nTry: '150x75x18'?" in error_msg
     
     def test_fuzzy_match_multiple_suggestions(self, factory):
         """Test that multiple suggestions are provided when available."""

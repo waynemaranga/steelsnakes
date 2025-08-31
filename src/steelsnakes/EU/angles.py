@@ -1,7 +1,6 @@
 """
-Angle steel sections for UK module.
+Angle steel sections for EU module.
 This module implements Equal Angles, Unequal Angles, and their Back-to-Back variants.
-TODO: Fix UK/EU angle classes and properties; do dataprep again for UK sections on angles to clean up properties OR remarshall json for fixing
 """
 
 from __future__ import annotations
@@ -10,7 +9,7 @@ from pathlib import Path
 from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
+from steelsnakes.EU.factory import EUSectionFactory, get_EU_factory
 
 
 @dataclass
@@ -25,7 +24,7 @@ class EqualAngle(BaseSection):
     # Identification
     hxh: str = ""
     t: float = 0.0  # Thickness (mm)
-    is_additional: bool = False
+    histar_fy: bool = False
     
     # Physical properties
     mass_per_metre: float = 0.0  # Mass per metre (kg/m)
@@ -66,7 +65,9 @@ class EqualAngle(BaseSection):
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return vars(self).copy()
+        from dataclasses import asdict
+        return asdict(self)
+
 
 
 @dataclass
@@ -81,7 +82,7 @@ class UnequalAngle(BaseSection):
     # Identification
     hxb: str = ""  # Leg dimensions (e.g., '200x100')
     t: float = 0.0  # Thickness (mm)
-    is_additional: bool = False
+    histar_fy: bool = False
     
     # Physical properties
     mass_per_metre: float = 0.0  # Mass per metre (kg/m)
@@ -126,7 +127,9 @@ class UnequalAngle(BaseSection):
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return vars(self).copy()
+        from dataclasses import asdict
+        return asdict(self)
+
 
 
 @dataclass
@@ -139,9 +142,9 @@ class EqualAngleBackToBack(BaseSection):
     """
     
     # Identification
-    hxh: str = "" # TODO: resolve dataprep for h vaue and t value (or) employ in calc engine
-    is_additional: bool = False
+    hxh: str = ""
     t: float = 0.0
+    histar_fy: bool = False
     total_mass_per_metre: float = 0.0
     n_y: float = 0.0
     total_area: float = 0.0
@@ -154,9 +157,10 @@ class EqualAngleBackToBack(BaseSection):
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL_B2B
     
-    def get_properties(self) -> dict[str,Any]:
+    def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return vars(self).copy()
+        from dataclasses import asdict
+        return asdict(self)
 
 
 @dataclass
@@ -170,8 +174,8 @@ class UnequalAngleBackToBack(BaseSection):
     
     # Identification
     hxb: str = ""
-    is_additional: bool = False
     t: float = 0.0
+    histar_fy: bool = False
     total_mass_per_metre: float = 0.0
     n_y: float = 0.0
     total_area: float = 0.0
@@ -180,51 +184,52 @@ class UnequalAngleBackToBack(BaseSection):
     W_el_yy: float = 0.0
     i_zz: Any = () # FIXME: dict/list/set/OrderedDict mutable defaults not allowed
     
-    
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL_B2B
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return vars(self).copy()
+        from dataclasses import asdict
+        return asdict(self)
 
 # Convenience functions for direct instantiation
 def L_EQUAL(designation: str, data_directory: Optional[Path] = None) -> EqualAngle:
     """Create an Equal Angle section by designation."""
-    factory: UKSectionFactory = get_UK_factory(data_directory)
+    factory: EUSectionFactory = get_EU_factory(data_directory)
     # return factory.create_section(designation, SectionType.L_EQUAL)
     return cast(EqualAngle, factory.create_section(designation, SectionType.L_EQUAL))
 
 
 def L_UNEQUAL(designation: str, data_directory: Optional[Path] = None) -> UnequalAngle:
     """Create an Unequal Angle section by designation."""
-    factory: UKSectionFactory = get_UK_factory(data_directory)
+    factory: EUSectionFactory = get_EU_factory(data_directory)
     # return factory.create_section(designation, SectionType.L_UNEQUAL)
     return cast(UnequalAngle, factory.create_section(designation, SectionType.L_UNEQUAL))
 
 
 def L_EQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> EqualAngleBackToBack:
     """Create a Back-to-Back Equal Angles section by designation."""
-    factory: UKSectionFactory = get_UK_factory(data_directory)
+    factory: EUSectionFactory = get_EU_factory(data_directory)
     # return factory.create_section(designation, SectionType.L_EQUAL_B2B)
     return cast(EqualAngleBackToBack, factory.create_section(designation, SectionType.L_EQUAL_B2B))
 
 
 def L_UNEQUAL_B2B(designation: str, data_directory: Optional[Path] = None) -> UnequalAngleBackToBack:
     """Create a Back-to-Back Unequal Angles section by designation."""
-    factory: UKSectionFactory = get_UK_factory(data_directory)
+    factory: EUSectionFactory = get_EU_factory(data_directory)
     # return factory.create_section(designation, SectionType.L_UNEQUAL_B2B)
     return cast(UnequalAngleBackToBack, factory.create_section(designation, SectionType.L_UNEQUAL_B2B))
 
-if __name__ == "__main__":
-    # factory = get_UK_factory()
-    # test_section = factory.create_section("200x200x24.0", SectionType.L_EQUAL)
-    # print(test_section.get_properties())
 
-    print(L_EQUAL("200x200x24.0").get_properties())
-    print(L_EQUAL_B2B("200x200x20").get_properties())
-    print(L_UNEQUAL("200x150x18").get_properties())
-    print(L_UNEQUAL_B2B("200x150x18").get_properties())
+if __name__ == "__main__":
+    # factory = get_EU_factory()
+    # test_section2 = factory.create_section("200x100x14", section_type=SectionType.L_UNEQUAL)
+    # print(test_section2.get_properties())
+
+    print(L_EQUAL("300x300x35.0").get_properties())
+    print(L_EQUAL_B2B("300x300x35.0").get_properties())
+    print(L_UNEQUAL("250x90x16").get_properties())
+    print(L_UNEQUAL_B2B("250x90x14").get_properties())
 
     print("🐬")

@@ -20,13 +20,29 @@ class HotFinishedCircularHollowSection(BaseSection):
     # Basic properties - to be expanded based on actual data structure
     mass_per_metre: float = 0.0
     A: float = 0.0  # Cross-sectional area (cm²)
+    d: float = 0.0
+    t: float = 0.0
+    is_additional: float = 0.0
+    mass_per_metre: float = 0.0
+    A: float = 0.0
+    d_t: float = 0.0
+    I: float = 0.0
+    i: float = 0.0
+    W_el: float = 0.0
+    W_pl: float = 0.0
+    I_t: float = 0.0
+    W_t: float = 0.0
+    surface_area_per_metre: float = 0.0
+    surface_area_per_tonne: float = 0.0
     
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.HFCHS
     
     def get_properties(self) -> dict[str, Any]:
-        return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
+        """Return all section properties as a dictionary."""
+        from dataclasses import asdict
+        return asdict(self)
 
 
 @dataclass
@@ -34,14 +50,29 @@ class HotFinishedSquareHollowSection(BaseSection):
     """Hot Finished Square Hollow Section (HFSHS)."""
     
     mass_per_metre: float = 0.0
+    hxh: str = ""
+    t: float = 0.0
+    is_additional: float = 0.0
+    mass_per_metre: float = 0.0
     A: float = 0.0
+    c_t: float = 0.0
+    I: float = 0.0
+    i: float = 0.0
+    W_el: float = 0.0
+    W_pl: float = 0.0
+    I_t: float = 0.0
+    W_t: float = 0.0
+    surface_area_per_metre: float = 0.0
+    surface_area_per_tonne: float = 0.0
     
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.HFSHS
     
     def get_properties(self) -> dict[str, Any]:
-        return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
+        """Return all section properties as a dictionary."""
+        from dataclasses import asdict
+        return asdict(self)
 
 
 @dataclass
@@ -49,14 +80,34 @@ class HotFinishedRectangularHollowSection(BaseSection):
     """Hot Finished Rectangular Hollow Section (HFRHS)."""
     
     mass_per_metre: float = 0.0
+    hxb: str = ""
+    t: float = 0.0
+    is_additional: float = 0.0
+    mass_per_metre: float = 0.0
     A: float = 0.0
+    cw_t: float = 0.0
+    cf_t: float = 0.0
+    I_yy: float = 0.0
+    I_zz: float = 0.0
+    i_yy: float = 0.0
+    i_zz: float = 0.0
+    W_el_yy: float = 0.0
+    W_el_zz: float = 0.0
+    W_pl_yy: float = 0.0
+    W_pl_zz: float = 0.0
+    I_t: float = 0.0
+    W_t: float = 0.0
+    surface_area_per_metre: float = 0.0
+    surface_area_per_tonne: float = 0.0
     
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.HFRHS
     
     def get_properties(self) -> dict[str, Any]:
-        return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
+        """Return all section properties as a dictionary."""
+        from dataclasses import asdict
+        return asdict(self)
 
 
 @dataclass
@@ -64,14 +115,32 @@ class HotFinishedEllipticalHollowSection(BaseSection):
     """Hot Finished Elliptical Hollow Section (HFEHS)."""
     
     mass_per_metre: float = 0.0
+    hxb: str = ""
+    t: float = 0.0
+    is_additional: float = 0.0
+    mass_per_metre: float = 0.0
     A: float = 0.0
+    I_yy: float = 0.0
+    I_zz: float = 0.0
+    i_yy: float = 0.0
+    i_zz: float = 0.0
+    W_el_yy: float = 0.0
+    W_el_zz: float = 0.0
+    W_pl_yy: float = 0.0
+    W_pl_zz: float = 0.0
+    I_t: float = 0.0
+    W_t: float = 0.0
+    surface_area_per_metre: float = 0.0
+    surface_area_per_tonne: float = 0.0
     
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.HFEHS
     
     def get_properties(self) -> dict[str, Any]:
-        return {'designation': self.designation, 'mass_per_metre': self.mass_per_metre, 'A': self.A}
+        """Return all section properties as a dictionary."""
+        from dataclasses import asdict
+        return asdict(self)
 
 
 # Convenience functions
@@ -101,3 +170,10 @@ def HFEHS(designation: str, data_directory: Optional[Path] = None) -> HotFinishe
     factory: UKSectionFactory = get_UK_factory(data_directory)
     # return factory.create_section(designation, SectionType.HFEHS)
     return cast(HotFinishedEllipticalHollowSection, factory.create_section(designation, SectionType.HFEHS))
+
+if __name__ == "__main__":
+    print(HFCHS("48.3x3.6").get_properties())
+    print(HFEHS("300x150x12.5").get_properties())
+    print(HFRHS("50x30x4.0").get_properties())
+    print(HFSHS("50x50x3.2").get_properties())
+    print("🐬")
