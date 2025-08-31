@@ -1,7 +1,7 @@
 from dataclasses import dataclass, asdict
 from typing import Any, Optional, cast
 from steelsnakes.base import BaseSection, SectionType
-from steelsnakes.US.factory import SectionFactory, get_US_factory
+from steelsnakes.US_Metric.factory import SectionFactory, get_US_Metric_factory
 
 @dataclass
 class Tee(BaseSection):
@@ -75,17 +75,17 @@ class WideFlangeTee(Tee):
 
 
 def ST(designation: str) -> StandardTee:
-    return cast(StandardTee, get_US_factory().create_section(designation, SectionType.ST))
+    return cast(StandardTee, get_US_Metric_factory().create_section(designation, SectionType.ST))
 
 def MT(designation: str) -> MiscellaneousTee:
-    return cast(MiscellaneousTee, get_US_factory().create_section(designation, SectionType.MT))
+    return cast(MiscellaneousTee, get_US_Metric_factory().create_section(designation, SectionType.MT))
 
 def WT(designation: str) -> WideFlangeTee:
-    return cast(WideFlangeTee, get_US_factory().create_section(designation, SectionType.WT))
+    return cast(WideFlangeTee, get_US_Metric_factory().create_section(designation, SectionType.WT))
 
 
 if __name__ == "__main__":
-    print(ST("ST12X60.5").get_properties())
-    print(MT("MT6.25X6.2").get_properties())
-    print(WT("WT22X184").get_properties())
+    print(ST("ST305X90").get_properties())
+    print(MT("MT159X9.25").get_properties())
+    print(WT("WT550X303.5").get_properties())
     print("🐬")

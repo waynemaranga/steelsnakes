@@ -80,11 +80,17 @@ class WideFlangeBeam(Beam):
 
 @dataclass
 class ExtraWideFlangeBeam(Beam):
-    """Extra Wide Flange Beam section."""
+    """Extra Wide Flange Beam section.
+    
+    Supports both HL and HLZ section types through manual factory registration.
+    The factory will register this class for both SectionType.HL and SectionType.HLZ.
+    """
     @classmethod
     def get_section_type(cls) -> SectionType:
-        # return Union[SectionType.HL, SectionType.HLZ] # Pylance[reportReturnType]: https://github.com/microsoft/pylance-release/blob/main/docs/diagnostics/reportReturnType.md
-        return cast(SectionType, Union[SectionType.HL, SectionType.HLZ]) # FIXME: see if Unions bring issues...
+        # //return Union[SectionType.HL, SectionType.HLZ] # Pylance[reportReturnType]: https://github.com/microsoft/pylance-release/blob/main/docs/diagnostics/reportReturnType.md
+
+        # Return HL as the primary type - factory will handle both HL and HLZ registration
+        return SectionType.HL
 
 @dataclass
 class UniversalBeam(Beam):
@@ -134,8 +140,8 @@ if __name__ == "__main__":
     # print(test_section.get_properties())
 
     print(UB("1100x400x433").get_properties())
-    # print(HL("HL-1100-M").get_properties()) # FIXME: Why doesn't this work?
-    # print(HLZ("HLZ-1100").get_properties()) # FIXME: Why doesn't this work?
+    print(HL("HL-1100-M").get_properties())
+    print(HLZ("HLZ-1100-A").get_properties())
     print(IPE("IPE-750x220").get_properties())
     
     

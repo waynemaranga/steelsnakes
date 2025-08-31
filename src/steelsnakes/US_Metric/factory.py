@@ -87,6 +87,10 @@ class USMetricSectionFactory(SectionFactory):
             self.register_section_class(MiscellaneousTee)
             self.register_section_class(WideFlangeTee)
 
+            # --- Pipes ---
+            from steelsnakes.US_Metric.pipes import Pipe
+            self.register_section_class(Pipe)
+
         except ImportError as e:
             # Some section modules may not exist yet - gracefully handle
             logger.warning(f"Warning: Could not import some US section classes: {e}")
