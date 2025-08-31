@@ -1,4 +1,4 @@
-# `SteelSnakes`
+# `steelsnakes`
 
 ![Logo](./docs/logo-4.png)
 
@@ -9,8 +9,9 @@
   </p>
 </div>
 
-A Python library for structural steel.
-Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US. Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
+A python library for structural steel.
+Currently developing 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US and 🇮🇳 IN.
+Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 ## Quick Start
 
@@ -35,6 +36,7 @@ print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
 print(f"Column mass: {column.mass_per_metre} kg/m")
 print(f"Channel shear center: {channel.e0} mm")
 ```
+
 ## Documentation
 
 - **[Installation Guide](https://steelsnakes.readthedocs.io/en/latest/getting-started/installation/)** - Get started quickly
@@ -55,5 +57,6 @@ This project is licensed under the GNU General Public License v2.0. See the [LIC
 - SCI (Steel Construction Institute)
 - ArcelorMittal
 - AISC (American Institute of Steel Construction)
+- SAISC (South African Institute of Steel Construction)
 
 ---

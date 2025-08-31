@@ -1,20 +1,19 @@
-# `SteelSnakes`
+# `steelsnakes`
 
 <!-- Centered HTML-image logo -->
+
 ![Logo](./logo-4.png)
 
 <div align="center">
   <p>
-    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a>
-    <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a>
-    <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
-    <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
   </p>
 </div>
 
-A Python library for structural steel.
-Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US. Developing 🇮🇳 IS. Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
+A python library for structural steel.
+Currently developing 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US and 🇮🇳 IN.
+Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 ## Quick Start
 
@@ -39,23 +38,27 @@ print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
 print(f"Column mass: {column.mass_per_metre} kg/m")
 print(f"Channel shear center: {channel.e0} mm")
 ```
+
 ## Documentation
 
-- **[Installation Guide](getting-started/installation.md)** - Get started quickly <!-- Relative links -->
-- **[User Guide](user-guide/sections.md)** - Comprehensive feature documentation
-- **[Examples](examples/basic.md)** - Practical usage examples
-- **[API Reference](reference/index.md)** - Complete API documentation
+- **[Installation Guide](https://steelsnakes.readthedocs.io/en/latest/getting-started/installation/)** - Get started quickly
+- **[User Guide](https://steelsnakes.readthedocs.io/en/latest/user-guide/section-types/)** - Comprehensive feature documentation
+- **[Examples](https://steelsnakes.readthedocs.io/en/latest/examples/basic/)** - Practical usage examples
+- **[API Reference](https://steelsnakes.readthedocs.io/en/latest/reference/core/)** - Complete API documentation
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](contributing.md) for details.
+We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
 - SCI (Steel Construction Institute)
 - ArcelorMittal
 - AISC (American Institute of Steel Construction)
+- SAISC (South African Institute of Steel Construction)
+
+---
