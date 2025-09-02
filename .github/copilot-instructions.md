@@ -4,8 +4,8 @@ Always use this file first. If reality deviates (APIs, paths, commands), prefer 
 
 ### Scope and Status
 - Python: 3.11+ (tested with 3.12)
-- Version: 0.0.1-alpha-5
-- Regions: UK is the primary supported region today. EU/US/AU/IS modules exist but are incomplete and evolving.
+- Version: 0.0.1-alpha-6
+- Regions: UK, EU, US. Currently developing IN, AU, NZ.
  
 
 ### Bootstrap, Build, Test
@@ -15,7 +15,7 @@ Option 1 — Install in editable mode (recommended when network is available)
 - `python -m venv venv`
 - `source venv/bin/activate`  (Windows: `venv\Scripts\activate`)
 - `pip install --upgrade pip`
-- `pip install -e .`  (installs package + deps; allow 30–60s)
+- `pip install -e .`  (installs package + deps; allow 30 - 60s)
 - `python -c "import steelsnakes; print('Installation OK')"`
 
 Option 2 — PYTHONPATH (when install is blocked by network)
@@ -58,7 +58,7 @@ steelsnakes/
 │   ├── main.py               # Demo entry point
 │   ├── base/                 # Core: database, factory, section types
 │   ├── UK/                   # UK sections (primary, fully wired)
-│   ├── EU/, US/, AU/, IS/    # Present, partially implemented
+│   ├── EU/, US/, AU/, IN/    # Present, partially implemented
 │   └── engine/               # Analysis engines (early)
 ├── tests/                    # Pytest suite
 ├── pyproject.toml            # Build, scripts, deps

@@ -1,7 +1,5 @@
 # `steelsnakes`
 
-<!-- Centered HTML-image logo -->
-
 ![Logo](./logo-4.png)
 
 <div align="center">
@@ -12,7 +10,8 @@
 </div>
 
 A python library for structural steel.
-Currently developing 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US and 🇮🇳 IN.
+Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
+Developing 🇮🇳 IN.
 Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 ## Quick Start
@@ -41,18 +40,31 @@ print(f"Channel shear center: {channel.e0} mm")
 
 ## Documentation
 
-- **[Installation Guide](https://steelsnakes.readthedocs.io/en/latest/getting-started/installation/)** - Get started quickly
-- **[User Guide](https://steelsnakes.readthedocs.io/en/latest/user-guide/section-types/)** - Comprehensive feature documentation
-- **[Examples](https://steelsnakes.readthedocs.io/en/latest/examples/basic/)** - Practical usage examples
-- **[API Reference](https://steelsnakes.readthedocs.io/en/latest/reference/core/)** - Complete API documentation
+Comprehensive documentation to get you started and master SteelSnakes:
+
+- **[Overview](01-overview/what-is-steelsnakes.md)** - What is SteelSnakes and why use it?
+- **[Getting Started](02-getting-started/installation.md)** - Installation and quick start guide
+- **[User Guide](03-user-guide/sections.md)** - In-depth guides and concepts
+- **[Examples](04-examples/basic.md)** - Practical code examples and use cases
+- **[API Reference](05-api-reference/index.md)** - Complete API documentation
+
+### Quick Navigation
+
+| I want to... | Go to... |
+|---------------|----------|
+| **Install SteelSnakes** | [Installation Guide →](02-getting-started/installation.md) |
+| **Learn the basics** | [Quick Start Guide →](02-getting-started/quickstart.md) |
+| **See code examples** | [Basic Examples →](04-examples/basic.md) |
+| **Find a specific API** | [API Reference →](05-api-reference/index.md) |
+| **Understand section types** | [Section Types Guide →](03-user-guide/sections.md) |
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
+All contributions are welcome! See the [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
