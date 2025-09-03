@@ -133,10 +133,10 @@ print(f"Bending stress: {stress:.1f} N/mm²")
 
 # Material properties (example)
 fy = 355  # N/mm² (S355 steel)
-utilization = stress / fy
-print(f"Utilization ratio: {utilization:.2f}")
+utilisation = stress / fy
+print(f"Utilisation ratio: {utilisation:.2f}")
 
-if utilization < 1.0:
+if utilisation < 1.0:
     print("✅ Section is adequate for bending")
 else:
     print("❌ Section is overstressed")
