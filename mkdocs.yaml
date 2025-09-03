@@ -112,39 +112,39 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - API Reference: reference/index.md
+  - Overview:
+    - What is SteelSnakes?: 01-overview/what-is-steelsnakes.md
   - Getting Started:
-    - Installation: getting-started/installation.md
-    # - Quick Start: getting-started/quickstart.md
-    - Basic Usage: getting-started/basic-usage.md
+    - Installation: 02-getting-started/installation.md
+    - Quick Start: 02-getting-started/quickstart.md
+    - Basic Usage: 02-getting-started/basic-usage.md
   - User Guide:
-    - Section Types: user-guide/sections.md
-    - Database System: user-guide/database.md
-    - Factory Pattern: user-guide/factory.md
-    - Search & Filtering: user-guide/search.md
+    - Section Types: 03-user-guide/sections.md
+    - Database System: 03-user-guide/database.md
+    - Factory Pattern: 03-user-guide/factory.md
+    - Search & Filtering: 03-user-guide/search.md
   - Examples:
-    - Basic Examples: examples/basic.md
-    - Advanced Usage: examples/advanced.md
-    - Steel Design: examples/design.md
-  # - API Guide: api.md
+    - Basic Examples: 04-examples/basic.md
+    - Advanced Usage: 04-examples/advanced.md
+    - Steel Design: 04-examples/design.md
   - API Reference:
-    - Overview: reference/index.md
+    - Overview: 05-api-reference/index.md
     - Core Components:
-      - Base Classes: reference/core/base.md
-      - Database System: reference/core/database.md
-      - Factory Pattern: reference/core/factory.md
+      - Base Classes: 05-api-reference/core/base.md
+      - Database System: 05-api-reference/core/database.md
+      - Factory Pattern: 05-api-reference/core/factory.md
     - Regional Sections:
       - UK (British):
-        - Overview: reference/regional/UK/index.md
-        - Universal Sections: reference/regional/UK/universal/index.md
-        - Channels: reference/regional/UK/channels/index.md
-        - Angles: reference/regional/UK/angles/index.md
-        - Hollow Sections: reference/regional/UK/hollow/index.md
-        - Connections: reference/regional/UK/connections/index.md
-      - US (American): reference/regional/US/index.md
-      - EU (European): reference/regional/EU/index.md
-      - AU (Australian): reference/regional/AU/index.md
-      - IN (Indian): reference/regional/IS/index.md
+        - Overview: 05-api-reference/regional/UK/index.md
+        - Universal Sections: 05-api-reference/regional/UK/universal/index.md
+        - Channels: 05-api-reference/regional/UK/channels/index.md
+        - Angles: 05-api-reference/regional/UK/angles/index.md
+        - Hollow Sections: 05-api-reference/regional/UK/hollow/index.md
+        - Connections: 05-api-reference/regional/UK/connections/index.md
+      - US (American): 05-api-reference/regional/US/index.md
+      - EU (European): 05-api-reference/regional/EU/index.md
+      - AU (Australian): 05-api-reference/regional/AU/index.md
+      - IN (Indian): 05-api-reference/regional/IS/index.md
   
   # - Contributing: contributing.md
   # - Changelog: changelog.md
