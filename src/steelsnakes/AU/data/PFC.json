@@ -1,0 +1,32 @@
+{
+  "380-PFC": {
+    "designation": "380-PFC"
+  },
+  "300-PFC": {
+    "designation": "300-PFC"
+  },
+  "250-PFC": {
+    "designation": "250-PFC"
+  },
+  "230-PFC": {
+    "designation": "230-PFC"
+  },
+  "200-PFC": {
+    "designation": "200-PFC"
+  },
+  "180-PFC": {
+    "designation": "180-PFC"
+  },
+  "150-PFC": {
+    "designation": "150-PFC"
+  },
+  "125-PFC": {
+    "designation": "125-PFC"
+  },
+  "100-PFC": {
+    "designation": "100-PFC"
+  },
+  "75-PFC": {
+    "designation": "75-PFC"
+  }
+}
