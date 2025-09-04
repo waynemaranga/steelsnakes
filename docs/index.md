@@ -1,4 +1,4 @@
-# `steelsnakes`
+# $steelsnakes$
 
 ![Logo](./logo-4.png)
 
@@ -9,10 +9,74 @@
   </p>
 </div>
 
-A python library for structural steel.
-Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
+A python package for structural steel design. $steelsnakes$ aims to provide a unified interface for designing steel members and connections for civil & structural engineers using Python. Users can import steel section data from international standards, perform verification checks from prior analysis and more.
+
+<!-- prettier-ignore-start -->
+!!! warning "Work in Progress"
+    $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+<!-- prettier-ignore-end -->
+
+<!-- Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
 Developing 🇮🇳 IN.
-Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
+Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR. -->
+
+$steelsnakes$ currently supports:
+
+## Codes and Standards
+
+### 🇬🇧 UK
+
+- BS EN 1993-1-1:2022 - Design of Steel Structures - Part 1-1: General Rules and Rules for Buildings [↗][1]
+- BS EN 1993-1-8:2005 - Design of Steel Structures - Part 1-8: Design of Joints [↗][]
+- BS EN 10365:2017 - Hot rolled steel channels, I and H sections - dimensions and masses [↗][]
+- BS EN 10056-1: 2017 - Structural steel equal and unequal leg angles - Dimensions [↗][]
+- BS EN 10210-2: 2006 - Hot finished structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
+- BS EN 10219-2: 2006 - Cold formed welded structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
+- BS EN ISO 4016: 2011 [↗][]
+- BS EN ISO 4018: 2011 [↗][]
+
+### 🇪🇺 EU
+
+- EN 1993-1-1:2005 - Eurocode 3: Design of steel structures - Part 1-1: General rules and rules for buildings [↗][]
+- EN 1993-1-8:2005 - Eurocode 3: Design of steel structures - Part 1-8: Design of joints [↗][]
+- EN 10365:2017 - Hot rolled steel channels, I and H sections - dimensions and masses [↗][]
+- EN 10056-1: 2017 - Structural steel equal and unequal leg angles - Dimensions [↗][]
+- EN 10210-2: 2006 - Hot finished structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
+- EN 10219-2: 2006 - Cold formed welded structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
+- EN ISO 4016: 2011 [↗][]
+- EN ISO 4018: 2011 [↗][]
+
+### 🇺🇸 US
+
+- AISC 360-22 - Specification for Structural Steel Buildings [↗][]
+- AISC Steel Construction Manual, 16th Edition [↗][]
+- ASTM A6/A6M-24 - Standard Specification for General Requirements for Rolled Structural Steel Bars, Plates, Shapes, and Sheet Piling [↗][]
+- ASTM A992/A992M-21 - Standard Specification for Structural Steel Shapes [↗][]
+- ASTM A500/A500M-21 - Standard Specification for Cold-Formed Welded and Seamless Carbon Steel Structural Tubing in Rounds and Shapes [↗][]
+- ASTM A501/A501M-20 - Standard Specification for Hot-Formed Welded and Seamless Carbon Steel Structural Tubing [↗][]
+- ASTM A36/A36M-19 - Standard Specification for Carbon Structural Steel [↗][]
+
+### 🇮🇳 IN
+
+- IS 800:2007 - General Construction in Steel - Code of Practice [↗][]
+- IS 808:2021 - Dimensions for Hot Rolled Steel Sections [↗][]
+
+### AU
+
+- AS 4100:2020 - Steel Structures [↗](https://www.standards.org.au/standards-catalogue/standard-details?designation=as-4100-2020)
+- AS/NZS 3679.1:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/asnzs-3679-12016)
+- AS/NZS 5131:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/ASNZS-51312016)
+
+### 🇳🇿 NZ
+
+- NZS 3404 Parts 1 and 2:1997 - Steel Structures Standard [↗](https://www.standards.govt.nz/shop/NZS-3404-PARTS-1-AND-21997)
+- ~~NZS 3404.1&2:2009 - Steel Structures Standard [↗][]~~
+- AS/NZS 5131:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/ASNZS-51312016)
+- AS/NZS 3679.1:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/asnzs-3679-12016)
+
+### 🇯🇵 JP
+
+  <!-- 😉 future Julia implementation? -->
 
 ## Quick Start
 
@@ -22,55 +86,19 @@ Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, �
 pip install steelsnakes
 ```
 
-### Basic Usage
-
-```python
-from steelsnakes.UK import UB, UC, PFC
-
-# Create section objects using the designations
-beam = UB("457x191x67") # Universal Beam
-column = UC("305x305x137") # Universal Column
-channel = PFC("430x100x64") # Parallel Flange Channel
-
-# Access properties immediately
-print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
-print(f"Column mass: {column.mass_per_metre} kg/m")
-print(f"Channel shear center: {channel.e0} mm")
-```
-
-## Documentation
-
-Comprehensive documentation to get you started and master SteelSnakes:
-
-- **[Overview](01-overview/what-is-steelsnakes.md)** - What is SteelSnakes and why use it?
-- **[Getting Started](02-getting-started/installation.md)** - Installation and quick start guide
-- **[User Guide](03-user-guide/sections.md)** - In-depth guides and concepts
-- **[Examples](04-examples/basic.md)** - Practical code examples and use cases
-- **[API Reference](05-api-reference/index.md)** - Complete API documentation
-
-### Quick Navigation
-
-| I want to... | Go to... |
-|---------------|----------|
-| **Install SteelSnakes** | [Installation Guide →](02-getting-started/installation.md) |
-| **Learn the basics** | [Quick Start Guide →](02-getting-started/quickstart.md) |
-| **See code examples** | [Basic Examples →](04-examples/basic.md) |
-| **Find a specific API** | [API Reference →](05-api-reference/index.md) |
-| **Understand section types** | [Section Types Guide →](03-user-guide/sections.md) |
-
 ## Contributing
 
-All contributions are welcome! See the [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
+All contributions are welcome! See the [CONTRIBUTING GUIDELINES](https://github.com/waynemaranga/steelsnakes/blob/main/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md).
+
+## References
 
 ## Acknowledgments
 
-- SCI (Steel Construction Institute)
-- ArcelorMittal
-- AISC (American Institute of Steel Construction)
-- SAISC (South African Institute of Steel Construction)
+🫂
 
----
+[1]: ...
+[2]: ...
