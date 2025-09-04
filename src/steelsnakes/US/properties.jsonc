@@ -1,35 +1,38 @@
 {
     "W": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "W",
+        "variable": "W",
         "aliases": [
-            "",
-            ""
+            "weight",
+            "nominal_weight"
         ],
-        "units_metric": "", // FIXME: will implement US and US_Metric modules. // TODO: make a module called US_Imperial that is simply a copy/wrapper of US itself.
-        "units_imperial": "", // TODO: modules that try to use wrong units should fail pydantic validation. Looks like I need to design a units library.
+        "units_imperial": "lb/ft",
+        "units_metric": "kg/m",
+        "unit_type": "linear_mass",
         "description": "Nominal weight, lb/ft (kg/m)"
     },
     "A": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "A",
+        "variable": "A",
         "aliases": [
-            "",
-            ""
+            "area",
+            "cross_sectional_area"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "in2",
+        "units_metric": "mm2",
+        "unit_type": "area",
         "description": "Cross-sectional area, in.2 (mm2)"
     },
     "d": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "d",
+        "variable": "d",
         "aliases": [
-            "",
-            ""
+            "depth",
+            "overall_depth"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "in",
+        "units_metric": "mm",
+        "unit_type": "length",
         "description": "Overall depth of member, or width of shorter leg for angles, or width of the outstanding legs of long legs back-to-back double angles, or the width of the back-to-back legs of short legs back-to-back double angles, in. (mm)"
     },
     "ddet": {
@@ -308,14 +311,15 @@
         "description": "Vertical distance from designated edge of member, as defined in the AISC Steel Construction Manual Part 1, to plastic neutral axis of member, in. (mm)"
     },
     "bf/2tf": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "bf/2tf",
+        "variable": "bf_2tf",
         "aliases": [
-            "",
-            ""
+            "flange_slenderness",
+            "flange_width_thickness_ratio"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "ratio",
+        "units_metric": "ratio",
+        "unit_type": "dimensionless",
         "description": "Slenderness ratio for W, M, S, HP, WT, and ST flange"
     },
     "b/t": {
@@ -374,25 +378,27 @@
         "description": "Slenderness ratio for round HSS and pipe (D = ID), or tee shapes (D = d)"
     },
     "Ix": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "Ix",
+        "variable": "Ix",
         "aliases": [
-            "",
-            ""
+            "moment_of_inertia_x",
+            "second_moment_x"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "in4",
+        "units_metric": "mm4",
+        "unit_type": "moment_of_inertia",
         "description": "Moment of inertia about the x-axis, in.4 (´106 mm4)"
     },
     "Zx": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "Zx",
+        "variable": "Zx",
         "aliases": [
-            "",
-            ""
+            "plastic_section_modulus_x",
+            "plastic_modulus_x"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "in3",
+        "units_metric": "mm3",
+        "unit_type": "volume",
         "description": "Plastic section modulus about the x-axis, in.3 (´103 mm3)"
     },
     "Sx": {
@@ -506,14 +512,15 @@
         "description": "Torsional constant, in.4 (´103 mm4)"
     },
     "Cw": {
-        "symbol": "",
-        "variable": "",
+        "symbol": "Cw",
+        "variable": "Cw",
         "aliases": [
-            "",
-            ""
+            "warping_constant",
+            "warping_modulus"
         ],
-        "units_imperial": "",
-        "units_metric": "",
+        "units_imperial": "in6",
+        "units_metric": "mm6",
+        "unit_type": "warping_constant",
         "description": "Warping constant, in.6 (´109 mm6)"
     },
     "C": {

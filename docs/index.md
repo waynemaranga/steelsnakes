@@ -1,6 +1,4 @@
-# `steelsnakes`
-
-<!-- Centered HTML-image logo -->
+# $steelsnakes$
 
 ![Logo](./logo-4.png)
 
@@ -11,54 +9,93 @@
   </p>
 </div>
 
-A python library for structural steel.
-Currently developing 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US and 🇮🇳 IN.
-Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
+A python package for structural steel design. $steelsnakes$ aims to provide a unified interface for designing steel members and connections for civil & structural engineers using Python. Users can import steel section data from international standards, perform verification checks from prior analysis and more.
+
+<!-- prettier-ignore-start -->
+!!! warning "Work in Progress"
+    $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+<!-- prettier-ignore-end -->
+
+$steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
+
+1. 🇪🇺 `EU` European Union - Eurocode 3
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA
+3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
+4. 🇮🇳 `IN` India - IS 800 & IS 808
+5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
+6. 🇳🇿 `NZ` New Zealand - NZS 3404 & AS/NZS 5131
+
+See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs+mkdocs-shadcn supports simple relative links -->
 
 ## Quick Start
 
 ### Installation
 
-```bash
-pip install steelsnakes
-```
+<!-- prettier-ignore-start -->
+/// tab | `pip`
 
-### Basic Usage
+    :::bash
+    pip install steelsnakes
+///
+
+/// tab | uv
+
+    :::bash
+    uv add steelsnakes
+///
+
+/// tab | poetry
+
+    :::bash
+    poetry add steelsnakes
+///
+<!-- prettier-ignore-end -->
+
+## Example
+
+For available steel profiles implemented in $steelsnakes$, properties can be accessed directly from the object.
+See the [Profiles](02-api-reference/02-database.md) for all available steel profiles.
 
 ```python
-from steelsnakes.UK import UB, UC, PFC
+from steelsnakes.UK.universal import UB, UniversalBeam
+from steelsnakes.US.beams import W, WideFlangeBeam
 
-# Create section objects using the designations
-beam = UB("457x191x67") # Universal Beam
-column = UC("305x305x137") # Universal Column
-channel = PFC("430x100x64") # Parallel Flange Channel
+beam_1 = UB(designation="1016x305x438")
+beam_2 = W("W44X335")
 
-# Access properties immediately
-print(f"Beam moment of inertia: {beam.I_yy} cm⁴")
-print(f"Column mass: {column.mass_per_metre} kg/m")
-print(f"Channel shear center: {channel.e0} mm")
+print(beam_1.h)
+print(beam_2.d)
+print(beam_2.A)
 ```
 
-## Documentation
+```text
+1026.0
+44.0
+98.5
+```
 
-- **[Installation Guide](https://steelsnakes.readthedocs.io/en/latest/getting-started/installation/)** - Get started quickly
-- **[User Guide](https://steelsnakes.readthedocs.io/en/latest/user-guide/section-types/)** - Comprehensive feature documentation
-- **[Examples](https://steelsnakes.readthedocs.io/en/latest/examples/basic/)** - Practical usage examples
-- **[API Reference](https://steelsnakes.readthedocs.io/en/latest/reference/core/)** - Complete API documentation
+<!-- prettier-ignore-start -->
+!!!warning "Note"
+    $steelsnakes$ does not currently implement any units or unit conversion; it is up to the user to ensure that all inputs are in the correct units as required by calculations
+<!-- prettier-ignore-end -->
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
+All contributions are welcome! See the [CONTRIBUTING GUIDELINES](https://github.com/waynemaranga/steelsnakes/blob/main/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md).
+
+## References
 
 ## Acknowledgments
 
-- SCI (Steel Construction Institute)
-- ArcelorMittal
-- AISC (American Institute of Steel Construction)
-- SAISC (South African Institute of Steel Construction)
+🫂
 
----
+[1]: ...
+[2]: ...
+
+```
+
+```

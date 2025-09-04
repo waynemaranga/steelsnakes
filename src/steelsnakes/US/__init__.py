@@ -2,10 +2,10 @@
 US Steel Sections Module.
 """
 
-# Import base infrastructure
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.US.database import USSectionDatabase, get_US_database
 from steelsnakes.US.factory import USSectionFactory, get_US_factory
+from steelsnakes.US.checks import Classification, classify_compression, classify_flexure
 
 # -- Beams --
 from steelsnakes.US.beams import (
@@ -46,4 +46,14 @@ from steelsnakes.US.hollow import (
 # -- Piles --
 from steelsnakes.US.piles import BearingPile
 
-# __all__ = []
+__all__ = [
+    "BaseSection",
+    "SectionType",
+    "USSectionDatabase",
+    "get_US_database",
+    "USSectionFactory",
+    "get_US_factory",
+    "Classification",
+    "classify_compression",
+    "classify_flexure",
+]

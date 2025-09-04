@@ -4,13 +4,26 @@
 
 <div align="center">
   <p>
-    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+  <!-- python version -->
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a>
+    <!-- license -->
+     <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a>
+    <!-- pypi version -->
+     <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
+    <!-- documentation -->
+     <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <!-- build status -->
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
+    <!-- pypi stats -->
+    <a href="https://pepy.tech/projects/steelsnakes"><img src="https://static.pepy.tech/personalized-badge/steelsnakes?period=total&units=ABBREVIATION&left_color=GREY&right_color=BLUE&left_text=downloads" alt="PyPI Downloads"></a>
+    
+
   </p>
 </div>
 
 A python library for structural steel.
-Currently developing 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US and 🇮🇳 IN.
+Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US
+Developing 🇮🇳 IN.
 Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
 ## Quick Start
@@ -46,11 +59,11 @@ print(f"Channel shear center: {channel.e0} mm")
 
 ## Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
+All contributions are welcome! See the [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.
 
 ## License
 
-This project is licensed under the GNU General Public License v2.0. See the [LICENSE]([https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
+This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md) file for details.
 
 ## Acknowledgments
 
