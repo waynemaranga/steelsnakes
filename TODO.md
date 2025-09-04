@@ -46,3 +46,8 @@
 - [ ] Handle missing column data especially for american sections e.g WGi and SwB in some values
 - [ ] Flattening some UK/EU sections using the american script will require tweaking to handle some missing values and some dict values e.g izz for different lengths.
 - [ ] Remember: CSV files need type handling because they are all strings.
+- [ ] Implement a units library and use it in the project.
+- [ ] Match section properties and dimensions variables to units.
+- [ ] Do published worked examples e.g on websites and implement
+- [ ] (AISC) Pinned connections are used when free rotation of the connected members is required as in crane booms. In the design of pin-connected members it is necessary to consider the limit states of tensile yield, tensile rupture, shear rupture, and bearing.
+- [ ] See if this implementation of mkdocs and shadcn renders latex, if so, use in documentation properly
