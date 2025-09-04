@@ -16,75 +16,68 @@ A python package for structural steel design. $steelsnakes$ aims to provide a un
     $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
 <!-- prettier-ignore-end -->
 
-<!-- Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
-Developing 🇮🇳 IN.
-Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR. -->
+$steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
 
-$steelsnakes$ currently supports:
+1. 🇪🇺 `EU` European Union - Eurocode 3
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA
+3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
+4. 🇮🇳 `IN` India - IS 800 & IS 808
+5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
+6. 🇳🇿 `NZ` New Zealand - NZS 3404 & AS/NZS 5131
 
-## Codes and Standards
-
-### 🇬🇧 UK
-
-- BS EN 1993-1-1:2022 - Design of Steel Structures - Part 1-1: General Rules and Rules for Buildings [↗][1]
-- BS EN 1993-1-8:2005 - Design of Steel Structures - Part 1-8: Design of Joints [↗][]
-- BS EN 10365:2017 - Hot rolled steel channels, I and H sections - dimensions and masses [↗][]
-- BS EN 10056-1: 2017 - Structural steel equal and unequal leg angles - Dimensions [↗][]
-- BS EN 10210-2: 2006 - Hot finished structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
-- BS EN 10219-2: 2006 - Cold formed welded structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
-- BS EN ISO 4016: 2011 [↗][]
-- BS EN ISO 4018: 2011 [↗][]
-
-### 🇪🇺 EU
-
-- EN 1993-1-1:2005 - Eurocode 3: Design of steel structures - Part 1-1: General rules and rules for buildings [↗][]
-- EN 1993-1-8:2005 - Eurocode 3: Design of steel structures - Part 1-8: Design of joints [↗][]
-- EN 10365:2017 - Hot rolled steel channels, I and H sections - dimensions and masses [↗][]
-- EN 10056-1: 2017 - Structural steel equal and unequal leg angles - Dimensions [↗][]
-- EN 10210-2: 2006 - Hot finished structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
-- EN 10219-2: 2006 - Cold formed welded structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗][]
-- EN ISO 4016: 2011 [↗][]
-- EN ISO 4018: 2011 [↗][]
-
-### 🇺🇸 US
-
-- AISC 360-22 - Specification for Structural Steel Buildings [↗][]
-- AISC Steel Construction Manual, 16th Edition [↗][]
-- ASTM A6/A6M-24 - Standard Specification for General Requirements for Rolled Structural Steel Bars, Plates, Shapes, and Sheet Piling [↗][]
-- ASTM A992/A992M-21 - Standard Specification for Structural Steel Shapes [↗][]
-- ASTM A500/A500M-21 - Standard Specification for Cold-Formed Welded and Seamless Carbon Steel Structural Tubing in Rounds and Shapes [↗][]
-- ASTM A501/A501M-20 - Standard Specification for Hot-Formed Welded and Seamless Carbon Steel Structural Tubing [↗][]
-- ASTM A36/A36M-19 - Standard Specification for Carbon Structural Steel [↗][]
-
-### 🇮🇳 IN
-
-- IS 800:2007 - General Construction in Steel - Code of Practice [↗][]
-- IS 808:2021 - Dimensions for Hot Rolled Steel Sections [↗][]
-
-### AU
-
-- AS 4100:2020 - Steel Structures [↗](https://www.standards.org.au/standards-catalogue/standard-details?designation=as-4100-2020)
-- AS/NZS 3679.1:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/asnzs-3679-12016)
-- AS/NZS 5131:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/ASNZS-51312016)
-
-### 🇳🇿 NZ
-
-- NZS 3404 Parts 1 and 2:1997 - Steel Structures Standard [↗](https://www.standards.govt.nz/shop/NZS-3404-PARTS-1-AND-21997)
-- ~~NZS 3404.1&2:2009 - Steel Structures Standard [↗][]~~
-- AS/NZS 5131:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/ASNZS-51312016)
-- AS/NZS 3679.1:2016 - Structural steel fabrication and erection [↗](https://www.standards.govt.nz/shop/asnzs-3679-12016)
-
-### 🇯🇵 JP
-
-  <!-- 😉 future Julia implementation? -->
+See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs+mkdocs-shadcn supports simple relative links -->
 
 ## Quick Start
 
 ### Installation
 
-```bash
-pip install steelsnakes
+<!-- prettier-ignore-start -->
+/// tab | `pip`
+
+    :::bash
+    pip install steelsnakes
+///
+
+/// tab | uv
+
+    :::bash
+    uv add steelsnakes
+///
+
+/// tab | poetry
+
+    :::bash
+    poetry add steelsnakes
+///
+<!-- prettier-ignore-end -->
+
+## Example
+
+For available steel profiles implemented in $steelsnakes$, properties can be accessed directly from the object.
+See the [Profiles](02-api-reference/02-database.md) for all available steel profiles.
+
+```python
+from steelsnakes.UK.universal import UB, UniversalBeam
+from steelsnakes.US.beams import W, WideFlangeBeam
+
+beam_1 = UB(designation="1016x305x438")
+beam_2 = W("W44X335")
+
+print(beam_1.h)
+print(beam_2.d)
+print(beam_2.A)
 ```
+
+```text
+1026.0
+44.0
+98.5
+```
+
+<!-- prettier-ignore-start -->
+!!!warning "Note"
+    $steelsnakes$ does not currently implement any units or unit conversion; it is up to the user to ensure that all inputs are in the correct units as required by calculations
+<!-- prettier-ignore-end -->
 
 ## Contributing
 
@@ -102,3 +95,7 @@ This project is licensed under the GNU General Public License v2.0. See the [LIC
 
 [1]: ...
 [2]: ...
+
+```
+
+```

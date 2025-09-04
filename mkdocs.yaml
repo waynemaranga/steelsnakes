@@ -89,7 +89,8 @@ markdown_extensions:
   pymdownx.snippets:
   pymdownx.arithmatex:
     generic: true
-  shadcn.extensions.echarts.alpha:
+  shadcn.extensions.echarts.alpha: # probably built-in
+  shadcn.extensions.codexec: # probably built-in
 
 extra:
   social:
@@ -112,4 +113,7 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - Guides: 
+    - First Steps: 01-guides/index.md
+    - Codes and Standards: 01-guides/03-codesandstds.md
   - API Reference: 02-api-reference/index.md
