@@ -1,6 +1,9 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from typing import Any, Optional
+from pathlib import Path
 from steelsnakes.base import BaseSection, SectionType
+# from steelsnakes.IN.factory import INSectionFactory, get_IN_factory
 
 @dataclass
 class Angle(BaseSection):
@@ -32,19 +35,33 @@ class Angle(BaseSection):
     
     I_t: float = 0.0 # Torsional constant (x10⁴ mm⁴)
 
+    def get_properties(self) -> dict[str, Any]:
+        """Return all section properties as a dictionary."""
+        return asdict(self)
+
 
 @dataclass
 class EqualAngle(Angle):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.EA
 
 @dataclass
 class UnequalAngle(Angle):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.UA
 
-@dataclass
-class EA(EqualAngle):
-    pass
+def EA(designation: str, data_directory: Optional[Path] = None) -> EqualAngle:
+    # factory: INSectionFactory = get_IN_factory(data_directory)
+    # return cast(EqualAngle, factory.create_section(designation, SectionType.EA))
+    raise NotImplementedError("ISEA section creation not implemented yet.")
 
-@dataclass
-class UA(UnequalAngle):
-    pass
+def UA(designation: str, data_directory: Optional[Path] = None) -> UnequalAngle:
+    # factory: INSectionFactory = get_IN_factory(data_directory)
+    # return cast(UnequalAngle, factory.create_section(designation, SectionType.UA))
+    raise NotImplementedError("ISUA section creation not implemented yet.")
+
+
+if __name__ == "__main__":
+    print("🐬")
