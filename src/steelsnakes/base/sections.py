@@ -204,6 +204,15 @@ class BaseSection(ABC):
         # TODO: implement...
         pass
 
+    def list_properties(self):
+        """Print all section properties to the console."""
+        properties = self.get_properties()
+        properties_list = []
+        for prop, value in properties.items():
+            # return list of properties/keys only
+            properties_list.append(prop)
+
+        return properties_list
 
 if __name__ == "__main__":
     
