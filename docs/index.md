@@ -32,7 +32,7 @@ See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more infor
 ### Installation
 
 <!-- prettier-ignore-start -->
-/// tab | `pip`
+/// tab | pip
 
     :::bash
     pip install steelsnakes
@@ -88,6 +88,8 @@ All contributions are welcome! See the [CONTRIBUTING GUIDELINES](https://github.
 This project is licensed under the GNU General Public License v2.0. See the [LICENSE](https://github.com/waynemaranga/steelsnakes/blob/main/LICENSE.md).
 
 ## References
+
+See [References](./99-references.md)
 
 ## Acknowledgments
 
