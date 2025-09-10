@@ -1,6 +1,8 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from steelsnakes.base import BaseSection, SectionType
+from typing import Optional
+from pathlib import Path
 
 @dataclass
 class Channel(BaseSection):
@@ -31,32 +33,39 @@ class Channel(BaseSection):
 
 @dataclass
 class JuniorChannel(Channel):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.JC
 
 @dataclass
 class LightWeightChannel(Channel):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.LWC
 
 @dataclass
 class MediumWeightChannel(Channel):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.MWC
 
 @dataclass
 class MediumWeightParallelFlangeChannel(Channel):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.MPC
 
-@dataclass
-class JC(JuniorChannel):
-    pass
+def JC(designation: str, data_directory: Optional[Path] = None) -> JuniorChannel:
+    raise NotImplementedError("ISJC section creation not implemented yet.")
 
-@dataclass
-class LWC(LightWeightChannel):
-    pass
+def LWC(designation: str, data_directory: Optional[Path] = None) -> LightWeightChannel:
+    raise NotImplementedError("ISLC section creation not implemented yet.")
 
-@dataclass
-class MWC(MediumWeightChannel):
-    pass
+def MWC(designation: str, data_directory: Optional[Path] = None) -> MediumWeightChannel:
+    raise NotImplementedError("ISMC section creation not implemented yet.")
 
-@dataclass
-class MPC(MediumWeightParallelFlangeChannel):
-    pass
+def MPC(designation: str, data_directory: Optional[Path] = None) -> MediumWeightParallelFlangeChannel:
+    raise NotImplementedError("ISMPC section creation not implemented yet.")
+
+if __name__ == "__main__":
+    print("🐬")
