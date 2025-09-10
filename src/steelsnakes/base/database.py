@@ -2,85 +2,160 @@
 
 from __future__ import annotations
 import logging
-from abc import ABC, abstractmethod
 from pathlib import Path
 import json
-import sqlite3
+import difflib
 from typing import Any, Optional
 
 from steelsnakes.base.sections import SectionType
-from steelsnakes.base.sqlite3db import SQLiteJSONInterface
 
 logger: logging.Logger = logging.getLogger(__name__)
 
 
-
-class SectionDatabase(ABC):
-    """Abstract base class for section databases. Region-specific databases inherit from this and:
-    - call `super().__init__(data_directory)`
-    - override `_resolve_data_directory()`
-    - override `get_supported_types()`
-    - override `_fuzzy_find_section()`
+class SectionDatabase:
+    """Simplified steel section database for all regions.
+    This concrete implementation handles data loading, caching, and searching
+    for steel sections across different regions.
     """
 
-    def __init__(self, data_directory: Optional[Path] = None, use_sqlite: bool = False) -> None:
+    def __init__(self, data_directory: Optional[Path] = None, region: str = "EU", use_sqlite: bool = False) -> None:
         """Initialize the database with the data directory.
         
         Args:
             data_directory: Path to data directory containing JSON files
+            region: Region code (EU, UK, US, etc.) for auto-discovery
             use_sqlite: If `True`, prefer SQLite database over JSON files (experimental)
         """
-        self.data_directory: Path = self._resolve_data_directory(data_directory=data_directory)
+        self.region = region.upper()
+        self.data_directory: Path = self._resolve_data_directory(data_directory, region)
         self.use_sqlite: bool = use_sqlite
         self._cache: dict[SectionType, dict[str, dict[str, Any]]] = {}
-        self._sqlite_db_path: Optional[Path] = None
+        self._supported_types: list[SectionType] = self._get_region_supported_types()
         self._load_sections()
 
-    # ------- Abstract Methods -------
-    # -
-    @abstractmethod
-    def _resolve_data_directory(self, data_directory: Optional[Path]) -> Path:
-        """Resolve the data directory path; unique to each region."""
-        # Override in region-specific databases
-        pass
+    def _resolve_data_directory(self, data_directory: Optional[Path], region: str) -> Path:
+        """Resolve the data directory path for the given region."""
+        if data_directory is not None:
+            return data_directory.resolve()
+            
+        # Auto-discovery based on region
+        current_file: Path = Path(__file__).resolve()
+        region_upper = region.upper()
+        
+        possible_paths: list[Path] = [          
+            Path.cwd() / f"src/steelsnakes/{region_upper}/data/",  # from project root
+            current_file.parent.parent / f"{region_upper}/data/",  # from package installation
+            current_file.parent.parent.parent / f"data/{region_upper}/",  # from development environment
+            current_file.parent.parent.parent / f"src/steelsnakes/{region_upper}/data/",  # from source directory
+            current_file.parent.parent.parent.parent / f"data/{region_upper}/"  # from parent directory
+        ]
+        
+        for path in possible_paths:
+            resolved_path = path.resolve()
+            if resolved_path.exists() and resolved_path.is_dir():
+                return resolved_path
+                
+        # Fallback - create region-specific path
+        return current_file.parent.parent / f"{region_upper}/data/"
 
-    # -
-    @abstractmethod
-    def get_supported_types(self) -> list[SectionType]:
-        """Return a tuple of supported section types for given region."""
-        # Override in region-specific databases
-        pass
+    def _get_region_supported_types(self) -> list[SectionType]:
+        """Get supported section types for the region."""
+        # Define region-specific supported types
+        region_types = {
+            # TODO: double-check...
+            "EU": [
+                # Beams
+                SectionType.IPE, SectionType.HE, SectionType.HL, SectionType.HLZ, SectionType.UB,
+                # Angles
+                SectionType.L_EQUAL, SectionType.L_UNEQUAL, SectionType.L_EQUAL_B2B, 
+                SectionType.L_UNEQUAL_B2B, 
+                # Channels
+                SectionType.PFC, SectionType.UPN, SectionType.UPE, 
+                # Flats
+                SectionType.Sigma, SectionType.Zed, 
+                # Columns
+                SectionType.HD, SectionType.UC,
+                # Bearing Piles
+                SectionType.HP, SectionType.UBP,
+                # Flats
+                SectionType.Sigma, SectionType.Zed, 
+            ],
+            "UK": [
+                # Universal
+                SectionType.UB, SectionType.UC, SectionType.UBP,
+                # Channels
+                SectionType.PFC,
+                # Angles
+                SectionType.L_EQUAL, SectionType.L_UNEQUAL,
+                SectionType.L_EQUAL_B2B, SectionType.L_UNEQUAL_B2B,
+                # Hot-finished Hollow Sections
+                SectionType.HFCHS, SectionType.HFRHS, SectionType.HFSHS, SectionType.HFEHS, 
+                # Cold Formed Hollow Sections
+                SectionType.CFCHS, SectionType.CFRHS, SectionType.CFSHS
+            ],
+            "US": [
+                # Beams
+                SectionType.W, SectionType.S, SectionType.M,
+                # Bearing Piles
+                SectionType.HP,
+                # Channels
+                SectionType.C, SectionType.MC,
+                # Angles
+                SectionType.L_EQUAL, SectionType.L_UNEQUAL,
+                SectionType.L2L_EQUAL, SectionType.L2L_LLBB, SectionType.L2L_SLBB,
+                # Hollow Sections
+                SectionType.HSS_RCT, SectionType.HSS_RND, SectionType.HSS_SQR,
+                SectionType.PIPE, SectionType.WT, SectionType.MT, SectionType.ST
+            ],
+            "IN": [
+                # Beams
+                SectionType.JB, SectionType.LWB, SectionType.MWB, SectionType.WFB, SectionType.NPB, SectionType.WPB,
+                # Columns/Heavy-weight Beams
+                SectionType.SC, SectionType.HWB,
+                # Channels
+                SectionType.JC, SectionType.LWC, SectionType.MWC, SectionType.MPC,
+                # Angles
+                SectionType.EA, SectionType.UA,
+                # Bearing Piles
+                SectionType.PBP,
+            ],
+        #     "AU": [
+        #         SectionType.UB, SectionType.UC, SectionType.PFC, SectionType.EA
+        #     ],
+        #     "NZ": [
+        #         SectionType.UB, SectionType.UC, SectionType.PFC, SectionType.EA
+        #     ]
+        #     "JP":[],
+        #     "MX":[],
+        #     "SA":[],
+        #     "CN":[],
+        #     "CA":[],
+        #     "KR":[],
+        }
+        
+        return region_types.get(self.region, [])
 
-    # -
-    @abstractmethod
-    def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
-        """Country-specific fuzzy section finding. Each country has different designation formats and needs
-        custom logic for parsing and matching."""
-        pass
- 
     # ------- Standard Interface Methods -------
     # 🌟 - Loading sections from database
     def _load_sections(self) -> None:
         """Load all supported section types into the cache."""
-        if not self.data_directory.is_dir(): # .is_dir() implies .exists()
-            # raise FileNotFoundError(f"Data directory '{self.data_directory}' does not exist.") # TODO: compare raise vs log warning and return
+        if not self.data_directory.is_dir():
             logger.warning(f"Data directory '{self.data_directory}' does not exist.")
             return
 
         loaded_count: int = 0
 
-        for section_type in self.get_supported_types(): # .get_supported_types() is overridden in region-specific databases
+        for section_type in self._supported_types:
             try:
                 section_data = self._load_section_type(section_type)
                 if section_data:
                     # Adding metadata for each section...
                     for designation, properties in section_data.items():
                         properties["_section_type"] = section_type.value
+                        properties["_region"] = self.region
 
                     self._cache[section_type] = section_data
-                    # logger.info(f"Loaded {len(section_data)} {section_type.value} sections") # TODO: consider silent logging for success
                     loaded_count += 1
-
                 else:
                     self._cache[section_type] = {}
 
@@ -88,35 +163,70 @@ class SectionDatabase(ABC):
                 logger.error(f"Error loading {section_type.value} sections: {e}")
                 self._cache[section_type] = {}
 
-        # logger.info(f"Loaded {loaded_count} section types into cache.") # TODO: consider silent logging for success
+        logger.info(f"Loaded {loaded_count} section types for region {self.region}")
     
-    # -
     def _load_section_type(self, section_type: SectionType) -> Optional[dict[str, dict[str, Any]]]:
-        """Load a specific section type. Can be overridden for custom loading; defaults to JSON"""
-        
-        # Load from JSON (primary method)
+        """Load a specific section type from JSON files."""
         json_path: Path = self.data_directory / f"{section_type.value}.json"
         
         if json_path.exists():
-            with open(json_path, mode="r", encoding="utf-8") as filepath:
-                return json.load(fp=filepath)
+            try:
+                with open(json_path, mode="r", encoding="utf-8") as filepath:
+                    return json.load(fp=filepath)
+            except (json.JSONDecodeError, UnicodeDecodeError) as e:
+                logger.error(f"Error parsing JSON file {json_path}: {e}")
+                return None
         
-        # Try SQLite if enabled (experimental)
+        # Try SQLite if enabled (experimental; keeping  existing SQLite support)
         if self.use_sqlite:
             sqlite_data = self._load_from_sqlite(section_type)
             if sqlite_data is not None:
                 return sqlite_data
             
-        # Try alternative formats if JSON not found
-        return self._try_alternative_formats(section_type=section_type)
-
-    # -
-    # @abstractmethod # TODO: consider abstracting this
-    def _try_alternative_formats(self, section_type: SectionType) -> Optional[dict[str, dict[str, Any]]]:
-        """Try to load from alternative formats (SQLite, CSV, etc.). Override in regions."""
-        # TODO: Implement alternative formats i.e SQLite, CSV, etc.
         return None
-    
+
+    def _load_from_sqlite(self, section_type: SectionType) -> Optional[dict[str, dict[str, Any]]]:
+        """Load section data from SQLite database (if SQLite support is enabled)."""
+        # Simplified implementation - can be extended later if needed
+        if not hasattr(self, '_sqlite_db_path') or self._sqlite_db_path is None:  # type: ignore[reportAttributeAccess]
+            # FIXME: handle sqlite_db_path properly
+            return None
+            
+        try:
+            import sqlite3
+            with sqlite3.connect(self._sqlite_db_path) as conn: # type: ignore[reportAttributeAccess]
+                conn.row_factory = sqlite3.Row
+                cursor = conn.cursor()
+                
+                # Table name is the section type in uppercase
+                table_name = section_type.value.upper()
+                
+                # Check if table exists
+                cursor.execute(
+                    "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+                    (table_name,)
+                )
+                if not cursor.fetchone():
+                    return None
+                
+                # Load all sections from the table
+                cursor.execute(f"SELECT * FROM {table_name}")
+                rows = cursor.fetchall()
+                
+                sections = {}
+                for row in rows:
+                    # Parse the JSON data column which contains the full section data
+                    import json
+                    section_data = json.loads(row['data'])
+                    designation = row['designation']
+                    sections[designation] = section_data
+                    
+                return sections
+                
+        except Exception as e:
+            logger.error(f"Error loading {section_type.value} from SQLite: {e}")
+            return None
+
     # - 🌟 Get section data
     def get_section_data(self, designation: str, section_type: SectionType) -> Optional[dict[str, Any]]:
         """Retrieve section data by designation and type."""
@@ -129,24 +239,81 @@ class SectionDatabase(ABC):
     
     # 🌟 - Find section # TODO: redocument
     def find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
-        """Find a section by designation across all types."""
-        # Try exact match first...
-        for section_type in self.get_supported_types():
+        """Find a section by designation across all types with robust fuzzy matching."""
+        # Try exact match first
+        for section_type in self._supported_types:
             section_data: Optional[dict[str, Any]] = self.get_section_data(designation=designation, section_type=section_type)
             if section_data:
                 return section_type, section_data
             
-        # If not found, try fuzzy match (case-insensitive)
-        return self._fuzzy_find_section(designation=designation)
+        # Try fuzzy match with robust matching strategies
+        return self._fuzzy_find_section(designation)
 
-    # -
+    # - Fuzzy find section
+    def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
+        """Robust fuzzy section finding with multiple strategies."""
+        designation_clean = designation.strip()
+        
+        # 1: Case-insensitive exact match
+        for section_type in self._supported_types:
+            sections = self._cache.get(section_type, {})
+            for stored_designation, section_data in sections.items():
+                if stored_designation.lower() == designation_clean.lower():
+                    return section_type, section_data
+        
+        # 2: Normalize spaces, hyphens, and separators
+        normalized_input = self._normalize_designation(designation_clean)
+        for section_type in self._supported_types:
+            sections = self._cache.get(section_type, {})
+            for stored_designation, section_data in sections.items():
+                if self._normalize_designation(stored_designation) == normalized_input:
+                    return section_type, section_data
+        
+        # 3: Difflib-based similarity matching (robust but controlled)
+        all_designations = []
+        designation_map = {}
+        
+        for section_type in self._supported_types:
+            sections = self._cache.get(section_type, {})
+            for stored_designation, section_data in sections.items():
+                all_designations.append(stored_designation)
+                designation_map[stored_designation] = (section_type, section_data)
+        
+        # Find close matches with reasonable cutoff
+        close_matches = difflib.get_close_matches(
+            designation_clean, 
+            all_designations, 
+            n=1, 
+            cutoff=0.8  # High cutoff to avoid false positives
+        )
+        
+        if close_matches:
+            best_match = close_matches[0]
+            return designation_map[best_match]
+        
+        return None
+
+    def _normalize_designation(self, designation: str) -> str:
+        """Normalize designation for fuzzy matching."""
+        # Convert to lowercase and normalize common separators
+        normalized = designation.lower().strip()
+        # Replace various separators with standard format
+        normalized = normalized.replace(' ', '').replace('-', '').replace('_', '')
+        # Handle 'x' separators consistently  
+        normalized = normalized.replace('×', 'x')
+        return normalized
+
+    def get_supported_types(self) -> list[SectionType]:
+        """Return supported section types for this region."""
+        return self._supported_types.copy()
+    
     def get_available_section_types(self) -> list[SectionType]:
         """Return a list of section types that have data loaded."""
         return [
             section_type for section_type 
-            in self.get_supported_types()
+            in self._supported_types
             if section_type in self._cache and self._cache[section_type]
-            ]
+        ]
     
     # 🌟 - Search sections from cache; is independent of database impl.
     def search_sections(
@@ -154,7 +321,6 @@ class SectionDatabase(ABC):
             section_type: SectionType,
             **criteria: Any
         ) -> list[tuple[str, dict[str, Any]]]:
-
         """Search sections by criteria with comparison operators."""
         sections: dict[str, dict[str, Any]] = self._cache.get(section_type, {})
         results = []
@@ -204,97 +370,30 @@ class SectionDatabase(ABC):
         
         return results
 
-    # ------- SQLite Methods -------
-    # - 🪶 SQLite: Get database path
-    def _get_sqlite_db_path(self) -> Path:
-        """Get the SQLite database path for this region."""
-        if self._sqlite_db_path is None:
-            # Default to {data_directory}_sections.sqlite3
-            db_name = f"{self.data_directory.name}_sections.sqlite3"
-            self._sqlite_db_path = self.data_directory.parent / db_name
-        return self._sqlite_db_path
-
-    # - 🪶 SQLite: Ensure database exists
-    def _ensure_sqlite_database(self) -> bool:
-        """Ensure SQLite database exists, creating it from JSON files if needed."""
-        sqlite_path = self._get_sqlite_db_path()
+    # - Get similar sections using fuzzy matching
+    def get_similar_sections(self, designation: str, section_type: Optional[SectionType] = None, n: int = 5) -> list[str]:
+        """Get similar section designations using fuzzy matching."""
+        all_sections = []
         
-        if sqlite_path.exists():
-            return True
-            
-        # Create SQLite database from JSON files
-        try:
-            logger.info(f"Creating SQLite database from JSON files at: {sqlite_path}")
-            self._build_sqlite_from_json(sqlite_path, self.data_directory)
-            return True
-        except Exception as e:
-            logger.error(f"Failed to create SQLite database: {e}")
-            return False
-
-    # - 🌟 | 🪶 SQLite: Load from SQLite
-    def _load_from_sqlite(self, section_type: SectionType) -> Optional[dict[str, dict[str, Any]]]:
-        """Load section data from SQLite database."""
-        if not self._ensure_sqlite_database():
-            return None
-            
-        sqlite_path = self._get_sqlite_db_path()
+        if section_type:
+            # Search within specific type
+            sections = self.list_sections(section_type)
+            all_sections = sections
+        else:
+            # Search across all types
+            for st in self.get_available_section_types():
+                sections = self.list_sections(st)
+                all_sections.extend(sections)
         
-        try:
-            with sqlite3.connect(sqlite_path) as conn:
-                conn.row_factory = sqlite3.Row
-                cursor = conn.cursor()
-                
-                # Table name is the section type in uppercase
-                table_name = section_type.value.upper()
-                
-                # Check if table exists
-                cursor.execute(
-                    "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-                    (table_name,)
-                )
-                if not cursor.fetchone():
-                    return None
-                
-                # Load all sections from the table
-                cursor.execute(f"SELECT * FROM {table_name}")
-                rows = cursor.fetchall()
-                
-                sections = {}
-                for row in rows:
-                    # Parse the JSON data column which contains the full section data
-                    section_data = json.loads(row['data'])
-                    designation = row['designation']
-                    sections[designation] = section_data
-                    
-                return sections
-                
-        except Exception as e:
-            logger.error(f"Error loading {section_type.value} from SQLite: {e}")
-            return None
-
-    # - 🪶 SQLite: Build from JSON
-    def _build_sqlite_from_json(self, db_path: Path, source_dir: Path) -> None:
-        """Build SQLite database from JSON files using the SQLite JSON interface."""
+        # Use difflib to find close matches
+        close_matches = difflib.get_close_matches(
+            designation, 
+            all_sections, 
+            n=n, 
+            cutoff=0.6  # Balanced cutoff for suggestions
+        )
         
-        # Use the SQLite JSON interface to build the database
-        interface = SQLiteJSONInterface(db_path)
-        interface.convert_directory(source_dir)
-
-    # - 🪶 SQLite: Build from JSON
-    def build_sqlite_database(self, force_rebuild: bool = False) -> Path:
-        """Manually build SQLite database from JSON files. Takes force_rebuild: If `True`,
-        rebuild even if database exists. Returns: `Path` to the created SQLite database
-        """
-        sqlite_path = self._get_sqlite_db_path()
-        
-        if force_rebuild and sqlite_path.exists():
-            sqlite_path.unlink()
-            
-        if not self._ensure_sqlite_database():
-            raise RuntimeError(f"Failed to create SQLite database at {sqlite_path}")
-            
-        return sqlite_path
-
+        return close_matches
 
 
 if __name__ == "__main__":    
