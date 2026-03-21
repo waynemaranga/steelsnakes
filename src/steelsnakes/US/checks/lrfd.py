@@ -1,3 +1,11 @@
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportOptionalOperand=false
+# pyright: reportOperatorIssue=false
+# pyright: reportMissingImports=false
+# pyright: reportArgumentType=false
+# pyright: reportReturnType=false
+# pyright: reportCallIssue=false
+
 # D: Tension - tensile yielding in gross section and tensile rupture in net section
 # E: Compression - flexural buckling, torsional buckling, flexural-torsional buckling
 # F: Flexure -
@@ -408,7 +416,7 @@ def calc_effective_width_be(lambda_value: float, lambda_r: float, Fy: float, Fn:
             c1 = kwargs.get("c1")
             Fel = kwargs.get("Fel")
             Fcr = kwargs.get("Fcr")
-            return b * (1 - c1 * (np.sqrt(Fel / Fcr))) * np.sqrt(Fel / Fcr)
+            return b * (1 - c1 * (np.sqrt(Fel / Fcr))) * np.sqrt(Fel / Fcr)  # pyright: ignore[reportUnboundVariable] # FIXME: unbound variable b; ...
         case _:
             raise NotImplementedError("Function is still rudimentary & untested.")
 

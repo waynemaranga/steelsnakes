@@ -42,5 +42,11 @@ def UBP(designation: str) -> UniversalBearingPile:
 
 
 if __name__ == "__main__":
-    print(UBP("356x368x109").get_properties(), "\n")
-    print(HP("HP-400x231").get_properties())
+    from steelsnakes.EU.checks.classification import classify_section
+
+    section = UBP("356x368x109")
+    print(section.get_properties())
+
+    classification_result = classify_section(section=section, fy_mpa=235.0)
+    print(f"Compression class: {classification_result.model_dump_json(indent=2)}")
+    print(f"Compression class: {classification_result.section_class}")

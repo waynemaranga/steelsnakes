@@ -57,6 +57,48 @@ print(f"Channel shear center: {channel.e0} mm")
 - **[Examples](https://steelsnakes.readthedocs.io/en/latest/examples/basic/)** - Practical usage examples
 - **[API Reference](https://steelsnakes.readthedocs.io/en/latest/reference/core/)** - Complete API documentation
 
+## Eurocode Classification Example
+
+```python
+from steelsnakes.EU import (
+    IPE,
+    ElementInput,
+    ElementStressCase,
+    StressPattern,
+    classify_section,
+)
+
+section = IPE("IPE-750x220")
+
+compression_result = classify_section(section=section, fy_mpa=355.0)
+
+bending_result = classify_section(
+    section=section,
+    fy_mpa=355.0,
+    stress_pattern="bending-major-axis",
+)
+
+combined_result = classify_section(
+    fy_mpa=275.0,
+    custom_elements=[
+        ElementInput(
+            name="web",
+            kind="internal",
+            c_mm=360.4,
+            t_mm=7.7,
+            stress=ElementStressCase.COMBINED,
+            alpha=0.70,
+        )
+    ],
+)
+
+print(compression_result.section_class)
+print(bending_result.section_class)
+print(combined_result.section_class)
+```
+
+`stress_pattern` accepts either a simple string like `"compression"` or `"bending-major-axis"`, or the enum value `StressPattern.MAJOR_AXIS_BENDING`.
+
 ## Contributing
 
 All contributions are welcome! See the [Contributing Guidelines](https://steelsnakes.readthedocs.io/en/latest/contributing/) for details.

@@ -22,6 +22,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - `SectionFactory` wires that cache to concrete section classes for `UK`, `EU`, and `US` while gracefully warning when the region linked in `SectionDatabase` does not yet have a corresponding module; extension hooks for `AU`/`NZ` are already in place.
 - Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
 - Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, `src/steelsnakes/US/checks/classification.py`, and `lrfd.py` already capture clauses for limit state verifications; expect more worked examples and metadata refinement as the TODO comments are closed.
+- `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
 - The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
 <!-- prettier-ignore-start -->

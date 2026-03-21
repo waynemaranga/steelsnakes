@@ -1,3 +1,4 @@
+```python
 from __future__ import annotations
 
 import math
@@ -406,3 +407,5 @@ if __name__ == "__main__":
     #     print(f"  [{row.clause:<12}]  {row.expr[:70]:<70}  {row.value}  {row.badge}")
 
     assert 1
+
+```
