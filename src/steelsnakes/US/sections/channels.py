@@ -84,13 +84,13 @@ class DoubleStandardChannel(Channel):
 class DoubleMiscellaneousChannel(Channel):
     pass
 
-def C(designation: str) -> Channel:
+def C_channel(designation: str) -> Channel:
     return cast(Channel, get_US_factory().create_section(designation, SectionType.C))
 
-def MC(designation: str) -> MiscellaneousChannel:
+def MC_channel(designation: str) -> MiscellaneousChannel:
     return cast(MiscellaneousChannel, get_US_factory().create_section(designation, SectionType.MC))
 
 if __name__ == "__main__":
-    print(C("C6X10.5").get_properties())
-    print(MC("MC6X6.5").get_properties())
+    print(C_channel("C6X10.5").get_properties())
+    print(MC_channel("MC6X6.5").get_properties())
     print("🐬")

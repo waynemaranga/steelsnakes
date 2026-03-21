@@ -32,8 +32,8 @@ class BearingPile(BaseSection):
 class ParallelFlangeBearingPile(BearingPile):
     pass
 
-@dataclass
-class PBP(ParallelFlangeBearingPile):
-    pass
+def PBP(designation: str) -> ParallelFlangeBearingPile:
+    raise NotImplementedError("PBP section creation not implemented yet.")
 
-
+if __name__ == "__main__":
+    print("🐬")

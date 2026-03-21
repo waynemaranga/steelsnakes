@@ -82,19 +82,19 @@ class MiscellaneousBeam(Beam):
         return SectionType.M
 
 
-def W(designation: str) -> WideFlangeBeam:
+def W_beam(designation: str) -> WideFlangeBeam:
     """Note: Case insensitive - accepts both "x" and "X" separators"""
     return cast(WideFlangeBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.W))
 
-def S(designation: str) -> StandardBeam:
+def S_beam(designation: str) -> StandardBeam:
     """Note: case insensitive - accepts both "x" and "X" separators"""
     return cast(StandardBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.S))
 
-def M(designation: str) -> MiscellaneousBeam:
+def M_beam(designation: str) -> MiscellaneousBeam:
     """Note: case insensitive - accepts both "x" and "X" separators"""
     return cast(MiscellaneousBeam, get_US_factory().create_section(designation.upper().strip(), SectionType.M))
 
 if __name__ == "__main__":
-    print(W("W36x350").get_properties())
-    print(S("S10X35").get_properties())
-    print(M("M12x10.8").get_properties())
+    print(W_beam("W36x350").get_properties())
+    print(S_beam("S10X35").get_properties())
+    print(M_beam("M12x10.8").get_properties())

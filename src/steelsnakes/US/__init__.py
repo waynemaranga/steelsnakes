@@ -6,47 +6,17 @@ from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.US.database import USSectionDatabase, get_US_database
 from steelsnakes.US.factory import USSectionFactory, get_US_factory
 from steelsnakes.US.checks import Classification, classify_compression, classify_flexure
-
-# -- Beams --
-from steelsnakes.US.beams import (
-    Beam,
-    StandardBeam,
-    MiscellaneousBeam,
-    WideFlangeBeam,
+from steelsnakes.US.sections import (
+    angles,
+    beams,
+    channels,
+    hollow,       
+    piles,
+    pipes,
+    tees,
 )
 
-# -- Channels --
-from steelsnakes.US.channels import (
-    Channel,
-    StandardChannel,
-    MiscellaneousChannel,
-    DoubleStandardChannel,
-    DoubleMiscellaneousChannel,
-)
-
-# -- Angles --
-from steelsnakes.US.angles import (
-    Angle,
-    EqualAngle,
-    UnequalAngle,
-    DoubleAngle,
-    BackToBackEqualAngle,
-    LongLegBackToBackUnequalAngle,
-    ShortLegBackToBackUnequalAngle,
-)
-
-# -- Hollow Structural Sections --
-from steelsnakes.US.hollow import (
-    HollowStructuralSection,
-    RectangularHSS,
-    SquareHSS,
-    RoundHSS,
-)
-
-# -- Piles --
-from steelsnakes.US.piles import BearingPile
-
-__all__ = [
+__all__: list[str] = [
     "BaseSection",
     "SectionType",
     "USSectionDatabase",
@@ -56,4 +26,12 @@ __all__ = [
     "Classification",
     "classify_compression",
     "classify_flexure",
+    # Section types
+    "angles",
+    "beams",
+    "channels",
+    "hollow",       
+    "piles",
+    "pipes",
+    "tees"
 ]
