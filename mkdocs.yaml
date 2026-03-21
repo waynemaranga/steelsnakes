@@ -21,7 +21,6 @@ theme:
   pygments_style: # https://pygments.org/styles/
         light: abap
         dark: monokai
-  icon: "heroicons:arrows-pointing-out" # https://heroicons.com/solid # use the shadcn svg if not defined
   topbar_sections: false # Keep sections in sidebar for better nested navigation
   katex_options: # optional
     macros: # example of macros
@@ -113,7 +112,11 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Guides: 
-    - First Steps: 01-guides/index.md
+  - Guides:
+    - Overview: 01-guides/index.md
+    - First Steps: 01-guides/01-first-steps.md
     - Codes and Standards: 01-guides/03-codesandstds.md
-  - API Reference: 02-api-reference/index.md
+  - API Reference:
+    - Overview: 02-api-reference/index.md
+    - Section Database & Factory: 02-api-reference/02-database.md
+  - References: 99-references.md
