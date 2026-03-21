@@ -5,7 +5,7 @@ Channel steel sections for EU module.
 from __future__ import annotations
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Any, cast, Union
+from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.EU.factory import EUSectionFactory, get_EU_factory
@@ -54,6 +54,12 @@ class ParallelFlangeChannel(BaseSection):
     I_w: float = 0.0
     I_t: float = 0.0
     A: float = 0.0
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for channel sections."""
+        from steelsnakes.EU.checks.classification import channel_section_elements
+
+        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
     
     @classmethod
     def get_section_type(cls) -> SectionType:
@@ -103,6 +109,12 @@ class TaperedFlangeChannel(BaseSection):
     I_w: float = 0.0
     I_t: float = 0.0
     A: float = 0.0
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for channel sections."""
+        from steelsnakes.EU.checks.classification import channel_section_elements
+
+        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
 
     @classmethod
     def get_section_type(cls) -> SectionType:

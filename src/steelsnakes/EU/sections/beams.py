@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import Any, Union, cast
+from typing import Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
-from steelsnakes.EU.factory import EUSectionFactory, SectionFactory, get_EU_factory
+from steelsnakes.EU.factory import EUSectionFactory, get_EU_factory
 
 @dataclass
 class Beam(BaseSection):
@@ -57,6 +57,16 @@ class Beam(BaseSection):
     I_w: float = 0.0  # Warping constant (cm⁶)
     I_t: float = 0.0  # Torsional constant (cm⁴)
     A: float = 0.0  # Cross-sectional area (cm²)
+
+    def classification_elements(self) -> list[Any]:
+        """Return EC3 classification elements for beam-like sections.
+
+        Keeping this logic inside section modules allows section-specific control
+        while the check module remains a shared robust engine.
+        """
+        from steelsnakes.EU.checks.classification import i_section_elements
+
+        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -139,10 +149,24 @@ if __name__ == "__main__":
     # test_section = factory.create_section("1100x400x607", section_type=SectionType.UB)
     # print(test_section.get_properties())
 
-    print(UB("1100x400x433").get_properties())
-    print(HL("HL-1100-M").get_properties())
-    print(HLZ("HLZ-1100-A").get_properties())
-    print(IPE("IPE-750x220").get_properties())
+    # print(UB("1100x400x433").get_properties())
+    # print(HL("HL-1100-M").get_properties())
+    # print(HLZ("HLZ-1100-A").get_properties())
+    # print(IPE("IPE-750x220").get_properties())
+
+    # Classification example...
+    from steelsnakes.EU.checks.classification import classify_elements, classify_section
+    from steelsnakes.base.checks import SectionClass
+    section = IPE("IPE-750x220")
+    classification_result = classify_section(section=section, fy_mpa=355.0)
+
+    print(f"Section class: {classification_result.section_class}")
+    for element in classification_result.elements:
+        print(f" - {element.name}: kind={element.kind}, c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}")
     
-    
+    section_2 = HE("HE-100-A")
+    classification_result_2 = classify_section(section=section_2, fy_mpa=355.0)
+    print(f"Section class: {classification_result_2.section_class}")
+    for element in classification_result_2.elements:
+        print(f" - {element.name}: kind={element.kind}, c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}")
     print("🐬")
