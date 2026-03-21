@@ -115,3 +115,5 @@ def compute_utilisation(demand: float, capacity: float) -> float:
         return math.inf
     return demand / capacity
 
+
+# Look keenly at szf (https://github.com/waynemaranga/szf) for the check/utilisation ratio architecture. Results should include inputs and outputs.

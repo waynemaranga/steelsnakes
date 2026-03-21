@@ -1,6 +1,6 @@
 [project]
 name = "steelsnakes"
-version = "0.0.1-alpha-8"
+version = "0.0.1-alpha-9"
 description = "A python library for structural steel."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = "GPL-2.0 " # https://packaging.python.org/en/latest/glossary/#term-SPDX-Expression
@@ -24,7 +24,7 @@ dependencies = [
 # [project.optional-dependencies]
 # extras = [
 #     # Extra features:
-#     # - ui using streamlit and/or fastapi
+#     # - ui using streamlit and/or fastapi with LateX rendering (https://fastapi.tiangolo.com/advanced/latex/)
 #     # - cli using typer/click/argparse, maybe even a tui
 #     # - built-in sqlite with fastapi's sqlmodels (from tiangolo: https://sqlmodel.tiangolo.com/tutorial/)
 #     # - probably: sqlite binary: pysqlite3-binary - since in advanced implementations, the speed of sqlite matters

@@ -4,12 +4,39 @@ This module implements Equal Angles, Unequal Angles, and their Back-to-Back vari
 """
 
 from __future__ import annotations
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional, Any, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.EU.factory import EUSectionFactory, get_EU_factory
+
+
+def _parse_leg_pair(*candidates: str) -> tuple[float, float] | None:
+    for value in candidates:
+        if not value:
+            continue
+        numbers = re.findall(r"\d+(?:\.\d+)?", value)
+        if len(numbers) >= 2:
+            return float(numbers[0]), float(numbers[1])
+    return None
+
+
+def _angle_elements(leg_hint: str, designation: str, t: float) -> list[Any]:
+    from steelsnakes.EU.checks.classification import angle_section_elements
+
+    if t <= 0.0:
+        return []
+
+    pair = _parse_leg_pair(leg_hint, designation)
+    if pair is None:
+        return []
+
+    leg_1, leg_2 = pair
+    return angle_section_elements(leg_1_mm=leg_1, leg_2_mm=leg_2, t_mm=t)
+
+
 
 
 @dataclass
@@ -62,6 +89,10 @@ class EqualAngle(BaseSection):
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for equal angle sections."""
+        return _angle_elements(self.hxh, self.designation, self.t)
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -124,6 +155,10 @@ class UnequalAngle(BaseSection):
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for unequal angle sections."""
+        return _angle_elements(self.hxb, self.designation, self.t)
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -156,6 +191,10 @@ class EqualAngleBackToBack(BaseSection):
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL_B2B
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for equal angle back-to-back sections."""
+        return _angle_elements(self.hxh, self.designation, self.t)
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -187,6 +226,10 @@ class UnequalAngleBackToBack(BaseSection):
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL_B2B
+
+    def classification_elements(self) -> list[Any]:
+        """Return EN classification elements for unequal angle back-to-back sections."""
+        return _angle_elements(self.hxb, self.designation, self.t)
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""

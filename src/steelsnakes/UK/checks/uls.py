@@ -33,7 +33,7 @@ def tension_utilisation(N_Ed: float, N_tRd: float) -> UtilisationCheck:
     """
     utilisation = np.divide(N_Ed, N_tRd) # N_Ed / N_tRd
     return UtilisationCheck(
-        utilisation=round(utilisation, ndigits=3),
+        utilisation=round(utilisation, ndigits=3), # FIXME: not non-negative proofed, but will be caught in design; also, resolve rounding in design instead of checks
         metadata={},
         adequacy="OK" if utilisation <= 1.0 else "FAILS",  # TODO: improve, check against tolerances using numpy
         reference=Reference(code="EN_1993", clause="6.2.3", equation="6.5")

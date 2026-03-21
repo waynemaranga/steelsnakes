@@ -32,7 +32,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
 
 1. 🇪🇺 `EU` European Union - Eurocode 3
-2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA (Heavily considering BS 5950 due to common use and redundancy of 2 Eurocode checks)
 3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
 4. 🇮🇳 `IN` India - IS 800 & IS 808
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
@@ -107,10 +107,17 @@ See [References](./99-references.md)
 ## Acknowledgments
 
 🫂
+- SCI (Steel Construction Institute)
+- ArcelorMittal
+- AISC (American Institute of Steel Construction)
+- SAISC (South African Institute of Steel Construction)
 
-[1]: ...
+---
+
+
+<!-- [1]: ...
 [2]: ...
 
 ```
 
-```
+``` -->
