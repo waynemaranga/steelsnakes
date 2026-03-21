@@ -1,54 +1,104 @@
 # US Classification
 
-This page documents the current AISC local-buckling classification API in `steelsnakes.US`.
+This page documents the current AISC classification surface in `steelsnakes.US`.
 
-## Cross-Code Naming Note
+The goal here is not to mirror every function in prose. The goal is to make the structure easy to use.
 
-`StressPattern` is intentionally kept as a shared public name across regions so callers can reuse a familiar API shape.
+## What the module does
 
-Its meaning is not identical in every code:
+The US classification module evaluates local slenderness / compactness style limits for the relevant compression elements.
 
-- In **EU / EC3**, `StressPattern` is closer to an element stress-case selector.
-- In **US / AISC B4.1**, `StressPattern` is better understood as the **classification context** that determines which compression element and which table case apply.
+In practice, the workflow is:
 
-For US code, `StressPattern` is therefore an alias of `ClassificationContext`.
+```mermaid
+flowchart LR
+    A[section or ratios] --> B[Classification context]
+    B --> C[Select AISC Table B4.1 case]
+    C --> D[Classify each active element]
+    D --> E[Return governing result]
+```
 
-## Shared Principle
+## Core idea
 
-The order of reasoning differs slightly by code, but the underlying idea is the same:
+In the US implementation, the starting point is usually the **classification context**.
 
-- In **EU**, the implementation starts from the section elements and then applies the relevant force or stress case to each element.
-- In **US**, the implementation starts from the member action or classification context and then selects which element and which Table B4.1 case are active.
+That context decides which element is active and which case is checked.
 
-In both codes, the core principle is still:
+So the mental model is:
 
-1. identify the relevant plate element in compression
-2. identify the correct code-specific classification rule for that element
-3. classify the element
-4. let the governing element determine the section classification
+\[
+\text{result} = f(\text{context},\, \lambda,\, F_y,\, E,\, \text{case metadata})
+\]
 
-## Scope Notes
+where \(\lambda\) is the relevant slenderness ratio for the active plate or wall.
 
-Some AISC cases are intentionally available through the direct case API before they are auto-wired to a section adapter:
+## Use the API at three levels
 
-- cover-plate cases such as `CompressionCase.CASE_7` and `FlexureCase.CASE_18`
-- built-up or singly symmetric cases that need extra metadata
-- fabricated box-section cases that do not yet have their own section family in the library
+### 1. Fast section-level check
 
-## Case Enums
+Use this when you already have a `steelsnakes.US` section object.
 
-US users can now work with either:
+```python
+from steelsnakes.US.checks import classify_section, ClassificationContext
 
-- string values such as `"case1"` and `"case10"`
-- enum values such as `CompressionCase.CASE_1` and `FlexureCase.CASE_10`
+result = classify_section(
+    section=section,
+    context=ClassificationContext.COMPRESSION,
+    Fy=50.0,
+)
+```
 
-Each enum exposes:
+### 2. Dictionary-based check
 
-- `.value` for the string form used by the functions
-- `.label` as a readable alias of that string
-- `.description` as a short guide to the corresponding AISC Table B4.1 case
+Use this for API payloads, spreadsheets, or serializers.
 
-## API Reference
+```python
+from steelsnakes.US.checks import classify_section_from_dict
+
+result = classify_section_from_dict(
+    data=section_data,
+    context="compression",
+    Fy=50.0,
+)
+```
+
+### 3. Direct case check
+
+Use this when you need exact control over the AISC table case.
+
+```python
+from steelsnakes.US.checks import classify_compression, CompressionCase
+
+result = classify_compression(
+    CompressionCase.CASE_1,
+    ratio=38.2,
+    Fy=50.0,
+    E=29000.0,
+)
+```
+
+## Which objects matter most
+
+| Object | Use it for |
+|---|---|
+| `ClassificationContext` | Tell the module what design situation you are checking |
+| `CompressionCase`, `FlexureCase` | Force a specific AISC case |
+| `ElementInput` | Provide explicit element-level inputs |
+| `ClassificationResult` | Read the governing section/element result |
+
+## Recommended usage for engineers
+
+- Use **section-level classification** first.
+- Drop to **dictionary input** when integrating with external data.
+- Drop to **direct case functions** only when you are validating edge cases or building your own adapter.
+
+## Scope note
+
+The API is already useful, but some cases are exposed sooner at the direct-case level than at the high-level adapter level.
+
+That is a normal consequence of the current architecture and is acceptable for an engineering-first release.
+
+## API objects
 
 ::: steelsnakes.US.checks.classification.StressPattern
 
