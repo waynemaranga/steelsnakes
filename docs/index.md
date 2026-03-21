@@ -22,6 +22,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - `SectionFactory` wires that cache to concrete section classes for `UK`, `EU`, and `US` while gracefully warning when the region linked in `SectionDatabase` does not yet have a corresponding module; extension hooks for `AU`/`NZ` are already in place.
 - Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
 - Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, `src/steelsnakes/US/checks/classification.py`, and `lrfd.py` already capture clauses for limit state verifications; expect more worked examples and metadata refinement as the TODO comments are closed.
+- `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
 - The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
 <!-- prettier-ignore-start -->
@@ -32,7 +33,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
 
 1. 🇪🇺 `EU` European Union - Eurocode 3
-2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA (Heavily considering BS 5950 due to common use and redundancy of 2 Eurocode checks)
 3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
 4. 🇮🇳 `IN` India - IS 800 & IS 808
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
@@ -107,10 +108,17 @@ See [References](./99-references.md)
 ## Acknowledgments
 
 🫂
+- SCI (Steel Construction Institute)
+- ArcelorMittal
+- AISC (American Institute of Steel Construction)
+- SAISC (South African Institute of Steel Construction)
 
-[1]: ...
+---
+
+
+<!-- [1]: ...
 [2]: ...
 
 ```
 
-```
+``` -->

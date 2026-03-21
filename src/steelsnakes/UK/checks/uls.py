@@ -1,3 +1,10 @@
+
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportOptionalOperand=false
+# pyright: reportOperatorIssue=false
+# pyright: reportMissingImports=false
+# pyright: reportArgumentType=false
+# 
 import numpy as np
 from typing import Any, Optional, Union, Literal, cast
 from steelsnakes.base.checks import UtilisationCheck, Scalar, Reference, SectionClass
@@ -33,7 +40,7 @@ def tension_utilisation(N_Ed: float, N_tRd: float) -> UtilisationCheck:
     """
     utilisation = np.divide(N_Ed, N_tRd) # N_Ed / N_tRd
     return UtilisationCheck(
-        utilisation=round(utilisation, ndigits=3),
+        utilisation=round(utilisation, ndigits=3), # FIXME: not non-negative proofed, but will be caught in design; also, resolve rounding in design instead of checks
         metadata={},
         adequacy="OK" if utilisation <= 1.0 else "FAILS",  # TODO: improve, check against tolerances using numpy
         reference=Reference(code="EN_1993", clause="6.2.3", equation="6.5")
@@ -279,7 +286,7 @@ def web_shear_stress(
             hw = section.h - 2*section.tf - 2*section.r # clear height of web
             Aw = hw*section.tw
             Af = section.b*section.tf
-            tau_Ed = np.multiply(V_Ed, Aw)
+            tau_Ed = np.multiply(V_Ed, Aw) # pyright: ignore[reportCallIssue] # FIXME: ...
             return round(tau_Ed, ndigits=4)
         case (_, _):
             raise ValueError("Either section or properties must be provided, not both.")
@@ -373,9 +380,9 @@ if __name__ == "__main__":
     # print(check)
     print("")
     from steelsnakes.UK import UB
-    from steelsnakes.EU.beams import IPE
-    from steelsnakes.EU.channels import UPN, PFC
-    from steelsnakes.UK.cf_hollow import CFCHS
+    from steelsnakes.EU.sections.beams import IPE
+    from steelsnakes.EU.sections.channels import UPN, PFC
+    from steelsnakes.UK.sections.cf_hollow import CFCHS
     # element = IPE("IPE-500")
     element = UB("457x191x67")
     # element = PFC("430x100x64")

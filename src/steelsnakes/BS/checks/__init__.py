@@ -1,0 +1,6 @@
+# Legacy BS5950; since many people still use it anyway...
+# How to export BS to UK modules:...
+
+if __name__ == "__main__":
+    print("🐬")
+    

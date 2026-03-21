@@ -4,6 +4,7 @@
 
 1. [First Steps](./01-first-steps.md)
 2. [Codes and Standards](./03-codesandstds.md)
+3. [EU Classification](./05-eu-classification.md)
 
 $steelsnakes$ is being documented in stages: the core guides collect installation/usage notes and code references, while the standards guide documents which regional specifications the package is lining up with.
 

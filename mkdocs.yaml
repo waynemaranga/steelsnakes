@@ -116,7 +116,10 @@ nav:
     - Overview: 01-guides/index.md
     - First Steps: 01-guides/01-first-steps.md
     - Codes and Standards: 01-guides/03-codesandstds.md
+    - EU Classification: 01-guides/05-eu-classification.md
   - API Reference:
     - Overview: 02-api-reference/index.md
     - Section Database & Factory: 02-api-reference/02-database.md
+    - UK Classification: 02-api-reference/04-uk-classification.md
+    - US Classification: 02-api-reference/03-us-classification.md
   - References: 99-references.md
