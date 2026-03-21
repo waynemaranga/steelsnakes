@@ -1,19 +1,63 @@
 # API Reference
 
-The reference is split into the shared base modules that power all regions, followed by the region-specific packages that tailor steel sections, databases, factories, and checks to each code.
+This reference is intentionally **lean**.
 
-## Base Modules
+Use it to answer three questions quickly:
 
-1. `sections` provides the `SectionType` enumerations plus the abstract `BaseSection`. Every concrete section class inherits the helpers (`get_properties`, `list_properties`, `from_dictionary`) so consumers can enumerate attributes consistently.
-2. `database` explains how JSON datasets are auto-discovered, cached, and exposed through fuzzy search, comparison filtering, and similarity helpers for resilient designation lookups.
-3. `factory` maps the cached data to region-aware section classes, auto-loading UK/EU/US modules and warning when a region does not yet have a concrete implementation.
-4. `checks` holds shared limit-state helpers; current coverage includes EC3 classification (UK/EU), UK ULS and stability helpers, and AISC LRFD/classification.
+1. **Where does data come from?** `SectionDatabase`
+2. **How do I get a section object?** `SectionFactory`
+3. **Where do classification checks live?** Regional `checks` modules
 
-## Regions
+/// card | Core architecture
+`steelsnakes` currently has a practical internal architecture:
 
-1. `UK`
-2. `EU`
-3. `US` and `US_Metric`
-4. `IN`
+- **data files** hold section properties
+- **database classes** load and search them
+- **factory classes** build section objects
+- **regional section classes** expose geometry/properties
+- **regional checks** perform code-specific verification
+///
 
-Each region still provides its own `sections`, `database`, `factory`, and `checks` modules. Check the corresponding regional README files and API pages to see exactly which standards and section profiles are currently packaged.
+## Mental model
+
+```mermaid
+flowchart LR
+    A[JSON section tables] --> B[SectionDatabase]
+    B --> C[SectionFactory]
+    C --> D[Regional section class\nUB / IPE / W / HSS]
+    D --> E[Checks module\nEU / UK / US]
+    E --> F[Classification or design result]
+```
+
+## Package layout
+
+| Layer | Main modules | Why it exists |
+|---|---|---|
+| Shared core | `steelsnakes.base.sections`, `steelsnakes.base.database`, `steelsnakes.base.factory` | Common section typing, data loading, lookup, and object creation |
+| Regional data | `steelsnakes.<region>.data` | Region-specific section tables |
+| Regional sections | `steelsnakes.<region>.sections` | Concrete classes such as `UB`, `UC`, `IPE`, `W`, `HSS` |
+| Regional checks | `steelsnakes.EU.checks`, `steelsnakes.UK.checks`, `steelsnakes.US.checks` | Code-specific classification and design helpers |
+
+## What to read next
+
+- **Section Database & Factory** if you are automating section lookup, data access, or object creation.
+- **UK Classification** if you are using EC3-style classification through the UK package.
+- **US Classification** if you are using AISC local slenderness / compactness checks.
+
+## Current public API stance
+
+The current API is best understood as a **working engineering API**, not yet a final polished public interface.
+
+That means:
+
+- the **architecture is already useful** for scripts and engineering workflows
+- the **classification entry points are usable today**
+- a simpler, more unified public API can still be added later without losing the current structure
+
+A good rule is:
+
+\[
+\text{workflow today} = \text{data access} + \text{section object} + \text{regional check}
+\]
+
+That is the pattern this documentation now emphasizes.

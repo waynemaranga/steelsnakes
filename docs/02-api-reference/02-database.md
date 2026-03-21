@@ -1,40 +1,116 @@
 # Section Database & Factory
 
-This page captures the shared infrastructure that keeps all regions inside `$steelsnakes$` synchronized: the data caches (`SectionDatabase`) and the wiring layer (`SectionFactory`) that turns cached rows into concrete section objects.
+This is the backbone of the app.
 
-## SectionDatabase
+If you are writing scripts, notebooks, or internal tools, this is usually the most important part of the current architecture.
 
-1. **Discovery & caching.** When you instantiate `SectionDatabase`, it auto-discovers the correct `data/<REGION>/` directory via several fallback paths, optionally respects an injected `data_directory`, and loads every supported `SectionType` into a dictionary cache. Metadata like `_section_type` and `_region` are added to every entry so downstream tools understand the source.
-2. **Fallback SQLite support.** The constructor accepts `use_sqlite=True`, in which case `_load_section_type` can attempt to read from an SQLite table named after each `SectionType` when JSON files are absent. Error handling already logs missing tables and malformed rows without breaking the entire initialization.
-3. **Resilient lookup helpers.** `find_section` first tries an exact match, then `_fuzzy_find_section`:
-   - Exact matches ignore case and normalize separators (` `, `-`, `_`, `×`).
-   - Difflib-based similarity matching provides a controlled suggestion (cutoff 0.8) before falling back to `None`.
-   - `get_similar_sections` can be called independently with `n` suggestions across all loaded types.
-4. **Criteria-based search.** `search_sections(section_type, prop__gt=100, prop__eq="W")` filters the cached dict via comparison operators (`gt`, `lt`, `gte`, `lte`, `eq`, `ne`) and exact matches, so you can quickly find all sections that meet size thresholds.
+## Architecture in one diagram
 
-<!-- prettier-ignore-start -->
-!!! warning "Note"
-    The current database is JSON-first and still mirrors early datasets, so not every region/type has fully verified values. Validate against the source CSV/JSON, especially when drafting code that depends on exact masses or moments of inertia.
-<!-- prettier-ignore-end -->
+```mermaid
+flowchart TD
+    A[region code] --> B[SectionDatabase]
+    B --> C[cache by SectionType]
+    C --> D[find_section / search_sections]
+    C --> E[SectionFactory]
+    E --> F[Concrete section instance]
+    F --> G[get_properties / direct attributes / checks]
+```
 
-## SectionFactory
+## `SectionDatabase`
 
-`SectionFactory` bridges `SectionDatabase` with the concrete section classes.
+`SectionDatabase` does three jobs:
 
-1. **Automatic class loading.** If no `section_classes` mapping is provided, the factory inspects `database.region` and imports the relevant modules (`UK`, `EU`, `US`, `AU`, `NZ` are wired in), while gracefully logging if a region lacks exports.
-2. **Region-aware wiring.** Each helper (e.g., `_load_UK_classes`) imports the region's section definitions (beams, channels, angles, hollow sections) and maps them to `SectionType` members. This keeps the factory thin while letting each region evolve independently.
-3. **Extensibility.** Custom section classes or alternative databases can simply pass their own `section_classes` dict when instantiating the factory, so testing helpers can swap in fake sections without touching the auto-loader.
+1. **find the regional data folder**
+2. **load section tables into memory**
+3. **help you search by designation or filters**
 
-Pair any factory instance with the database you already created to request a section instance:
+### Why it matters
+
+For an engineer, this means you can treat the package like a searchable section catalogue before you even create a section object.
+
+### Typical flow
+
+```python
+from steelsnakes.base.database import SectionDatabase
+
+db = SectionDatabase(region="UK")
+match = db.find_section("457x191x67")
+print(match)
+```
+
+### Search strategy
+
+The lookup behavior is intentionally forgiving:
+
+- exact designation first
+- then normalized matching
+- then fuzzy similarity matching
+
+That is useful when incoming labels vary slightly between spreadsheets, analysis exports, and hand-entered names.
+
+## `SectionFactory`
+
+`SectionFactory` converts cached data into the right regional section class.
+
+### Why it matters
+
+This is what lets you move from **catalogue data** to an **object you can interrogate or classify**.
 
 ```python
 from steelsnakes.base.database import SectionDatabase
 from steelsnakes.base.factory import SectionFactory
 from steelsnakes.base.sections import SectionType
 
-db = SectionDatabase(region="UK")
-factory = SectionFactory(database=db)
-beam = factory.create_section("457x191x67", section_type=SectionType.UB)
+# 1. Load a regional catalogue
+uk_db = SectionDatabase(region="UK")
+
+# 2. Build a factory for that catalogue
+uk_factory = SectionFactory(database=uk_db)
+
+# 3. Create a typed section object
+section = uk_factory.create_section("457x191x67", section_type=SectionType.UB)
+
+print(section)
+print(section.get_properties())
 ```
 
-The next page in this reference dives into the region-specific APIs for UK, EU, US, and additional locales.
+## Practical engineering use
+
+Use the database/factory layer when you need to:
+
+- build a quick section browser
+- validate designations coming from Excel or CSV
+- compare candidate sections with simple filters
+- pass real section objects into classification functions
+
+## Architectural idea
+
+The current architecture is simple enough to explain as:
+
+\[
+\text{section object} = \text{factory}(\text{database}(\text{region data}))
+\]
+
+That may look abstract, but in practice it keeps responsibilities separate:
+
+- data loading stays in one place
+- region-specific shape classes stay in one place
+- design checks stay in one place
+
+## When to use this layer vs direct regional imports
+
+| Use case | Best approach |
+|---|---|
+| You already know the exact class, e.g. `UB` or `W` | Import directly from the region package |
+| You are building a tool that must work from designations dynamically | Use `SectionDatabase` + `SectionFactory` |
+| You need robust lookup from inconsistent names | Start with `SectionDatabase` |
+| You want classification after lookup | Database → Factory → Check |
+
+## Minimal rule of thumb
+
+/// card | Recommended pattern
+For exploratory engineering work:
+
+1. use a **regional direct import** for quick one-off checks
+2. use **database + factory** for automation or apps
+///

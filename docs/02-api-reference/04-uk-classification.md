@@ -1,41 +1,32 @@
 # UK Classification
 
-This page documents the current UK classification API in `steelsnakes.UK`.
+This page documents the current UK classification surface in `steelsnakes.UK`.
 
-## Design Goal
+The UK package is best understood as a **regional adapter over the shared EC3-style engine**.
 
-The UK module reuses the shared EC3 classification engine from `steelsnakes.EU` and adapts it through UK section families.
+## Architecture in one view
 
-That keeps the backend formula logic centralized while still giving the UK package a complete public API.
+```mermaid
+flowchart LR
+    A[UK section class] --> B[classification_elements or section adapter]
+    B --> C[shared EC3 classification logic]
+    C --> D[element classes]
+    D --> E[governing section class]
+```
 
-## What Reuses Directly
+## Design idea
 
-The same EN 1993-1-1 Table 5.2 helpers are reused for:
+The formula logic stays centralized, while the UK package supplies the section families and public entry points engineers actually want to import.
 
-- `UB`, `UC`, and `UBP`
-- `PFC`
-- equal and unequal angles
-- back-to-back angle variants
-- hot-finished `HFRHS`, `HFSHS`, and `HFCHS`
-- cold-formed `CFRHS`, `CFSHS`, and `CFCHS` through the same shared engine, with explicit Class 4 exits
+That makes the current architecture:
 
-The UK package exports the same main helpers as the EU package:
+- easier to extend
+- easier to test
+- easier to keep aligned with the EU implementation
 
-- `classify_section()`
-- `classify_section_from_dict()`
-- `classify_circular_hollow()`
-- `classify_internal_part()`
-- `classify_outstand_flange()`
-- `ElementInput`
-- `ElementStressCase`
-- `StressPattern`
+## What to use first
 
-These are available from both:
-
-- `steelsnakes.UK.checks`
-- `steelsnakes.UK`
-
-## Common Usage
+### 1. Standard section check
 
 ```python
 from steelsnakes.UK import UB, StressPattern, classify_section
@@ -48,11 +39,9 @@ result = classify_section(
 )
 
 print(result.section_class)
-for element in result.elements:
-    print(element.name, element.stress, element.section_class)
 ```
 
-Hollow sections use the same public entry point:
+### 2. Hollow section check
 
 ```python
 from steelsnakes.UK import HFRHS, classify_section
@@ -63,23 +52,64 @@ result = classify_section(section=section, fy_mpa=355.0)
 print(result.section_class)
 ```
 
-## Scope Notes
+### 3. Explicit element-level control
 
-The UK classification surface is intentionally aligned with the EU API, and now includes the following hollow families:
+Use `custom_elements` when you want to control the stress state directly.
 
-| Section family | Status | Notes |
-|----------------|--------|-------|
-| `HFRHS` | Supported | Table 5.2 Sheet 1; uses `cw_t` / `cf_t` |
-| `HFSHS` | Supported | Table 5.2 Sheet 1; uses `c_t` |
-| `HFCHS` | Supported | Table 5.2 Sheet 3; uses `d_t` and the `e^2 = 235 / fy` rule |
-| `CFRHS` | Supported | Table 5.2 Sheet 1; Class 4 raises and points to `EN 1993-1-3` |
-| `CFSHS` | Supported | Table 5.2 Sheet 1; Class 4 raises and points to `EN 1993-1-3` |
-| `CFCHS` | Supported | Table 5.2 Sheet 3; Class 4 raises and points to `EN 1993-1-3` |
-| `HFEHS` | Deferred | No EN 1993-1-1 Table 5.2 rule is implemented |
+```python
+from steelsnakes.UK import ElementInput, ElementStressCase, classify_section
 
-When you need full manual control, pass `custom_elements` to `classify_section(...)`.
+result = classify_section(
+    fy_mpa=355.0,
+    custom_elements=[
+        ElementInput(
+            name="web",
+            kind="internal",
+            c_mm=360.4,
+            t_mm=7.7,
+            stress=ElementStressCase.COMBINED,
+            alpha=0.70,
+        )
+    ],
+)
+```
 
-## API Reference
+## Engineering interpretation
+
+For a structural engineer, the useful pattern is:
+
+1. instantiate a UK section
+2. pick the stress pattern that matches the design situation
+3. read the governing element class
+
+In compact notation:
+
+\[
+\text{section class} = \max\left(\text{element classes derived from Table 5.2 logic}\right)
+\]
+
+where “max” means the most restrictive class governs.
+
+## Supported shape families
+
+| Family | Status | Note |
+|---|---|---|
+| `UB`, `UC`, `UBP` | Supported | Main I/H section workflow |
+| `PFC` | Supported | Channel workflow |
+| Angles | Supported | Compression-oriented use cases are in place |
+| `HFRHS`, `HFSHS`, `HFCHS` | Supported | Hot-finished hollow sections |
+| `CFRHS`, `CFSHS`, `CFCHS` | Supported | Shared engine, with explicit Class 4 exits |
+| `HFEHS` | Deferred | No implemented Table 5.2 path yet |
+
+## Recommended usage for engineers
+
+/// card | Recommended order
+1. Use `classify_section(...)` for normal work.
+2. Use `StressPattern` presets for common beam/column situations.
+3. Use `custom_elements` only when you need explicit stress control.
+///
+
+## API objects
 
 ::: steelsnakes.UK.checks.classification.StressPattern
 
