@@ -50,4 +50,20 @@ print(beam_2.A)
 
 ```
 
-###
+### Building on the API
+
+The basic usage above relies on `steelsnakes.<region>` imports, but most automated workflows should build on the shared base modules:
+
+- `steelsnakes.base.database.SectionDatabase` discovers JSON datasets by region, caches every supported `SectionType`, and exposes fuzzy lookups and comparison filters so pipelines can tolerate slight naming variations.
+- `steelsnakes.base.factory.SectionFactory` wires that cache to the concrete classes defined in each region (`UK`, `EU`, `US`, etc.) and exposes `create_section(...)` so you can programmatically assemble any section without hard-coding the class name.
+
+See the API reference page (`docs/02-api-reference/02-database.md`) for examples of how the database and factory collaborate, and expect similar patterns to appear in the future for connectors and checks.
+
+<!-- prettier-ignore-start -->
+!!!warning "Note"
+    The package does not currently enforce unit conversions or normalized inputs. Always feed inputs in the units the region expects (e.g., millimetres/kN if you are using Eurocode sections) and double-check the results before relying on them.
+<!-- prettier-ignore-end -->
+
+### What else is coming
+
+If you're exploring the docs, the `Codes and Standards` page is the best place to see what design standards each region is aiming to cover; expect more guides (installation modes, CLI usage, contributed data) once the codebase stabilizes.
