@@ -1,4 +1,10 @@
 """"""
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportOptionalOperand=false
+# pyright: reportOperatorIssue=false
+# pyright: reportMissingImports=false
+# pyright: reportArgumentType=false
+
 from __future__ import annotations
 import numpy as np
 from steelsnakes.base.checks import Classification, SectionClass

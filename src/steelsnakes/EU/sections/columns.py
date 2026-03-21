@@ -42,5 +42,10 @@ def UC(designation: str) -> UniversalColumn:
 
 
 if __name__ == "__main__":
-    print(UC("356x406x1299").get_properties(), "\n")
-    print(HD("HD-400x421").get_properties())
+    from steelsnakes.EU.checks.classification import classify_section
+
+    section = UC("356x406x1299")
+    print(section.get_properties())
+
+    classification_result = classify_section(section=section, fy_mpa=355.0)
+    print(f"Compression class: {classification_result.section_class}")

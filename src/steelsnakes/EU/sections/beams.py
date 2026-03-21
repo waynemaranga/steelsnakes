@@ -59,11 +59,7 @@ class Beam(BaseSection):
     A: float = 0.0  # Cross-sectional area (cm²)
 
     def classification_elements(self) -> list[Any]:
-        """Return EC3 classification elements for beam-like sections.
-
-        Keeping this logic inside section modules allows section-specific control
-        while the check module remains a shared robust engine.
-        """
+        """Return beam geometry as generic EC3 classification elements."""
         from steelsnakes.EU.checks.classification import i_section_elements
 
         return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
@@ -154,19 +150,26 @@ if __name__ == "__main__":
     # print(HLZ("HLZ-1100-A").get_properties())
     # print(IPE("IPE-750x220").get_properties())
 
-    # Classification example...
-    from steelsnakes.EU.checks.classification import classify_elements, classify_section
-    from steelsnakes.base.checks import SectionClass
+    # Classification examples. Geometry stays here in the section module,
+    # while the stress case is selected in the classification check.
+    from steelsnakes.EU.checks.classification import StressPattern, classify_section
     section = IPE("IPE-750x220")
     classification_result = classify_section(section=section, fy_mpa=355.0)
 
-    print(f"Section class: {classification_result.section_class}")
+    print(f"Compression class: {classification_result.section_class}")
     for element in classification_result.elements:
         print(f" - {element.name}: kind={element.kind}, c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}")
     
     section_2 = HE("HE-100-A")
-    classification_result_2 = classify_section(section=section_2, fy_mpa=355.0)
-    print(f"Section class: {classification_result_2.section_class}")
+    classification_result_2 = classify_section(
+        section=section_2,
+        fy_mpa=355.0,
+        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+    )
+    print(f"Major-axis bending class: {classification_result_2.section_class}")
     for element in classification_result_2.elements:
-        print(f" - {element.name}: kind={element.kind}, c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}")
+        print(
+            f" - {element.name}: kind={element.kind}, stress={element.stress}, "
+            f"c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}"
+        )
     print("🐬")
