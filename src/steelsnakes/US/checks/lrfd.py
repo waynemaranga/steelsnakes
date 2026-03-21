@@ -100,7 +100,7 @@ def effective_net_area(U: float, An: float) -> Scalar | float:
     return round(Ae, ndigits=4)
 
 # D4. Built-up Members
-# [NO PLAN TO IMPLEMENT BUILT-UP MEMBERS IN ANY CODE]
+# [NO PLAN TO IMPLEMENT BUILT-UP MEMBERS IN ANY CODE] # FIXME: change of plans I guess 😁
 
 # D5. Pin-Connected Members: lowest value of phi_t_Pn per tensile rupture, shear rupture, bearing and yielding
 # D5.1(a): for tensile rupture on net effective area
