@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/99-references/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/01-guides/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/01-guides/01-first-steps/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/01-guides/03-codesandstds/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/02-api-reference/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+    <url>
+         <loc>https://steelsnakes.readthedocs.io/en/latest/02-api-reference/02-database/</loc>
+         <lastmod>2026-03-21</lastmod>
+    </url>
+</urlset>
