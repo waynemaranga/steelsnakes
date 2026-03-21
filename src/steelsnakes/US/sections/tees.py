@@ -1,7 +1,9 @@
 from dataclasses import dataclass, asdict
-from typing import Any, Optional, cast
+from typing import Any, cast
+
 from steelsnakes.base import BaseSection, SectionType
-from steelsnakes.US.factory import SectionFactory, get_US_factory
+from steelsnakes.US.factory import get_US_factory
+
 
 @dataclass
 class Tee(BaseSection):
@@ -37,9 +39,17 @@ class Tee(BaseSection):
     ro: float = 0.0
     H: float = 0.0
 
+    def classification_elements(self) -> list[Any]:
+        """Return tee geometry as generic AISC classification elements."""
+        from steelsnakes.US.checks.classification import tee_section_elements
+
+        d_over_t = self.D_t if self.D_t > 0.0 else (self.d / self.tw if self.d > 0.0 and self.tw > 0.0 else 0.0)
+        bf_over_2tf = self.bf_2tf if self.bf_2tf > 0.0 else (self.bf / (2.0 * self.tf) if self.bf > 0.0 and self.tf > 0.0 else 0.0)
+        return tee_section_elements(d_over_t=d_over_t, bf_over_2tf=bf_over_2tf)
+
     def get_properties(self) -> dict[str, Any]:
         return asdict(self)
-    
+
 
 @dataclass
 class StandardTee(Tee):
@@ -49,25 +59,26 @@ class StandardTee(Tee):
     def get_section_type(cls) -> SectionType:
         return SectionType.ST
 
+
 @dataclass
 class MiscellaneousTee(Tee):
     T_F: str = ""
-    
+
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.MT
 
+
 @dataclass
 class WideFlangeTee(Tee):
     T_F: str = ""
-    H: float =  0.0
+    H: float = 0.0
     PA: float = 0.0
     PB: float = 0.0
     PC: float = 0.0
     PD: float = 0.0
     WGi: float = 0.0
     WGo: float = 0.0
-
 
     @classmethod
     def get_section_type(cls) -> SectionType:
@@ -77,15 +88,25 @@ class WideFlangeTee(Tee):
 def ST(designation: str) -> StandardTee:
     return cast(StandardTee, get_US_factory().create_section(designation, SectionType.ST))
 
+
 def MT(designation: str) -> MiscellaneousTee:
     return cast(MiscellaneousTee, get_US_factory().create_section(designation, SectionType.MT))
+
 
 def WT(designation: str) -> WideFlangeTee:
     return cast(WideFlangeTee, get_US_factory().create_section(designation, SectionType.WT))
 
 
 if __name__ == "__main__":
-    print(ST("ST12X60.5").get_properties())
-    print(MT("MT6.25X6.2").get_properties())
-    print(WT("WT22X184").get_properties())
-    print("🐬")
+    from steelsnakes.US.checks.classification import ClassificationContext, classify_section
+
+    section = WT("WT22X184")
+    print(section.get_properties())
+    print(classify_section(section=section, Fy_ksi=50.0).model_dump())
+    print(
+        classify_section(
+            section=section,
+            Fy_ksi=50.0,
+            classification_context=ClassificationContext.FLEXURE_MAJOR_AXIS,
+        ).model_dump()
+    )

@@ -41,5 +41,19 @@ def test_import_uk_modules():
         pytest.skip(f"UK modules not available: {e}")
 
 
+def test_main_examples_run_and_print_eu_and_us_sections(capsys):
+    """Smoke test the example runner so the documented demo stays valid."""
+    from steelsnakes.main import main
+
+    main()
+    output = capsys.readouterr().out
+
+    assert "steelsnakes classification examples" in output
+    assert "EU examples" in output
+    assert "US examples" in output
+    assert "W-shape in minor-axis flexure" in output
+    assert "case10" in output
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

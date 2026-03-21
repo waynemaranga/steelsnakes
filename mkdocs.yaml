@@ -120,4 +120,5 @@ nav:
   - API Reference:
     - Overview: 02-api-reference/index.md
     - Section Database & Factory: 02-api-reference/02-database.md
+    - US Classification: 02-api-reference/03-us-classification.md
   - References: 99-references.md
