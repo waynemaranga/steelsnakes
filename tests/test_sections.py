@@ -3,6 +3,9 @@ Essential tests for the base sections module.
 Tests SectionType enum and BaseSection abstract class.
 """
 
+# pyright: reportArgumentType=false
+# pyright: reportAttributeAccessIssue=false
+
 import pytest
 from abc import ABC
 from typing import Any

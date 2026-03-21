@@ -6,18 +6,20 @@ using the new base system architecture.
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
+
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Optional, Any, cast
+from typing import Any, Optional, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 
+
 @dataclass
 class UniversalSection(BaseSection):
     """Base class for all universal steel sections (UB, UC, UBP)."""
-    
-    # Identification  
+
+    # Identification
     serial_size: str = ""
     is_additional: bool = False
     
@@ -25,7 +27,7 @@ class UniversalSection(BaseSection):
     mass_per_metre: float = 0.0
     h: float = 0.0  # Overall depth (mm)
     b: float = 0.0  # Overall width (mm)
-    tw: float = 0.0  # Web thickness (mm) 
+    tw: float = 0.0  # Web thickness (mm)
     tf: float = 0.0  # Flange thickness (mm)
     r: float = 0.0  # Root radius (mm)
     d: float = 0.0  # Depth between fillets (mm)
@@ -40,30 +42,36 @@ class UniversalSection(BaseSection):
     n: float = 0.0  # Alternative notch clearance (mm)
     
     # Surface areas
-    surface_area_per_metre: float = 0.0  # Surface area per metre (m²/m)
-    surface_area_per_tonne: float = 0.0  # Surface area per tonne (m²/t)
+    surface_area_per_metre: float = 0.0  # Surface area per metre (m^2/m)
+    surface_area_per_tonne: float = 0.0  # Surface area per tonne (m^2/t)
     
     # Second moments of area
-    I_yy: float = 0.0  # Second moment of area, major axis (cm⁴)
-    I_zz: float = 0.0  # Second moment of area, minor axis (cm⁴)
+    I_yy: float = 0.0  # Second moment of area, major axis (cm^4)
+    I_zz: float = 0.0  # Second moment of area, minor axis (cm^4)
     
     # Radii of gyration
     i_yy: float = 0.0  # Radius of gyration, major axis (cm)
     i_zz: float = 0.0  # Radius of gyration, minor axis (cm)
     
     # Section moduli
-    W_el_yy: float = 0.0  # Elastic section modulus, major axis (cm³)
-    W_el_zz: float = 0.0  # Elastic section modulus, minor axis (cm³)
-    W_pl_yy: float = 0.0  # Plastic section modulus, major axis (cm³)
-    W_pl_zz: float = 0.0  # Plastic section modulus, minor axis (cm³)
+    W_el_yy: float = 0.0  # Elastic section modulus, major axis (cm^3)
+    W_el_zz: float = 0.0  # Elastic section modulus, minor axis (cm^3)
+    W_pl_yy: float = 0.0  # Plastic section modulus, major axis (cm^3)
+    W_pl_zz: float = 0.0  # Plastic section modulus, minor axis (cm^3)
     
     # Buckling and torsion properties
     U: float = 0.0  # Buckling parameter
     X: float = 0.0  # Torsional index
-    I_w: float = 0.0  # Warping constant (cm⁶)
-    I_t: float = 0.0  # Torsional constant (cm⁴)
-    A: float = 0.0  # Cross-sectional area (cm²)
-    
+    I_w: float = 0.0  # Warping constant (cm^6)
+    I_t: float = 0.0  # Torsional constant (cm^4)
+    A: float = 0.0  # Cross-sectional area (cm^2)
+
+    def classification_elements(self) -> list[Any]:
+        """Return UK universal geometry as generic EC3 classification elements."""
+        from steelsnakes.EU.checks.classification import i_section_elements
+
+        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
+
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
 
@@ -77,16 +85,16 @@ class UniversalSection(BaseSection):
 @dataclass
 class UniversalBeam(UniversalSection):
     """Universal Beam (UB) section."""
-    
+
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.UB
 
 
-@dataclass  
+@dataclass
 class UniversalColumn(UniversalSection):
     """Universal Column (UC) section."""
-    
+
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.UC
@@ -95,13 +103,12 @@ class UniversalColumn(UniversalSection):
 @dataclass
 class UniversalBearingPile(UniversalSection):
     """Universal Bearing Pile (UBP) section."""
-    
+
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.UBP
 
 
-# Convenience functions for direct instantiation
 def UB(designation: str, data_directory: Optional[Path] = None) -> UniversalBeam:
     """
     Create a Universal Beam section by designation.
@@ -113,7 +120,6 @@ def UB(designation: str, data_directory: Optional[Path] = None) -> UniversalBeam
         UniversalBeam instance with actual values from database
     """
     factory: UKSectionFactory = get_UK_factory(data_directory)
-    # return factory.create_section(designation, SectionType.UB)
     return cast(UniversalBeam, factory.create_section(designation, SectionType.UB))
 
 
@@ -128,7 +134,6 @@ def UC(designation: str, data_directory: Optional[Path] = None) -> UniversalColu
         UniversalColumn instance with actual values from database
     """
     factory: UKSectionFactory = get_UK_factory(data_directory)
-    # return factory.create_section(designation, SectionType.UC)
     return cast(UniversalColumn, factory.create_section(designation, SectionType.UC))
 
 
@@ -143,10 +148,4 @@ def UBP(designation: str, data_directory: Optional[Path] = None) -> UniversalBea
         UniversalBearingPile instance with actual values from database
     """
     factory: UKSectionFactory = get_UK_factory(data_directory)
-    # return factory.create_section(designation, SectionType.UBP)
     return cast(UniversalBearingPile, factory.create_section(designation, SectionType.UBP))
-
-if __name__ == "__main__":
-    # print(UB("457x191x67"))
-    # print(UC("305x305x137"))
-    print(UBP("203x203x45").get_properties())

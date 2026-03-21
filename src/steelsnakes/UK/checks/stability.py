@@ -12,6 +12,7 @@
 # Ncr is elastic critical force for given buckling mode
 # alpha is read off from Table 6.1 corresponding to buckling curve which is read off from Table 6.2
 # TODO: table 6.1 is simple dictionary: {'curve': alpha} = {'a0': 0.13, 'a': 0.21, 'b': 0.34, 'c': 0.49, 'd': 0.76}
+# TODO: There is almost always an equation for the tables parameters; find it and implement it instead of hardcoding tables. For example, alpha is a function of the buckling curve which is a function of the section type and buckling mode. See if table 6.2 can be flattened into a dictionary with keys like 'section_type_buckling_mode': buckling_curve.
 # TODO: implement Table 6.2; specify also rolled/welded. See if table is flattenable; check Members.md
 
 # Cl. 6.3.1.3 Slenderness for flexural buckling

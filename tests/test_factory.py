@@ -3,6 +3,9 @@ Essential tests for the base factory system.
 Tests SectionFactory initialization and section creation.
 """
 
+# pyright: reportArgumentType=false
+# pyright: reportAttributeAccessIssue=false
+
 import pytest
 import json
 from pathlib import Path
