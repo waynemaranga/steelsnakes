@@ -2,6 +2,17 @@
 
 $steelsnakes$ references codes and standards divided by **region**. Each region contains **specification** standards that contain steel profile properties and dimensions, and **design** standards that contain design rules and verification checks.
 
+## Current coverage (March 21, 2026)
+
+- **EU / UK / US**: The packaged datasets already cover universal sections, beams, channels, angles, hollow sections, and piles; UK/US checks for ULS, stability, classification, and LRFD are available with more metadata to be completed.
+- **IN**: IS 808:2021 data ingestion is in progress; clamp-to-table helpers and clause references are on the roadmap (look for TODO markers in `src/steelsnakes/IN/checks/__init__.py`).
+- **AU / NZ / JP / MX / SA / CN / CA / KR**: These regions remain on the roadmap. SectionType enums already reference the expected series (`AS/NZS`, `JIS`, `NMX`, etc.), so adding the data is mostly a matter of aligning the JSON assets and connectors.
+
+<!-- prettier-ignore-start -->
+!!!info "Reminder"
+    The list below is for orientation only. Always check the latest editions of the cited standards (via BSI, AISC, ISO, etc.) before relying on prescriptions or clause numbers.
+<!-- prettier-ignore-end -->
+
 <!-- prettier-ignore-start -->
 !!!info "Note"
     $steelsnakes$ is not a replacement for given design codes and standards. Always refer to the original documents for complete information and context.

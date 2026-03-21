@@ -13,7 +13,20 @@ A python package for structural steel design. $steelsnakes$ aims to provide a un
 
 <!-- prettier-ignore-start -->
 !!! warning "Work in Progress"
-    $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+$steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+<!-- prettier-ignore-end -->
+
+## Latest Progress (March 21, 2026)
+
+- `SectionDatabase` now auto-discovers regional JSON files, keeps the cache keyed by `SectionType`, and exposes both fuzzy lookups and comparison-based search helpers so you can handle designations that vary in case, hyphenation, or separator characters.
+- `SectionFactory` wires that cache to concrete section classes for `UK`, `EU`, and `US` while gracefully warning when the region linked in `SectionDatabase` does not yet have a corresponding module; extension hooks for `AU`/`NZ` are already in place.
+- Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
+- Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, `src/steelsnakes/US/checks/classification.py`, and `lrfd.py` already capture clauses for limit state verifications; expect more worked examples and metadata refinement as the TODO comments are closed.
+- The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
+
+<!-- prettier-ignore-start -->
+!!! warning "Note"
+    These capabilities are still evolving; metadata gaps, non-unit-aware helpers, and TODOs remain in the source. Double-check the implementation against the codebase whenever you need precise behavior, especially before using it in production.
 <!-- prettier-ignore-end -->
 
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
