@@ -37,3 +37,11 @@ class SectionTypeNotRegisteredError(SectionFactoryError):
     corresponding section class registered in the factory to create instances.
     """
     pass
+
+
+class SectionClass4Error(ValueError):
+    """Exception raised when a classification path reaches Class 4 but the
+    effective section-property method required by the governing standard is not
+    implemented in the current workflow.
+    """
+    pass
