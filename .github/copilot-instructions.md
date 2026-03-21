@@ -4,16 +4,18 @@ Always use this file first. If reality deviates (APIs, paths, commands), prefer 
 
 ### Scope and Status
 - Python: 3.11+ (tested with 3.12)
-- Version: 0.0.1-alpha-6
-- Regions: UK, EU, US. Currently developing IN, AU, NZ.
+- Version: 0.0.1-alpha-9
+- Regions: UK, EU, US supported.
+- Active development: IN.
+- Scaffolds/early modules present: AU, NZ, JP, BS, US_Metric.
  
 
 ### Bootstrap, Build, Test
 
 Option 1 — Install in editable mode (recommended when network is available)
 - `python --version` (expect 3.11+)
-- `python -m venv venv`
-- `source venv/bin/activate`  (Windows: `venv\Scripts\activate`)
+- `python -m venv .venv`
+- `source .venv/bin/activate`  (Windows/Git Bash: `source .venv/Scripts/activate`; CMD: `.venv\\Scripts\\activate.bat`; PowerShell: `.venv\\Scripts\\Activate.ps1`)
 - `pip install --upgrade pip`
 - `pip install -e .`  (installs package + deps; allow 30 - 60s)
 - `python -c "import steelsnakes; print('Installation OK')"`
@@ -66,9 +68,10 @@ steelsnakes/
 ```
 
 ### Dependencies (pyproject.toml)
-- Runtime: pydantic>=2.11, sqlalchemy>=2.0
-- Dev/Test: pytest>=8.4, coverage==7.10.0, ruff (install separately)
-- Docs: mkdocs>=1.6, mkdocstrings[python]>=0.30.0, mkdocs-shadcn, pymdown-extensions
+- Core/runtime: numpy>=2.3.2, pydantic>=2.11.7, sqlalchemy>=2.0.43
+- Testing: pytest>=8.4.1, pytest-cov>=6.2.1, coverage==7.10.0
+- Docs/tooling packaged in project deps: mkdocs>=1.6.1, mkdocstrings[python]>=0.30.0, mkdocs-shadcn==0.9.3, pymdown-extensions>=10.16.1
+- Ruff is still used for linting/formatting and may need separate install in constrained environments.
 
 Note: This library does depend on external packages; use the PYTHONPATH approach if network is restricted and you only need to run code locally.
 
@@ -86,7 +89,7 @@ Note: This library does depend on external packages; use the PYTHONPATH approach
 - Docs build fails: likely due to network; skip in sandboxed environments
 
 ### Roadmap Cues (to keep instructions future-proof)
-- Regions: broaden EU/US/AU/IS coverage and wire them into the CLI discovery
+- Regions: broaden EU/US/AU/IN/NZ/JP coverage and wire them into CLI discovery
 - Data backends: optional SQLite acceleration via tools in `steelsnakes.base.database`
 - Analysis: build out `engine/` for structural checks and design utilities
  

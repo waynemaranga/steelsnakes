@@ -1,12 +1,14 @@
 """
 Channel steel sections for UK module.
+
 This module implements Parallel Flange Channels (PFC).
 """
 
 from __future__ import annotations
-from dataclasses import dataclass
+
+from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Optional, Any, cast
+from typing import Any, Optional, cast
 
 from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
@@ -17,12 +19,15 @@ class ParallelFlangeChannel(BaseSection):
     """
     Parallel Flange Channel (PFC) section.
     
-    C-shaped section with parallel flanges, commonly used for 
+    C-shaped section with parallel flanges, commonly used for
     secondary beams, purlins, and cladding rails.
     """
-    
+
+    # Identification
     serial_size: str = ""
     is_additional: bool = False
+    
+    # Physical properties
     mass_per_metre: float = 0.0
     h: float = 0.0
     b: float = 0.0
@@ -51,25 +56,24 @@ class ParallelFlangeChannel(BaseSection):
     I_w: float = 0.0
     I_t: float = 0.0
     A: float = 0.0
-    
+
+    def classification_elements(self) -> list[Any]:
+        """Return UK channel geometry as generic EC3 classification elements."""
+        from steelsnakes.EU.checks.classification import channel_section_elements
+
+        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
+
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.PFC
-    
+
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        from dataclasses import asdict
+        # SAFE: returns a detached dictionary representation of the dataclass.
         return asdict(self)
 
 
-
-# Convenience function for direct instantiation
 def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
     """Create a Parallel Flange Channel section by designation."""
     factory: UKSectionFactory = get_UK_factory(data_directory)
-    # return factory.create_section(designation, SectionType.PFC)
     return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
-
-if __name__ == "__main__":
-    print(PFC("430x100x64").get_properties())
-    print("🐬")

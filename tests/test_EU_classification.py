@@ -3,12 +3,14 @@ from __future__ import annotations
 import pytest
 
 from steelsnakes.base.checks import SectionClass
+from steelsnakes.base.exceptions import SectionClass4Error
 from steelsnakes.base.sections import SectionType
 from steelsnakes.EU import IPE, StressPattern as PublicStressPattern, classify_section as public_classify_section
 from steelsnakes.EU.checks.classification import (
     ElementInput,
     ElementStressCase,
     StressPattern,
+    classify_circular_hollow,
     classify_elements,
     classify_outstand_flange,
     classify_internal_part,
@@ -340,3 +342,78 @@ def test_public_eu_api_exports_classification_helpers() -> None:
 
     assert result.section_class == SectionClass.CLASS_1
     assert result.elements[0].stress in {ElementStressCase.BENDING, ElementStressCase.COMPRESSION}
+
+
+def test_chs_class1_s275() -> None:
+    result = classify_circular_hollow(d_t=40.0, fy_mpa=275.0)
+    assert result.section_class == SectionClass.CLASS_1
+
+
+def test_chs_class2_s275() -> None:
+    result = classify_circular_hollow(d_t=55.0, fy_mpa=275.0)
+    assert result.section_class == SectionClass.CLASS_2
+
+
+def test_chs_class3_s275() -> None:
+    result = classify_circular_hollow(d_t=75.0, fy_mpa=275.0)
+    assert result.section_class == SectionClass.CLASS_3
+
+
+def test_chs_class4_raises() -> None:
+    with pytest.raises(SectionClass4Error):
+        classify_circular_hollow(d_t=100.0, fy_mpa=275.0)
+
+
+def test_rhs_compression_s275() -> None:
+    result = classify_section_from_dict(
+        section_type=SectionType.HFRHS,
+        data={"cw_t": 28.0, "cf_t": 22.0, "t": 10.0},
+        fy_mpa=275.0,
+    )
+
+    assert result.section_class == SectionClass.CLASS_1
+
+
+def test_rhs_major_axis_bending() -> None:
+    result = classify_section_from_dict(
+        section_type=SectionType.HFRHS,
+        data={"cw_t": 50.0, "cf_t": 18.0, "t": 10.0},
+        fy_mpa=275.0,
+        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+    )
+
+    assert {item.name for item in result.elements} == {"web_wall", "flange_wall"}
+    stress_cases = {item.name: item.stress for item in result.elements}
+    assert stress_cases["web_wall"] == ElementStressCase.BENDING
+    assert stress_cases["flange_wall"] == ElementStressCase.COMPRESSION
+    assert result.section_class == SectionClass.CLASS_1
+
+
+def test_rhs_minor_axis_bending_raises_class4() -> None:
+    with pytest.raises(SectionClass4Error):
+        classify_section_from_dict(
+            section_type=SectionType.HFRHS,
+            data={"cw_t": 50.0, "cf_t": 18.0, "t": 10.0},
+            fy_mpa=275.0,
+            stress_pattern=StressPattern.MINOR_AXIS_BENDING,
+        )
+
+
+def test_shs_compression() -> None:
+    result = classify_section_from_dict(
+        section_type=SectionType.HFSHS,
+        data={"c_t": 30.0, "t": 10.0},
+        fy_mpa=355.0,
+    )
+
+    assert result.section_class == SectionClass.CLASS_2
+
+
+def test_classify_section_from_dict_chs() -> None:
+    result = classify_section_from_dict(
+        section_type=SectionType.HFCHS,
+        data={"d_t": 55.0},
+        fy_mpa=275.0,
+    )
+
+    assert result.section_class == SectionClass.CLASS_2

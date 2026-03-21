@@ -7,6 +7,7 @@ from typing import Callable, Iterable, Literal, Optional, Sequence, cast
 from pydantic import BaseModel, Field
 
 from steelsnakes.base.checks import SectionClass
+from steelsnakes.base.exceptions import SectionClass4Error
 from steelsnakes.base.sections import BaseSection, SectionType
 
 ElementKind = Literal["internal", "outstand"] # TODO: expose to Public API: INTERNAL COMPRESSION ELEMENT and OUTSTAND FLANGE
@@ -51,6 +52,22 @@ ANGLE_SECTION_TYPES = (
     SectionType.L_EQUAL_B2B,
     SectionType.L_UNEQUAL_B2B,
 )
+RECTANGULAR_HOLLOW_SECTION_TYPES = (
+    SectionType.HFRHS,
+    SectionType.CFRHS,
+)
+SQUARE_HOLLOW_SECTION_TYPES = (
+    SectionType.HFSHS,
+    SectionType.CFSHS,
+)
+ROUND_HOLLOW_SECTION_TYPES = (
+    SectionType.HFCHS,
+    SectionType.CFCHS,
+)
+ELLIPTICAL_HOLLOW_SECTION_TYPES = (
+    SectionType.HFEHS,
+)
+HOLLOW_INTERNAL_SECTION_TYPES = RECTANGULAR_HOLLOW_SECTION_TYPES + SQUARE_HOLLOW_SECTION_TYPES
 
 
 class ElementInput(BaseModel):
@@ -166,10 +183,42 @@ def angle_section_elements(leg_1_mm: float, leg_2_mm: float, t_mm: float) -> lis
     )
 
 
+def rectangular_hollow_section_elements(
+    cw_t: float,
+    cf_t: float,
+    t_mm: float,
+) -> list[ElementInput]:
+    """Build classification elements for rectangular hollow sections from stored c/t ratios."""
+
+    return _build_elements(
+        [
+            ("web_wall", "internal", cw_t * t_mm, t_mm),
+            ("flange_wall", "internal", cf_t * t_mm, t_mm),
+        ]
+    )
+
+
+def square_hollow_section_elements(c_t: float, t_mm: float) -> list[ElementInput]:
+    """Build classification elements for square hollow sections from the stored c/t ratio."""
+
+    return _build_elements(
+        [
+            ("web_wall", "internal", c_t * t_mm, t_mm),
+            ("flange_wall", "internal", c_t * t_mm, t_mm),
+        ]
+    )
+
+
 def _epsilon(fy_mpa: float) -> float:
     if fy_mpa <= 0.0:
         raise ValueError("fy_mpa must be positive.")
     return math.sqrt(235.0 / fy_mpa)
+
+
+def _epsilon_squared(fy_mpa: float) -> float:
+    if fy_mpa <= 0.0:
+        raise ValueError("fy_mpa must be positive.")
+    return 235.0 / fy_mpa
 
 
 def _compression_limits(kind: ElementKind, epsilon: float) -> tuple[float, float, float]:
@@ -346,6 +395,65 @@ def classify_elements(elements: Sequence[ElementInput], fy_mpa: float) -> Classi
     )
 
 
+def classify_circular_hollow(
+    d_t: float,
+    fy_mpa: float,
+    *,
+    class4_reference: str = "EN 1993-1-6",
+) -> ClassificationResult:
+    """Classify a circular hollow section per EN 1993-1-1 Table 5.2 Sheet 3.
+
+    The CHS rule is load-independent and uses epsilon squared = 235 / fy.
+    """
+
+    if d_t <= 0.0:
+        raise ValueError("d_t must be positive.")
+
+    eps2 = _epsilon_squared(fy_mpa)
+    lim1 = 50.0 * eps2
+    lim2 = 70.0 * eps2
+    lim3 = 90.0 * eps2
+
+    if d_t <= lim1:
+        section_class = SectionClass.CLASS_1
+    elif d_t <= lim2:
+        section_class = SectionClass.CLASS_2
+    elif d_t <= lim3:
+        section_class = SectionClass.CLASS_3
+    else:
+        raise SectionClass4Error(
+            f"CHS d/t={d_t:.1f} exceeds 90e^2={lim3:.2f}. "
+            f"Class 4 CHS - refer to {class4_reference} for effective section properties."
+        )
+
+    element = ElementClassification(
+        name="wall",
+        kind="internal",
+        stress=ElementStressCase.COMPRESSION,
+        c_mm=d_t,
+        t_mm=1.0,
+        c_over_t=d_t,
+        class_1_limit=lim1,
+        class_2_limit=lim2,
+        class_3_limit=lim3,
+        section_class=section_class,
+        metadata={
+            "table": "EN 1993-1-1 Table 5.2",
+            "table_sheet": "sheet_3",
+            "table_case": "circular_hollow_section",
+            "stress_case": "bending_and_or_compression",
+            "epsilon_squared": eps2,
+        },
+    )
+    return ClassificationResult(
+        epsilon=math.sqrt(eps2),
+        fy_mpa=fy_mpa,
+        elements=[element],
+        section_class=section_class,
+        governing_elements=["wall"],
+    )
+
+
 def register_section_adapter(section_type: SectionType, adapter: SectionElementAdapter) -> None:
     """Register a section-type adapter that extracts classification elements."""
 
@@ -377,7 +485,11 @@ def _apply_stress_pattern(
         return list(elements)
 
     if stress_pattern == StressPattern.MAJOR_AXIS_BENDING:
-        if section_type not in I_SECTION_TYPES and section_type not in CHANNEL_SECTION_TYPES:
+        if (
+            section_type not in I_SECTION_TYPES
+            and section_type not in CHANNEL_SECTION_TYPES
+            and section_type not in HOLLOW_INTERNAL_SECTION_TYPES
+        ):
             raise NotImplementedError(
                 f"Stress pattern '{stress_pattern.value}' is not implemented for section type '{section_type.value}'. "
                 "Use custom_elements for explicit control."
@@ -385,17 +497,26 @@ def _apply_stress_pattern(
 
         updated: list[ElementInput] = []
         for element in elements:
-            if element.name == "web" and element.kind == "internal":
+            if element.name in {"web", "web_wall"} and element.kind == "internal":
                 updated.append(element.model_copy(update={"stress": ElementStressCase.BENDING, "alpha": None, "psi": None}))
             else:
                 updated.append(element.model_copy(update={"stress": ElementStressCase.COMPRESSION, "alpha": None, "psi": None}))
         return updated
 
     if stress_pattern == StressPattern.MINOR_AXIS_BENDING:
-        raise NotImplementedError(
-            f"Stress pattern '{stress_pattern.value}' is not implemented for section type '{section_type.value}'. "
-            "Use custom_elements for explicit control."
-        )
+        if section_type not in HOLLOW_INTERNAL_SECTION_TYPES:
+            raise NotImplementedError(
+                f"Stress pattern '{stress_pattern.value}' is not implemented for section type '{section_type.value}'. "
+                "Use custom_elements for explicit control."
+            )
+
+        updated = []
+        for element in elements:
+            if element.name == "flange_wall" and element.kind == "internal":
+                updated.append(element.model_copy(update={"stress": ElementStressCase.BENDING, "alpha": None, "psi": None}))
+            else:
+                updated.append(element.model_copy(update={"stress": ElementStressCase.COMPRESSION, "alpha": None, "psi": None}))
+        return updated
 
     if stress_pattern == StressPattern.COMBINED:
         raise NotImplementedError(
@@ -404,6 +525,87 @@ def _apply_stress_pattern(
         )
 
     raise NotImplementedError(f"Unsupported stress pattern '{stress_pattern.value}'.")
+
+
+def _class4_reference_for_section_type(section_type: SectionType) -> str | None:
+    if section_type in RECTANGULAR_HOLLOW_SECTION_TYPES or section_type in SQUARE_HOLLOW_SECTION_TYPES:
+        if section_type in (SectionType.CFRHS, SectionType.CFSHS):
+            return "EN 1993-1-3"
+        return "EN 1993-1-5"
+    if section_type == SectionType.CFCHS:
+        return "EN 1993-1-3"
+    if section_type == SectionType.HFCHS:
+        return "EN 1993-1-6"
+    return None
+
+
+def _raise_for_hollow_class4(section_type: SectionType, result: ClassificationResult) -> None:
+    if result.section_class != SectionClass.CLASS_4:
+        return
+
+    reference = _class4_reference_for_section_type(section_type)
+    if reference is None:
+        return
+
+    raise SectionClass4Error(
+        f"Class 4 {section_type.value} - effective section properties per {reference}, not implemented."
+    )
+
+
+def _float_value(data: dict[str, float | str | bool], key: str) -> float:
+    value = data.get(key)
+    if value is None:
+        raise ValueError(f"Missing required key '{key}'.")
+    return float(value)
+
+
+def _optional_float_value(data: dict[str, float | str | bool], key: str) -> float | None:
+    value = data.get(key)
+    if value is None:
+        return None
+    return float(value)
+
+
+def _rectangular_hollow_elements_from_dict(data: dict[str, float | str | bool]) -> list[ElementInput]:
+    t = _float_value(data, "t")
+    cw_t = _optional_float_value(data, "cw_t")
+    cf_t = _optional_float_value(data, "cf_t")
+    if cw_t is None:
+        h = _optional_float_value(data, "h")
+        if h is None:
+            raise ValueError("Missing required key 'cw_t'.")
+        cw_t = (h - 3.0 * t) / t
+    if cf_t is None:
+        b = _optional_float_value(data, "b")
+        if b is None:
+            raise ValueError("Missing required key 'cf_t'.")
+        cf_t = (b - 3.0 * t) / t
+    return rectangular_hollow_section_elements(cw_t=cw_t, cf_t=cf_t, t_mm=t)
+
+
+def _square_hollow_elements_from_dict(data: dict[str, float | str | bool]) -> list[ElementInput]:
+    t = _float_value(data, "t")
+    c_t = _optional_float_value(data, "c_t")
+    if c_t is None:
+        h = _optional_float_value(data, "h")
+        if h is None:
+            b = _optional_float_value(data, "b")
+            if b is None:
+                raise ValueError("Missing required key 'c_t'.")
+            h = b
+        c_t = (h - 3.0 * t) / t
+    return square_hollow_section_elements(c_t=c_t, t_mm=t)
+
+
+def _d_t_from_dict(data: dict[str, float | str | bool]) -> float:
+    d_t = _optional_float_value(data, "d_t")
+    if d_t is not None:
+        return d_t
+    d = _optional_float_value(data, "d")
+    t = _optional_float_value(data, "t")
+    if d is None or t is None:
+        raise ValueError("Missing required key 'd_t'.")
+    return d / t
 
 
 def classify_section(
@@ -429,6 +631,14 @@ def classify_section(
         raise ValueError("Provide either 'section' or 'custom_elements'.")
 
     pattern = _normalize_stress_pattern(stress_pattern)
+    section_type = section.get_section_type()
+
+    if section_type in ROUND_HOLLOW_SECTION_TYPES or section_type in ELLIPTICAL_HOLLOW_SECTION_TYPES:
+        classifier = getattr(section, "classify", None)
+        if callable(classifier):
+            typed_classifier = cast(Callable[[float], ClassificationResult], classifier)
+            return typed_classifier(fy_mpa)
+
     elements = _apply_stress_pattern(_get_section_elements(section), section.get_section_type(), pattern)
     if not elements:
         raise ValueError(
@@ -436,7 +646,9 @@ def classify_section(
             "Use custom_elements for explicit control."
         )
 
-    return classify_elements(elements, fy_mpa)
+    result = classify_elements(elements, fy_mpa)
+    _raise_for_hollow_class4(section_type, result)
+    return result
 
 
 def classify_section_from_dict(
@@ -450,7 +662,10 @@ def classify_section_from_dict(
     `stress_pattern` accepts the same string or enum values as
     `classify_section()`.
     """
-    pattern = _normalize_stress_pattern(stress_pattern)
+    if "stress_case" in data:
+        pattern = _normalize_stress_pattern(str(data["stress_case"]))
+    else:
+        pattern = _normalize_stress_pattern(stress_pattern)
 
     if section_type in I_SECTION_TYPES:
         d = float(data.get("d", 0.0) or 0.0)
@@ -478,6 +693,32 @@ def classify_section_from_dict(
         h = float(data.get("h", 0.0) or 0.0)
         b = float(data.get("b", h) or 0.0)
         return classify_elements(angle_section_elements(leg_1_mm=h, leg_2_mm=b, t_mm=t), fy_mpa)
+
+    if section_type in RECTANGULAR_HOLLOW_SECTION_TYPES:
+        elements = _rectangular_hollow_elements_from_dict(data)
+        result = classify_elements(_apply_stress_pattern(elements, section_type, pattern), fy_mpa)
+        _raise_for_hollow_class4(section_type, result)
+        return result
+
+    if section_type in SQUARE_HOLLOW_SECTION_TYPES:
+        elements = _square_hollow_elements_from_dict(data)
+        result = classify_elements(_apply_stress_pattern(elements, section_type, pattern), fy_mpa)
+        _raise_for_hollow_class4(section_type, result)
+        return result
+
+    if section_type in ROUND_HOLLOW_SECTION_TYPES:
+        d_t = _d_t_from_dict(data)
+        return classify_circular_hollow(
+            d_t=d_t,
+            fy_mpa=fy_mpa,
+            class4_reference=_class4_reference_for_section_type(section_type) or "EN 1993-1-6",
+        )
+
+    if section_type in ELLIPTICAL_HOLLOW_SECTION_TYPES:
+        raise NotImplementedError(
+            "HFEHS classification is not covered by EN 1993-1-1 Table 5.2. "
+            "No EC3 Part 1.1 rule exists for elliptical hollow sections."
+        )
 
     raise NotImplementedError(
         f"No dictionary adapter is registered for section type '{section_type.value}'. "
