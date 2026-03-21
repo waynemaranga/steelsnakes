@@ -1,7 +1,8 @@
 from dataclasses import dataclass, asdict
-from typing import Any, Optional, cast
+from typing import Any, cast
+
 from steelsnakes.base import BaseSection, SectionType
-from steelsnakes.US.factory import USSectionFactory, get_US_factory
+from steelsnakes.US.factory import get_US_factory
 
 
 @dataclass
@@ -25,25 +26,39 @@ class SteelPipe(BaseSection):
     ry: float = 0.0
     J: float = 0.0
 
+    def classification_elements(self) -> list[Any]:
+        """Return pipe geometry as generic AISC classification elements."""
+        from steelsnakes.US.checks.classification import round_hss_section_elements
+
+        D_over_t = self.D_t if self.D_t > 0.0 else (self.OD / self.tdes if self.OD > 0.0 and self.tdes > 0.0 else 0.0)
+        return round_hss_section_elements(D_over_t=D_over_t)
+
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
-        return asdict(self) # SAFE: applies recursively to field values that are dataclass instances.
+        return asdict(self)
+
 
 @dataclass
 class Pipe(SteelPipe):
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.PIPE
-    
+
+
 def PIPE(designation: str) -> Pipe:
     return cast(Pipe, get_US_factory().create_section(designation, SectionType.PIPE))
-    
+
 
 if __name__ == "__main__":
-    # Example usage
+    from steelsnakes.US.checks.classification import ClassificationContext, classify_section
+
     pipe = PIPE("Pipe24STD")
-    if pipe:
-        print(f"Successfully created pipe: {pipe.designation}")
-        print(pipe.get_properties())
-    else:
-        print("pipe not found.")
+    print(pipe.get_properties())
+    print(classify_section(section=pipe, Fy_ksi=35.0).model_dump())
+    print(
+        classify_section(
+            section=pipe,
+            Fy_ksi=35.0,
+            classification_context=ClassificationContext.FLEXURE_MAJOR_AXIS,
+        ).model_dump()
+    )
