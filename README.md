@@ -21,7 +21,7 @@
   </p>
 </div>
 
-A python library for structural steel: section properties, classification and member design checks, plus a
+A Python Library for Structural Steel: section properties, classification and member design checks, plus a
 finite-element section-analysis engine (built on [sectionproperties](https://sectionproperties.readthedocs.io)).
 Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US (imperial and 🇺🇸 US_Metric in SI units), with member design checks to
 AISC 360-22 (Chapters C-H, LRFD), EN 1993-1-1 (Sections 6 and 7, ULS and SLS) and, on UK sections, the legacy

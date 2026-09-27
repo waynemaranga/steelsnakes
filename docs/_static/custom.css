@@ -1,0 +1,53 @@
+/* Custom styles for steelsnakes documentation (Shibuya theme) */
+
+/* Fonts: Geist (text, headings), Geist Mono (code); variable, 100-900 */
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/Geist/Geist-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("fonts/Geist/Geist-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("fonts/Geist_Mono/GeistMono-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("fonts/Geist_Mono/GeistMono-Italic-VariableFont_wght.ttf") format("truetype");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
+
+:root {
+  --sy-f-heading: "Geist", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-text: "Geist", var(--sy-f-sys), var(--sy-f-cjk), sans-serif;
+  --sy-f-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+/* Colours: accent_color in conf.py sets the palette for links, inline code, tables and highlights. */
+/* Everything else is a --sy-c-* variable; set it on html.light / html.dark (not :root) so it beats the theme's own. */
+html.light {
+  --sy-c-heading: #37474f;
+  --sy-c-bold: #263238;
+}
+
+html.dark {
+  --sy-c-heading: #cfd8dc;
+  --sy-c-background: #102027;
+  --sy-c-background-dropback: #102027cc;
+}

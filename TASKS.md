@@ -218,20 +218,20 @@
  - [ ]`src/steelsnakes/IN/__init__.py:3` align sections with code even without data.
  - [ ]`src/steelsnakes/IN/__init__.py:24` cross-reference equal/unequal angles with Indian standards.
  - [ ]`src/steelsnakes/IN/__init__.py:26` distinguish database naming vs code direction.
- - [ ]`src/steelsnakes/IN/checks/Tables.md:5` generate JSON/lookups from tables.
- - [ ]`src/steelsnakes/IN/checks/Tables.md:6` double-check table values with code.
+ - [x]`src/steelsnakes/IN/checks/Tables.md:5` generate JSON/lookups from tables. _done: Tables 11, 15 and 16 are `COMPRESSION_EFFECTIVE_LENGTHS`, `BEAM_EFFECTIVE_LENGTHS` and `CANTILEVER_EFFECTIVE_LENGTHS` in `IN/checks/uls.py`_
+ - [x]`src/steelsnakes/IN/checks/Tables.md:6` double-check table values with code. _done: checked against the IS 800:2025 draft; Table 11 rows 2, 5 and 6 and Table 15 row iii were wrong_
  - [ ]`src/steelsnakes/IN/sections/angles.py:16` validate toe radius/data.
  - [ ]`src/steelsnakes/IN/sections/angles.py:17` validate flange slope data.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:17` add clause 7.1.1 references in docs.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:27` implement buckling curves (copy UK/EU).
- - [ ]`src/steelsnakes/IN/checks/__init__.py:28` document effective length notes (TODO).
- - [ ]`src/steelsnakes/IN/checks/__init__.py:59` evaluate shear lag for standard sections.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:61` note when to check LTB resistance separately.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:77` implement table 15 and enrich docs/examples/fuzzy search.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:78` implement table 16 and clarify UK/BS 5950 influence.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:79` build steelsnakes[extras] FastAPI browser with sqlite/fuzzy search.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:86` make functions section-agnostic for welded vs rolled.
- - [ ]`src/steelsnakes/IN/checks/__init__.py:90` determine shear area formula for angles.
+ - [x]`src/steelsnakes/IN/checks/__init__.py:17` add clause 7.1.1 references in docs. _done: "IS 800 Member Checks" docs page, in the draft's numbering (7 of IS 800:2007 is 14)_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:27` implement buckling curves (copy UK/EU). _done: Tables 7 to 10, `stress_reduction_factor()` and `design_compressive_stress()`, which reproduce Tables 8 and 9_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:28` document effective length notes (TODO). _done: `effective_length()` (Table 11) and `frame_effective_length_factor()` (Annex D)_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:59` evaluate shear lag for standard sections. _done: `shear_lag_negligible()` (15.2.1.5), and β of 13.3.3 in `check_tension()`_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:61` note when to check LTB resistance separately. _done: `check_lateral_torsional_buckling()` applies 15.2.2 a) to c)_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:77` implement table 15 and enrich docs/examples/fuzzy search. _done: `beam_effective_length()`, with worked examples on the docs page; the search is the :79 item_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:78` implement table 16 and clarify UK/BS 5950 influence. _done: `cantilever_effective_length()`; the draft's Tables 15 and 16 keep the BS 5950 values, its buckling and LTB rules are EN 1993-1-1:2022_
+ - [ ]`src/steelsnakes/IN/checks/__init__.py:79` build steelsnakes[extras] FastAPI browser with sqlite/fuzzy search. _(the comment went with the IS 800:2025 rewrite of `IN/checks/uls.py`; still open, see the `ui` item in TODO.md)_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:86` make functions section-agnostic for welded vs rolled. _done: every check takes a section or `section_type` with `properties`, and `welded=`_
+ - [x]`src/steelsnakes/IN/checks/__init__.py:90` determine shear area formula for angles. _done: the draft gives none (15.4.1.1); `check_shear()` takes `Av_cm2`_
  - [ ]`src/steelsnakes/IN/sections/beams.py:12` rename `h` to `D` per IS808.
  - [ ]`src/steelsnakes/IN/sections/beams.py:18` verify toe radius data.
  - [ ]`src/steelsnakes/IN/sections/beams.py:20` fill missing `I_yy`.

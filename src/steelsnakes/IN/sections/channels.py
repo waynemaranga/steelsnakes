@@ -1,7 +1,7 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from steelsnakes.base import BaseSection, SectionType
-from typing import Optional
+from typing import Any, Optional
 from pathlib import Path
 
 @dataclass
@@ -29,6 +29,10 @@ class Channel(BaseSection):
 
     I_t: float = 0.0 # Torsional constant (x10⁴ mm⁴)
     I_w: float = 0.0 # Warping constant (x10⁶ mm⁶)
+
+    def get_properties(self) -> dict[str, Any]:
+        """Return all section properties as a dictionary."""
+        return asdict(self)
 
 
 @dataclass
