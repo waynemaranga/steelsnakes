@@ -98,6 +98,9 @@ markdown_extensions:
   pymdownx.inlinehilite:
   pymdownx.tabbed:
     alternate_style: true
+  pymdownx.blocks.admonition:
+    types:
+      - card
   pymdownx.blocks.tab:
     combine_header_slug: true
     separator: ___
