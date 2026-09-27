@@ -6,6 +6,9 @@
 # pyright: reportReturnType=false
 # pyright: reportCallIssue=false
 
+# NOTE: legacy prototype; not imported anywhere. Superseded by the chapter modules tension.py (D), compression.py (E),
+# flexure.py (F), shear.py (G), combined.py (H) and stability.py (C, Appendices 7 and 8).
+
 # D: Tension - tensile yielding in gross section and tensile rupture in net section
 # E: Compression - flexural buckling, torsional buckling, flexural-torsional buckling
 # F: Flexure -
@@ -64,20 +67,20 @@ def design_yielding_tensile_strength(Fy: float, Ag: float) -> Scalar | float:
     return round(Pn * phi_t, ndigits=4)
 
 # eq. D2-2: for tensile rupture in net section
-# Pn = 0.75 * Fu * An, and phi_t = 0.75
+# Pn = Fu * Ae, and phi_t = 0.75
 # where: Ae: effective net area, Ag: gross area, Fy: specified minimum yield stress, Fu: specified minimum tensile strength
 
-def design_rupture_tensile_strength(Fu: float, An: float) -> Scalar | float:
+def design_rupture_tensile_strength(Fu: float, Ae: float) -> Scalar | float:
     """ACI 360-22 Section D2-2: Design tensile strength for tensile rupture in net section.
-    
+
     Args:
         Fu: Specified minimum tensile strength (kpsi) # FIXME: double check
-        An: Net area (in²)
+        Ae: Effective net area (in²), Ae = An*U per D3-1
 
     Returns:
         phi_t_Pn: Design tensile strength for rupture in net section (kips) # FIXME: double check
     """
-    Pn = Fu * An
+    Pn = Fu * Ae
     phi_t = 0.75
     return round(Pn * phi_t, ndigits=4)
 
@@ -100,7 +103,7 @@ def effective_net_area(U: float, An: float) -> Scalar | float:
     return round(Ae, ndigits=4)
 
 # D4. Built-up Members
-# [NO PLAN TO IMPLEMENT BUILT-UP MEMBERS IN ANY CODE] # FIXME: change of plans I guess 😁
+# [NO PLAN TO IMPLEMENT BUILT-UP MEMBERS IN ANY CODE] # FIXME: change of plans I guess 😁 IMPLEMENT!!
 
 # D5. Pin-Connected Members: lowest value of phi_t_Pn per tensile rupture, shear rupture, bearing and yielding
 # D5.1(a): for tensile rupture on net effective area
@@ -249,7 +252,9 @@ def flexural_torsional_buckling_stress(**kwargs) -> Scalar | float:
             Lc_z = kwargs.get("Lc_z")
             G = kwargs.get("G") # Shear modulus; default AISC 360-22 value of 11200 ksi
             J = kwargs.get("J") # Torsional constant; use section's value # TODO: check section type before using this
-            Fe = (np.pi ** 2) * E*Cw / (Lc_z ** 2) + G*J
+            Ix = kwargs.get("Ix")
+            Iy = kwargs.get("Iy")
+            Fe = ((np.pi ** 2) * E*Cw / (Lc_z ** 2) + G*J) / (Ix + Iy)
             return round(Fe, ndigits=4)
 
         # -- E4-3: for single-symmetric members twisting about the shear centre where y-axis is axis of symmetry
@@ -257,7 +262,7 @@ def flexural_torsional_buckling_stress(**kwargs) -> Scalar | float:
             Fe_y = kwargs.get("Fe_y")
             Fe_z = kwargs.get("Fe_z")
             H = kwargs.get("H")
-            Fe = ((Fe_y + Fe_z)/2*H) * [1 - np.sqrt(1 - (4*H*Fe_y*Fe_z)/(Fe_y + Fe_z)^2)]
+            Fe = ((Fe_y + Fe_z)/(2*H)) * (1 - np.sqrt(1 - (4*H*Fe_y*Fe_z)/(Fe_y + Fe_z)**2))
             return round(Fe, ndigits=4)
 
         case "E4-4":
@@ -268,11 +273,11 @@ def flexural_torsional_buckling_stress(**kwargs) -> Scalar | float:
 
 def EQ_4_2(case = "E4-2", **kwargs) -> Scalar | float:
     """ACI 360-22 Equation E4-2: Flexural-torsional buckling stress of compression members. Alias for flexural_torsional_buckling_stress().""" # TODO: put link to actual function in docstring.
-    return flexural_torsional_buckling_stress(**kwargs)
+    return flexural_torsional_buckling_stress(case=case, **kwargs)
 
 def EQ_4_3(case = "E4-3", **kwargs) -> Scalar | float:
     """ACI 360-22 Equation E4-3: Flexural-torsional buckling stress of compression members. Alias for flexural_torsional_buckling_stress().""" # TODO: put link to actual function in docstring.
-    return flexural_torsional_buckling_stress(**kwargs)
+    return flexural_torsional_buckling_stress(case=case, **kwargs)
 
 # TODO: have more aliases especially with nested equations or equations with multiple cases/variations.
 
@@ -284,8 +289,8 @@ def EQ_4_3(case = "E4-3", **kwargs) -> Scalar | float:
 # rx, ry: radii of gyration; x0, y0: coordinates of shear centre w.r.t centroid
 # r0_bar: polar radius of gyration about shear centre;
 
-# eq. E4-5: Fe_x = (pi^2 * E) / (Lc_x * rx)^2
-# eq. E4-6: Fe_y = (pi^2 * E) / (Lc_y * ry)^2
+# eq. E4-5: Fe_x = (pi^2 * E) / (Lc_x / rx)^2
+# eq. E4-6: Fe_y = (pi^2 * E) / (Lc_y / ry)^2
 
 def calc_Fe_x(Lc_x: float, E: float, rx: float) -> Scalar | float:
     """ACI 360-22 Equation E4-5: Elastic buckling stress about x-axis.
@@ -295,7 +300,7 @@ def calc_Fe_x(Lc_x: float, E: float, rx: float) -> Scalar | float:
         E: Modulus of elasticity (ksi)
         rx: Radius of gyration about x-axis (in)
     """
-    return (np.pi ** 2) * E / (Lc_x * rx) ** 2
+    return (np.pi ** 2) * E / (Lc_x / rx) ** 2
 
 
 def calc_Fe_y(Lc_y: float, E: float, ry: float) -> Scalar | float:
@@ -306,7 +311,7 @@ def calc_Fe_y(Lc_y: float, E: float, ry: float) -> Scalar | float:
         E: Modulus of elasticity (ksi)
         ry: Radius of gyration about y-axis (in)
     """
-    return (np.pi ** 2) * E / (Lc_y * ry) ** 2
+    return (np.pi ** 2) * E / (Lc_y / ry) ** 2
 
 def EQ_4_5(Lc_x: float, E: float, rx: float) -> Scalar | float:
     """ACI 360-22 Equation E4-5: Elastic buckling stress about x-axis. Alias for calc_Fe_x().""" # TODO: put link to actual function in docstring.
@@ -316,7 +321,7 @@ def EQ_4_6(Lc_y: float, E: float, ry: float) -> Scalar | float:
     """ACI 360-22 Equation E4-6: Elastic buckling stress about y-axis. Alias for calc_Fe_y().""" # TODO: put link to actual function in docstring.
     return calc_Fe_y(Lc_y, E, ry)
 
-# eq. E4-7: Fe_z = [(pi^2 * E*Cw)/Lc_z^2 + GJ] + 1/(Ag * rbar_0^2)
+# eq. E4-7: Fe_z = [(pi^2 * E*Cw)/Lc_z^2 + GJ] * 1/(Ag * rbar_0^2)
 
 def calc_Fe_z(Lc_z: float, E: float, Cw: float, G: float, J: float, Ag: float, r0_bar: float) -> Scalar | float:
     """ACI 360-22 Equation E4-7: Elastic buckling stress about z-axis.
@@ -408,15 +413,14 @@ def calc_effective_width_be(lambda_value: float, lambda_r: float, Fy: float, Fn:
     """
     #// llr = lambda_value / lambda_r # FIXME: find better notation; python uses lambda keywork and Lambda is too close to it; implies uppercase lambda as
     conditional = lambda_r * np.sqrt(Fy/Fn)
-    match lambda_value <= conditional:
+    b = kwargs.get("b")
+    match bool(lambda_value <= conditional): # numpy bools do not match the True/False patterns
         case True:
-            b = kwargs.get("b")
             return b
         case False:
             c1 = kwargs.get("c1")
             Fel = kwargs.get("Fel")
-            Fcr = kwargs.get("Fcr")
-            return b * (1 - c1 * (np.sqrt(Fel / Fcr))) * np.sqrt(Fel / Fcr)  # pyright: ignore[reportUnboundVariable] # FIXME: unbound variable b; ...
+            return b * (1 - c1 * (np.sqrt(Fel / Fn))) * np.sqrt(Fel / Fn) # AISC 360-22 uses Fn (was Fcr in 360-16)
         case _:
             raise NotImplementedError("Function is still rudimentary & untested.")
 
@@ -434,7 +438,7 @@ def calc_c2(c1: float) -> Scalar | float:
 # E7.2: Round HSS
 # Determine effective area Ae
 # eq E7.6: when D/t <= 0.11*E/Fy then Ae = Ag
-# eq E7.7: when 0.11*E/Fy < D/t < 0.45*E/Fy then Ae = [ 0.038E/Fy(D/t) + 2/3]*Ag; D: outside diameter, t: thickness
+# eq E7.7: when 0.11*E/Fy < D/t < 0.45*E/Fy then Ae = [ 0.038E/(Fy(D/t)) + 2/3]*Ag; D: outside diameter, t: thickness
 
 def Ae_for_round_HSS(D: float, t: float, Fy: float, Ag: float, E: float) -> Scalar | float:
     """ACI 360-22 Equation E7-6 and E7-7: Effective area for round HSS.
@@ -449,7 +453,7 @@ def Ae_for_round_HSS(D: float, t: float, Fy: float, Ag: float, E: float) -> Scal
     if D/t <= 0.11*E/Fy:
         return Ag
     elif 0.11*E/Fy < D/t < 0.45*E/Fy:
-        return (0.038*E/Fy*D/t + 2/3)*Ag
+        return (0.038*E/(Fy*(D/t)) + 2/3)*Ag
     else:
         raise NotImplementedError("Function is still rudimentary & untested.")
 

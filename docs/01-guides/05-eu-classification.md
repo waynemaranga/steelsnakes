@@ -24,15 +24,18 @@ The main public entry points are:
 - `classify_internal_part()`
 - `classify_outstand_flange()`
 - `ElementInput`
-- `ElementStressCase`
+- `ElementStressDistribution`
 - `StressPattern`
 
 These are exported from `steelsnakes.EU.checks` and also from `steelsnakes.EU`.
 
-`stress_pattern` accepts either:
+`stress_pattern` accepts any of:
 
-- a simple string such as `"compression"` or `"bending-major-axis"`
-- a `StressPattern` enum value
+- a simple string such as `"compression"`, `"bending-major-axis"` or `"bending-minor-axis"`
+- a `StressPattern` enum value: `COMPRESSION`, `MAJOR_AXIS_BENDING`, `MINOR_AXIS_BENDING` or `COMBINED`
+- an `ElementStressDistribution` value, which applies that stress to every element
+
+For hollow sections, the axis decides which walls act as webs (in bending) and which act as flanges (in compression).
 
 ## Common Usage
 
@@ -88,7 +91,7 @@ For combined bending and compression, the lean API is explicit:
 ```python
 from steelsnakes.EU import (
     ElementInput,
-    ElementStressCase,
+    ElementStressDistribution,
     classify_section,
 )
 
@@ -100,7 +103,7 @@ result = classify_section(
             kind="internal",
             c_mm=360.4,
             t_mm=7.7,
-            stress=ElementStressCase.COMBINED,
+            stress=ElementStressDistribution.COMBINED,
             alpha=0.70,
         ),
         ElementInput(
@@ -108,7 +111,7 @@ result = classify_section(
             kind="outstand",
             c_mm=74.8,
             t_mm=10.9,
-            stress=ElementStressCase.COMPRESSION,
+            stress=ElementStressDistribution.COMPRESSION,
         ),
     ],
 )
@@ -119,6 +122,38 @@ print(result.section_class)
 Use `alpha` for the Class 1 / 2 combined internal check.
 
 Add `psi` when the Class 3 internal limit is needed.
+
+### Outstands In Bending And Compression (Table 5.2 Sheet 2/3)
+
+For outstand flanges, set `tip` to say whether the free edge is in compression or tension:
+
+| | Class 1 | Class 2 | Class 3 |
+|---|---|---|---|
+| tip in compression | \(9\varepsilon/\alpha\) | \(10\varepsilon/\alpha\) | \(21\varepsilon\sqrt{k_\sigma}\) |
+| tip in tension | \(9\varepsilon/(\alpha\sqrt{\alpha})\) | \(10\varepsilon/(\alpha\sqrt{\alpha})\) | \(21\varepsilon\sqrt{k_\sigma}\) |
+
+\(k_\sigma\) is taken from EN 1993-1-5 Table 4.2 using `psi` (`outstand_buckling_factor(psi, tip)`). Without `psi`, the
+Class 3 limit falls back to \(14\varepsilon\). Without `alpha`, the uniform-compression limits are used, which is
+conservative.
+
+```python
+from steelsnakes.EU import ElementInput, ElementStressDistribution, classify_element
+
+flange = ElementInput(
+    name="flange", kind="outstand", c_mm=80.0, t_mm=5.0,
+    stress=ElementStressDistribution.COMBINED, alpha=0.6, psi=-0.5, tip="tension",
+)
+print(classify_element(flange, fy_mpa=355.0).section_class)  # CLASS_2; k_sigma = 8.475
+```
+
+### Clauses 5.5.2(9) And 5.5.2(11)
+
+- **5.5.2(9).** Set `sigma_com_ed_mpa` on an element to its maximum design compressive stress. A Class 4 element is
+  then re-checked against the Class 3 limit with \(\varepsilon\) increased by
+  \(\sqrt{(f_y/\gamma_{M0})/\sigma_{com,Ed}}\). The result carries a note that this does not apply to member buckling
+  checks (5.5.2(10)).
+- **5.5.2(11).** When a Class 3 web governs and the flanges are Class 1 or 2, `result.notes` records that the section
+  may be treated as Class 2 with an effective web (6.2.2.4).
 
 ## FastAPI / Pydantic Friendly Inputs
 
@@ -137,7 +172,7 @@ payload = ElementInput(
     kind="internal",
     c_mm=360.4,
     t_mm=7.7,
-    stress=ElementStressCase.COMBINED,
+    stress=ElementStressDistribution.COMBINED,
     alpha=0.70,
 )
 

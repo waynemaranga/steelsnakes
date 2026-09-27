@@ -145,6 +145,6 @@ if __name__ == "__main__":
     print(L_EQUAL("L254X254X19").get_properties())
     print(L_UNEQUAL("L203X152X25.4").get_properties())
     print(L2L_EQUAL("2L254X254X19X19").get_properties())
-    print(L2L_LLBB("2L203X152X25.4X19LLBB").get_properties()) # FIXME: Suggestions for LLBB include SLBB sections....
+    print(L2L_LLBB("2L203X152X25.4X19LLBB").get_properties())
     print(L2L_SLBB("2L203X152X25.4X19SLBB").get_properties())
 

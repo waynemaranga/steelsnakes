@@ -39,7 +39,7 @@ if __name__ == "__main__":
     factory = get_US_Metric_factory()
     
     try:
-        test = factory.create_section("W310X39", SectionType.W) # FIXME: implement US Metric sections
+        test = factory.create_section("W310X38.7", SectionType.W)
         print(test.get_properties())
     except SectionNotFoundError as e:
         logger.error(f"{e}")

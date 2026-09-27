@@ -6,7 +6,6 @@ from steelsnakes.base.checks import SectionClass
 from steelsnakes.base.exceptions import SectionClass4Error
 from steelsnakes.base.sections import SectionType
 from steelsnakes.UK import (
-    StressPattern as PublicStressPattern,
     HFCHS,
     HFEHS,
     HFRHS,
@@ -15,8 +14,7 @@ from steelsnakes.UK import (
     classify_section as public_classify_section,
 )
 from steelsnakes.UK.checks.classification import (
-    ElementStressCase,
-    StressPattern,
+    ElementStressDistribution,
     classify_section,
     classify_section_from_dict,
 )
@@ -40,27 +38,28 @@ def test_classify_section_uk_universal_beam_extracts_web_and_flange() -> None:
     }
 
 
-def test_classify_section_uk_channel_major_axis_bending_sets_web_to_bending() -> None:
+def test_classify_section_uk_channel_bending_sets_all_to_bending() -> None:
     section = ParallelFlangeChannel(designation="TEST-PFC", b=100.0, tw=9.0, tf=16.5, d=237.0)
 
     result = classify_section(
         section=section,
         fy_mpa=355.0,
-        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+        stress_pattern=ElementStressDistribution.BENDING,
     )
 
     stress_cases = {item.name: item.stress for item in result.elements}
-    assert stress_cases["web"] == ElementStressCase.BENDING
-    assert stress_cases["flange"] == ElementStressCase.COMPRESSION
+    assert stress_cases["web"] == ElementStressDistribution.BENDING
+    assert stress_cases["flange"] == ElementStressDistribution.BENDING
 
 
-def test_classify_section_uk_angle_extracts_two_outstand_legs() -> None:
+def test_classify_section_uk_angle_extracts_one_angle_element() -> None:
     section = EqualAngle(designation="100x100x10", hxh="100x100", t=10.0)
 
     result = classify_section(section=section, fy_mpa=355.0)
 
-    assert {item.name for item in result.elements} == {"leg_1", "leg_2"}
-    assert {item.kind for item in result.elements} == {"outstand"}
+    assert [item.name for item in result.elements] == ["angle"]
+    assert {item.kind for item in result.elements} == {"angle"}
+    assert result.section_class in {SectionClass.CLASS_3, SectionClass.CLASS_4}
 
 
 def test_classify_section_from_dict_supports_uk_section_types() -> None:
@@ -73,8 +72,8 @@ def test_classify_section_from_dict_supports_uk_section_types() -> None:
 
     stress_cases = {item.name: item.stress for item in result.elements}
     assert stress_cases == {
-        "web": ElementStressCase.BENDING,
-        "flange": ElementStressCase.COMPRESSION,
+        "web": ElementStressDistribution.BENDING,
+        "flange": ElementStressDistribution.BENDING,
     }
 
 
@@ -84,14 +83,11 @@ def test_public_uk_api_exports_classification_helpers() -> None:
     result = public_classify_section(
         section=section,
         fy_mpa=355.0,
-        stress_pattern=PublicStressPattern.MAJOR_AXIS_BENDING,
+        stress_pattern=ElementStressDistribution.BENDING,
     )
 
     assert {item.name for item in result.elements} == {"web", "flange"}
-    assert {item.stress for item in result.elements} == {
-        ElementStressCase.BENDING,
-        ElementStressCase.COMPRESSION,
-    }
+    assert {item.stress for item in result.elements} == {ElementStressDistribution.BENDING}
 
 
 def test_hfrhs_classify_compression() -> None:
@@ -103,35 +99,51 @@ def test_hfrhs_classify_compression() -> None:
     assert {item.name for item in result.elements} == {"web_wall", "flange_wall"}
 
 
-def test_hfrhs_classify_major_bending() -> None:
+def test_hfrhs_classify_bending() -> None:
     section = HFRHS("50x30x3.2")
 
     result = classify_section(
         section=section,
         fy_mpa=355.0,
-        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+        stress_pattern=ElementStressDistribution.BENDING,
     )
 
     stress_cases = {item.name: item.stress for item in result.elements}
     assert stress_cases == {
-        "web_wall": ElementStressCase.BENDING,
-        "flange_wall": ElementStressCase.COMPRESSION,
+        "web_wall": ElementStressDistribution.BENDING,
+        "flange_wall": ElementStressDistribution.BENDING,
     }
 
 
-def test_hfrhs_classify_minor_bending() -> None:
+def test_hfrhs_classify_minor_bending_alias() -> None:
     section = HFRHS("50x30x3.2")
 
     result = classify_section(
         section=section,
         fy_mpa=355.0,
-        stress_pattern=StressPattern.MINOR_AXIS_BENDING,
+        stress_pattern="bending-minor-axis",
     )
 
     stress_cases = {item.name: item.stress for item in result.elements}
     assert stress_cases == {
-        "web_wall": ElementStressCase.COMPRESSION,
-        "flange_wall": ElementStressCase.BENDING,
+        "web_wall": ElementStressDistribution.COMPRESSION,
+        "flange_wall": ElementStressDistribution.BENDING,
+    }
+
+
+def test_hfrhs_classify_major_bending_alias() -> None:
+    section = HFRHS("50x30x3.2")
+
+    result = classify_section(
+        section=section,
+        fy_mpa=355.0,
+        stress_pattern="bending-major-axis",
+    )
+
+    stress_cases = {item.name: item.stress for item in result.elements}
+    assert stress_cases == {
+        "web_wall": ElementStressDistribution.BENDING,
+        "flange_wall": ElementStressDistribution.COMPRESSION,
     }
 
 
@@ -142,6 +154,32 @@ def test_hfshs_classify() -> None:
 
     assert result.section_class == SectionClass.CLASS_1
     assert {item.name for item in result.elements} == {"web_wall", "flange_wall"}
+
+
+def test_hfshs_axis_aliases_are_equivalent() -> None:
+    section = HFSHS("40x40x3.2")
+
+    major = classify_section(
+        section=section,
+        fy_mpa=355.0,
+        stress_pattern="bending-major-axis",
+    )
+    minor = classify_section(
+        section=section,
+        fy_mpa=355.0,
+        stress_pattern="bending-minor-axis",
+    )
+
+    assert major.section_class == SectionClass.CLASS_1
+    assert minor.section_class == SectionClass.CLASS_1
+    assert {item.stress for item in major.elements} == {
+        ElementStressDistribution.BENDING,
+        ElementStressDistribution.COMPRESSION,
+    }
+    assert {item.stress for item in minor.elements} == {
+        ElementStressDistribution.BENDING,
+        ElementStressDistribution.COMPRESSION,
+    }
 
 
 def test_hfchs_classify() -> None:

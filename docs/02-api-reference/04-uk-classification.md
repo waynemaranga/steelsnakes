@@ -57,7 +57,7 @@ print(result.section_class)
 Use `custom_elements` when you want to control the stress state directly.
 
 ```python
-from steelsnakes.UK import ElementInput, ElementStressCase, classify_section
+from steelsnakes.UK import ElementInput, ElementStressDistribution, classify_section
 
 result = classify_section(
     fy_mpa=355.0,
@@ -67,11 +67,13 @@ result = classify_section(
             kind="internal",
             c_mm=360.4,
             t_mm=7.7,
-            stress=ElementStressCase.COMBINED,
+            stress=ElementStressDistribution.COMBINED,
             alpha=0.70,
+            psi=-0.40,  # needed here: c/t = 46.8 exceeds the Class 2 limit at S355, so the Class 3 limit is checked
         )
     ],
 )
+print(result.section_class)  # SectionClass.CLASS_3
 ```
 
 ## Engineering interpretation
@@ -113,7 +115,7 @@ where “max” means the most restrictive class governs.
 
 ::: steelsnakes.UK.checks.classification.StressPattern
 
-::: steelsnakes.UK.checks.classification.ElementStressCase
+::: steelsnakes.UK.checks.classification.ElementStressDistribution
 
 ::: steelsnakes.UK.checks.classification.ElementInput
 

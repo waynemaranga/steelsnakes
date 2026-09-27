@@ -2,8 +2,9 @@ from steelsnakes.UK.checks.classification import (
     ClassificationResult,
     ElementClassification,
     ElementInput,
-    ElementStressCase,
+    ElementStressDistribution,
     StressPattern,
+    outstand_buckling_factor,
     classify_circular_hollow,
     classify_element,
     classify_elements,
@@ -11,15 +12,15 @@ from steelsnakes.UK.checks.classification import (
     classify_outstand_flange,
     classify_section,
     classify_section_from_dict,
-    register_section_adapter,
 )
 
 __all__: list[str] = [
     "ElementInput",
     "ElementClassification",
     "ClassificationResult",
-    "ElementStressCase",
+    "ElementStressDistribution",
     "StressPattern",
+    "outstand_buckling_factor",
     "classify_circular_hollow",
     "classify_element",
     "classify_internal_part",
@@ -27,5 +28,4 @@ __all__: list[str] = [
     "classify_elements",
     "classify_section",
     "classify_section_from_dict",
-    "register_section_adapter",
 ]

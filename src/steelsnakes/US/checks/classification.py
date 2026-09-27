@@ -919,6 +919,34 @@ def _dict_value(data: dict[str, float | str | bool], *keys: str) -> float:
     return 0.0
 
 
+def _positive_value(data: dict[str, float | str | bool], *keys: str) -> float:
+    """First strictly positive value among `keys`; 0.0 if none. Unlike `_dict_value`, zero-valued (unpopulated) fields are skipped."""
+    for key in keys:
+        value = data.get(key)
+        if isinstance(value, (int, float)) and not isinstance(value, bool) and value > 0.0:
+            return float(value)
+    return 0.0
+
+
+def _section_properties(
+    section: Optional[BaseSection] = None,
+    section_type: Optional[SectionType] = None,
+    properties: Optional[dict[str, float | str | bool]] = None,
+) -> tuple[SectionType, dict[str, float | str | bool]]:
+    """Resolve a section object and/or a plain property dictionary into (section_type, properties).
+
+    `properties` overrides (or supplements) the section's own values e.g J for double angles.
+    """
+    if section is not None:
+        data = dict(section.get_properties()) if hasattr(section, "get_properties") else dict(vars(section))
+        data.update(properties or {})
+        return section.get_section_type(), data
+
+    if section_type is None or properties is None:
+        raise ValueError("Provide either 'section', or both 'section_type' and 'properties'.")
+    return section_type, dict(properties)
+
+
 def classify_section_from_dict(
     section_type: SectionType,
     data: dict[str, float | str | bool],

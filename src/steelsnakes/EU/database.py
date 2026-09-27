@@ -27,6 +27,6 @@ def get_EU_database(data_directory: Optional[Path] = None, use_sqlite: bool = Fa
 
 
 if __name__ == "__main__":
-    db = get_EU_database()
+    db: EUSectionDatabase = get_EU_database()
     print([i.value for i in db.get_supported_types()])
     print(f"Available types: {[t.value for t in db.get_available_section_types()]}")

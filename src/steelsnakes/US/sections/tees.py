@@ -63,6 +63,7 @@ class StandardTee(Tee):
 @dataclass
 class MiscellaneousTee(Tee):
     T_F: str = ""
+    WGi: float = 0.0 # Workable gauge, in. [mm]; only listed for some MT shapes e.g MT2.5X9.45
 
     @classmethod
     def get_section_type(cls) -> SectionType:

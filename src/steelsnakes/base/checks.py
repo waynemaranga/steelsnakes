@@ -12,7 +12,7 @@ class DesignCode(Enum):
     """Global enumeration of all design codes available in steelsnakes."""
     EN_1993 = "EN_1993" # Eurocode 3, Part 1-1: General rules and rules for buildings
     BS_EN_1993_UKNA = "BS_EN_1993_UKNA" # Eurocode 3 with UK National Annex
-    BS_5950_1 = "BS_5950_1" # British Standard: Loads for buildings, Part 1: General load cases
+    BS_5950_1 = "BS_5950_1" # British Standard: Structural use of steelwork in building, Part 1: Code of practice for design, rolled and welded sections
     AISC_360 = "AISC_360" # American Institute of Steel Construction: Specification for Structural Steel Buildings
     IS_800 = "IS_800" # Indian Standard: General Construction in Steel
     AS_4100 = "AS_4100" # Australian Standard: Steel Structures
@@ -22,7 +22,12 @@ class LimitState(Enum):
     """Global enumeration of all limit states available in steelsnakes."""
     # EU/UK
     ULS = "ULS" # Ultimate Limit State # TODO: expound, like US
-    SLS = "SLS" # Serviceability Limit State # TODO: expound, like US
+    SLS = "SLS" # Serviceability Limit State
+    # ... EN 1993-1-1 Section 7, with EN 1990 A1.4
+    VERTICAL_DEFLECTION = "VERTICAL_DEFLECTION" # 7.2.1; EN 1990 Figure A1.1
+    HORIZONTAL_DEFLECTION = "HORIZONTAL_DEFLECTION" # 7.2.2; EN 1990 Figure A1.2
+    VIBRATION = "VIBRATION" # 7.2.3; EN 1990 A1.4.4
+    SERVICEABILITY_STRESS = "SERVICEABILITY_STRESS" # 7.1(4): no plastic redistribution at SLS, EN 1993-2 7.3
 
     # US. Strictly LRFD
     TENSILE_YIELDING = "TENSILE_YIELDING"
@@ -38,6 +43,12 @@ class LimitState(Enum):
     TENSION_FLANGE_YIELDING = "TENSION_FLANGE_YIELDING"
     FLANGE_LOCAL_BUCKLING = "FLANGE_LOCAL_BUCKLING" # FIXME: Since only in metadata, just simplify the limit states, maybe specify for which flange in metadata?
     WEB_LOCAL_BUCKLING = "WEB_LOCAL_BUCKLING" # TODO: edit while editing module
+    LOCAL_BUCKLING = "LOCAL_BUCKLING" # e.g round HSS in flexure (F8), tee stems (F9.4)
+    LEG_LOCAL_BUCKLING = "LEG_LOCAL_BUCKLING" # single angles (F10.3)
+    SHEAR_YIELDING = "SHEAR_YIELDING"
+    SHEAR_RUPTURE = "SHEAR_RUPTURE" # pin-connected members (D5)
+    BEARING = "BEARING" # pin-connected members (D5 -> J7)
+    TORSIONAL_YIELDING = "TORSIONAL_YIELDING" # HSS in torsion (H3)
 
 class SectionClass(Enum):
     # TODO: [TRIVIAL] try, using classification methods/functions, to classify a section in one code and check in other codes. Also, do global classification of all sections in all codes into a one database and find conflicts e.g class 2 in one but class 1 in another.
