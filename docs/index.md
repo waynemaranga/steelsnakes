@@ -12,8 +12,9 @@
 A python package for structural steel design. $steelsnakes$ aims to provide a unified interface for designing steel members and connections for civil & structural engineers using Python. Users can import steel section data from international standards, perform verification checks from prior analysis and more.
 
 <!-- prettier-ignore-start -->
-!!! warning "Work in Progress"
+```{warning} Work in Progress
 $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+```
 <!-- prettier-ignore-end -->
 
 ## Latest Progress (September 26, 2026)
@@ -32,8 +33,9 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - The API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
 <!-- prettier-ignore-start -->
-!!! warning "Note"
+```{warning} Note
     These capabilities are still evolving; metadata gaps, non-unit-aware helpers, and TODOs remain in the source. Double-check the implementation against the codebase whenever you need precise behavior, especially before using it in production.
+```
 <!-- prettier-ignore-end -->
 
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
@@ -52,23 +54,25 @@ See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more infor
 ### Installation
 
 <!-- prettier-ignore-start -->
-/// tab | pip
+::::{tab-set}
+:::{tab-item} pip
+```bash
+pip install steelsnakes
+```
+:::
 
-    :::bash
-    pip install steelsnakes
-///
+:::{tab-item} uv
+```bash
+uv add steelsnakes
+```
+:::
 
-/// tab | uv
-
-    :::bash
-    uv add steelsnakes
-///
-
-/// tab | poetry
-
-    :::bash
-    poetry add steelsnakes
-///
+:::{tab-item} poetry
+```bash
+poetry add steelsnakes
+```
+:::
+::::
 <!-- prettier-ignore-end -->
 
 ## Example
@@ -95,8 +99,9 @@ print(beam_2.A)
 ```
 
 <!-- prettier-ignore-start -->
-!!!warning "Note"
+```{warning} Note
     $steelsnakes$ does not currently implement any units or unit conversion; it is up to the user to ensure that all inputs are in the correct units as required by calculations
+```
 <!-- prettier-ignore-end -->
 
 ## Contributing

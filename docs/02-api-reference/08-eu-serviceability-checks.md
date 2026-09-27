@@ -8,17 +8,19 @@ As with the [EU Member Checks](07-eu-member-checks.md), every check returns a Py
 `utilisation` and a `Reference`. Each result also carries a `limit_state`: `VERTICAL_DEFLECTION`, `HORIZONTAL_DEFLECTION`,
 `VIBRATION` or `SERVICEABILITY_STRESS`.
 
-!!! warning "Units"
+```{warning} Units
     The checks work in N, mm and N/mm². Line loads are in N/mm, which is the same number as kN/m. Deflections are in mm,
     masses per unit length in kg/m and frequencies in Hz.
     Section properties are read from the tables and converted, as in the ULS checks.
+  ```
 
-!!! note "Where the limits come from"
+```{note} Where the limits come from
     EN 1993-1-1 sets no serviceability limits. Clause 7.2 refers to EN 1990 Annex A1.4, and the limits are to be
     specified for each project and agreed with the client, or given by the National Annex.
     The default deflection limits here are the suggested values of the UK NA to BS EN 1993-1-1. The UK NA applies
     them to the deflection under the characteristic combination of the variable actions, without the permanent
     actions. Pass your own span or height ratios where your project or National Annex differs.
+  ```
 
 ## Module map
 
