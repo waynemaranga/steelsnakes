@@ -28,7 +28,9 @@ from steelsnakes.BS import (
     compound_flange_elements,
     design_strength,
     effective_plastic_modulus,
+    effective_plastic_modulus_chs,
     effective_plastic_modulus_i_section,
+    effective_plastic_modulus_rhs,
     element_limits,
     epsilon,
     render_classification,
@@ -327,10 +329,35 @@ def test_effective_plastic_modulus_semi_compact_uc_s355() -> None:
     assert minor.S_eff == pytest.approx(52.6 + (80.1 - 52.6) * flange_factor, rel=1e-4)
 
 
+def test_effective_plastic_modulus_semi_compact_rhs_and_chs() -> None:
+    # 3.5.6.3 RHS 300x200x6.3 S355: flange b/t = (200 - 18.9)/6.3 = 28.75, between 32ε = 28.16 and 40ε = 35.21;
+    # the web d/t = 44.6 is plastic, so the flange factor governs
+    rhs = effective_plastic_modulus(HFRHS("300x200x6.3"), steel_grade="S355")
+    eps = math.sqrt(275.0 / 355.0)
+    flange_factor = (40.0 * eps / (181.1 / 6.3) - 1.0) / (40.0 / 32.0 - 1.0)
+    assert rhs.method == "3.5.6.3: RHS" and rhs.flange_factor == pytest.approx(flange_factor)
+    assert rhs.S_eff == pytest.approx(522.0 + (624.0 - 522.0) * flange_factor)
+    # 3.5.6.4 CHS 219.1x5.0 S355: D/t = 43.82 between 50ε² and 140ε²
+    chs = effective_plastic_modulus(HFCHS("219.1x5.0"), steel_grade="S355")
+    assert chs.S_eff == pytest.approx(176.0 + 1.485 * (math.sqrt(140.0 / 43.82 * 275.0 / 355.0) - 1.0) * (229.0 - 176.0))
+    assert effective_plastic_modulus_chs(S=10.0, Z=8.0, D_t=10.0, py=275.0) == 10.0 # capped at S
+    with pytest.raises(ValueError, match="exceed"):
+        effective_plastic_modulus_rhs(S=1, Z=1, b_t=1, d_t=1, beta_2f=35, beta_3f=30, beta_2w=80, beta_3w=120)
+    with pytest.raises(ValueError, match="positive"):
+        effective_plastic_modulus_chs(S=10.0, Z=8.0, D_t=0.0, py=275.0)
+    # From plain properties, and without a section
+    props = HFRHS("300x200x6.3").get_properties()
+    assert effective_plastic_modulus(section_type=SectionType.HFRHS, properties=props, steel_grade="S355").S_eff == pytest.approx(rhs.S_eff)
+    with pytest.raises(ValueError, match="section_type"):
+        effective_plastic_modulus(properties=props)
+
+
 def test_effective_plastic_modulus_compact_other_and_formula() -> None:
     assert effective_plastic_modulus(UB("457x191x67")).S_eff == 1470.0 # plastic: Seff = S
     rhs = effective_plastic_modulus(HFRHS("200x100x5.0"), steel_grade="S355")
-    assert rhs.S_eff == rhs.Z == 149.0 # 3.5.6.1
+    assert rhs.S_eff == rhs.S == 185.0 # class 1: Seff = S
+    angle = effective_plastic_modulus(L_EQUAL("80x80x8.0"), properties={"W_pl_yy": 22.0})
+    assert angle.S_eff == angle.Z == 12.6 # 3.5.6.1: other cross-sections take Z
     Sx, Sy, web, flange = effective_plastic_modulus_i_section(Sx=100.0, Zx=80.0, Sy=50.0, Zy=30.0, b_T=12.0, d_t=110.0, beta_2f=10.0, beta_3f=15.0, beta_2w=100.0, beta_3w=120.0)
     assert web == pytest.approx(((120 / 110) ** 2 - 1) / ((1.2) ** 2 - 1))
     assert Sx == pytest.approx(80.0 + 20.0 * min(web, flange))

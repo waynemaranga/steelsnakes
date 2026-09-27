@@ -2,6 +2,8 @@
 
 This page documents BS 5950-1:2000 Section 3.5, classification of cross-sections, in `steelsnakes.BS`.
 
+The member checks that build on it are in [BS 5950 Member Checks](09-bs-member-checks.md).
+
 BS 5950 has been withdrawn, but it is still widely used. The module runs on the same UK section objects as the
 Eurocode checks and re-exports their constructors, so both codes can be checked from one place:
 
@@ -24,7 +26,7 @@ print(result.section_class, result.class_name)  # SectionClass.CLASS_1 plastic
 | Table 11: sections other than CHS and RHS | `ElementKind.OUTSTAND_FLANGE_ROLLED` … `ElementKind.TEE_STEM` |
 | Table 12: CHS and RHS | `ElementKind.CHS`, `HF_RHS_*`, `CF_RHS_*` |
 | 3.5.5, Figure 7: stress ratios r1, r2 | `stress_ratios()` |
-| 3.5.6.1, 3.5.6.2: effective plastic modulus | `effective_plastic_modulus()`, `effective_plastic_modulus_i_section()` |
+| 3.5.6: effective plastic modulus | `effective_plastic_modulus()`, `effective_plastic_modulus_i_section()` (3.5.6.2), `effective_plastic_modulus_rhs()` (3.5.6.3), `effective_plastic_modulus_chs()` (3.5.6.4) |
 | Calculation sheet rows | `render_classification()` → `base.renders.CheckBlock` |
 
 ## Stress patterns
@@ -54,8 +56,9 @@ mid-depth.
     - Rolled channel outstand: b = B.
     - RHS walls: b = B − 3t and d = D − 3t for hot finished, B − 5t and D − 5t for cold formed (Table 12 note a).
     - Back-to-back double angles: the longer leg is taken as the outstand, which is conservative.
-- **Effective plastic modulus.** Seff follows 3.5.6.2 for class 3 UB/UC/UBP. For other sections it returns Z, which
-  3.5.6.1 permits. The RHS and CHS formulas of 3.5.6.3 and 3.5.6.4 are not implemented.
+- **Effective plastic modulus.** Class 1 and 2 sections return S. Class 3 sections take 3.5.6.2 (UB, UC, UBP), 3.5.6.3
+  (RHS and SHS, with the Table 12 limits of the walls in bending) or 3.5.6.4 (CHS). Other sections return Z, as 3.5.6.1
+  says.
 - **Elliptical hollow sections.** HFEHS are not covered by Tables 11 and 12 and raise `NotImplementedError`.
 
 ## Examples

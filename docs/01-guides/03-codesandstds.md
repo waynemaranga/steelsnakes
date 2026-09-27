@@ -7,7 +7,7 @@ $steelsnakes$ references codes and standards divided by **region**. Each region 
 - **EU / UK / US**: The packaged datasets already cover universal sections, beams, channels, angles, hollow sections, and piles.
     - EN 1993-1-1 classification, 5.5 and Table 5.2, is implemented for EU and UK sections.
     - AISC 360-22 member design, Chapters C to H with Appendices 7 and 8 (LRFD), is implemented for US sections and validated against the AISC Design Examples v16.0.
-- **BS**: BS 5950-1:2000 Section 3.5 classification runs on the UK sections.
+- **BS**: BS 5950-1:2000 runs on the UK sections: Section 3.5 classification, and the ultimate (2.4, 3.4, 3.6, 4, Annexes B, C, H and I) and serviceability (2.5) limit states.
 - **IN**: IS 808:2021 data ingestion is in progress; clamp-to-table helpers and clause references are on the roadmap (look for TODO markers in `src/steelsnakes/IN/checks/__init__.py`).
 - **AU / NZ / JP / MX / SA / CN / CA / KR**: These regions remain on the roadmap. SectionType enums already reference the expected series (`AS/NZS`, `JIS`, `NMX`, etc.), so adding the data is mostly a matter of aligning the JSON assets and connectors.
 
@@ -61,9 +61,9 @@ The United Kingdom the Eurocode suite of standards with the UK National Annex. T
 
 ### `BS` - Legacy British Standard
 
-BS 5950 was withdrawn in 2010 but is still widely used. Its classification rules are implemented under `steelsnakes.BS`, which runs on the UK section objects.
+BS 5950 was withdrawn in 2010 but is still widely used. Its classification rules and member checks are implemented under `steelsnakes.BS`, which runs on the UK section objects.
 
-- BS 5950-1:2000 - Structural use of steelwork in building - Part 1: Code of practice for design - Rolled and welded sections (Section 3.5, Tables 9, 11 and 12)
+- BS 5950-1:2000 - Structural use of steelwork in building - Part 1: Code of practice for design - Rolled and welded sections (Sections 2.4, 2.5, 3 and 4; Annexes B, C, H and I)
 
 ## 🇺🇸 `US` - United States
 

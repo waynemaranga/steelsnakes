@@ -47,6 +47,7 @@ flowchart LR
 - **EU Member Checks** for EN 1993-1-1 Section 6: cross-section resistance, buckling, lateral-torsional buckling and beam-columns (Annexes A and B).
 - **EU Serviceability Checks** for EN 1993-1-1 Section 7: deflections, vibration and SLS stresses, with the EN 1990 combinations.
 - **BS 5950 Classification** for BS 5950-1:2000 Section 3.5 on UK sections.
+- **BS 5950 Member Checks** for BS 5950-1:2000 Sections 2.4, 3.4, 3.6, 4 and 2.5: stability, tension, compression, bending, lateral-torsional buckling, combined forces and deflections.
 
 ## Current public API stance
 
