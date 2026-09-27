@@ -24,7 +24,7 @@
 A python library for structural steel.
 Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
 Active development: 🇮🇳 IN.
-Legacy code: 🇬🇧 BS (BS 5950-1:2000 classification on UK sections).
+Legacy code: 🇬🇧 BS (BS 5950-1:2000 classification and member checks on UK sections).
 Sections only, no checks yet: 🇺🇸 US_Metric (AISC shapes in SI units).
 Scaffolded/early modules: 🇦🇺 AU, 🇳🇿 NZ, 🇯🇵 JP.
 Future expansion candidates: 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
@@ -68,6 +68,7 @@ print(f"Channel shear center: {channel.e0} mm")
 - **[EU Classification Guide](https://steelsnakes.readthedocs.io/en/latest/01-guides/05-eu-classification/)** - Eurocode classification background
 - **[US Member Checks](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/05-us-member-checks/)** - AISC 360-22 Chapters C to H
 - **[BS 5950 Classification](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/06-bs-classification/)** - BS 5950-1:2000 Section 3.5
+- **[BS 5950 Member Checks](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/09-bs-member-checks/)** - BS 5950-1:2000 Sections 2.4, 2.5, 3.4, 3.6 and 4
 - **[API Reference](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/)** - API and integration reference
 
 ## Eurocode Classification Example
@@ -130,7 +131,7 @@ RM = calculate_RM(Pmf=144.0, Pstory=288.0)
 print(calculate_B2(288.0, calculate_Pe_story(H=1.21, L=240.0, delta_H=0.304, RM=RM)))  # 1.48
 ```
 
-## BS 5950 Classification Example
+## BS 5950 Example
 
 ```python
 from steelsnakes.BS import UB, classify_section
@@ -138,6 +139,15 @@ from steelsnakes.BS import UB, classify_section
 beam = UB("457x191x67")
 print(classify_section(beam, steel_grade="S275", stress_pattern="bending-major-axis").class_name)  # plastic
 print(classify_section(beam, steel_grade="S275", stress_pattern="compression").class_name)         # slender (d/t > 40ε)
+
+# Section 4 member checks, in kN, kNm and mm
+from steelsnakes.BS import UC, check_compression_and_bending, check_lateral_torsional_buckling
+
+print(check_lateral_torsional_buckling(beam, LE_mm=4000.0, Mx_kNm=200.0, mLT=0.925).Mb)  # 246.1 kNm, pb = 167.4 N/mm²
+result = check_compression_and_bending(
+    UC("254x254x73"), Fc_kN=800.0, Mx_kNm=50.0, My_kNm=8.0, LEx_mm=5000.0, LEy_mm=5000.0, LE_LT_mm=5000.0, mx=0.9, my=0.9, mLT=0.925,
+)
+print(result.governing, result.utilisation.utilisation)  # lateral-torsional (4.8.3.3.2c), 0.851
 ```
 
 ## Contributing

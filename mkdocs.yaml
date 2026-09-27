@@ -144,4 +144,5 @@ nav:
     - EU Member Checks: 02-api-reference/07-eu-member-checks.md
     - EU Serviceability Checks: 02-api-reference/08-eu-serviceability-checks.md
     - BS 5950 Classification: 02-api-reference/06-bs-classification.md
+    - BS 5950 Member Checks: 02-api-reference/09-bs-member-checks.md
   - References: 99-references.md

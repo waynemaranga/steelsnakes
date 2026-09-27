@@ -91,6 +91,40 @@
 - `EU`/`UK`: a Class 1 or 2 section without a tabulated W_pl, such as an angle, uses W_el (6.2.1(4)).
 - Tests: `tests/test_US_Metric_checks.py`, which reproduces AISC Design Examples on the metric twins and compares every
   section type with its imperial twin.
+- `BS`: BS 5950-1:2000 ultimate limit states in `steelsnakes.BS.checks.uls`, in kN, kNm, N/mm² and mm, with the section
+  tables in their own units, covering:
+    - 2.4.1 Table 2 load factors and load combinations 1 to 3 (`factored_load()`)
+    - 2.4.2 notional horizontal forces, λcr = h/200δ, non-sway or sway-sensitive frames and kamp
+      (`check_sway_stability()`), and the restraint forces of 4.3.2, 4.3.3 and 4.7.1
+    - 2.4.4 brittle fracture from the t1 formula with Tables 3 and 7 (`check_brittle_fracture()`), and 2.4.5 tie forces
+    - 3.4 net areas with staggered holes and the effective net area coefficient Ke
+    - 3.6 effective properties of slender sections: Aeff and Zeff of I, H, RHS and SHS (3.6.2.2, 3.6.2.3), equal angles
+      (3.6.4) and CHS (3.6.6), or the reduced design strength pyr (3.6.5) (`effective_section()`)
+    - 4.2 shear capacity with the shear buckling resistance of 4.4.5.2 and Annex H.1/H.2 (`check_shear()`), and the
+      moment capacity with high shear and the 1.2pyZ/1.5pyZ limit (`check_bending()`)
+    - 4.3 lateral-torsional buckling: Tables 13 and 14 effective lengths, Table 18 mLT, pb from Annex B (Tables 16 and
+      17), λLT = u v λ βW^0.5 with u and x from the tables or B.2.3, the 4.3.7 simple method, RHS to Table 15 and B.2.6,
+      and single angles to 4.3.8.3 (`check_lateral_torsional_buckling()`)
+    - 4.5.2 and 4.5.3 web bearing and buckling of unstiffened webs (`check_web_bearing()`)
+    - 4.6 tension with the effective net area and the simple ties of 4.6.3 (`check_tension()`)
+    - 4.7 compression with Tables 22 to 24 and Annex C (`check_compression()`), angle, channel and T struts to 4.7.10 and
+      Table 25 (`check_angle_strut()`), and columns in simple structures, 4.7.7 (`check_simple_column()`)
+    - 4.8 and 4.9 combined moment and axial force: 4.8.2 (`check_tension_and_bending()`); 4.8.3.2, 4.8.3.3.1 to
+      4.8.3.3.3 and the stocky members of I.1, with the reduced plastic moduli of I.2 and Table 26
+      (`check_compression_and_bending()`); I.4.3 for equal angles
+    - the internal moments of B.3, C.3 and I.5
+- `BS`: BS 5950-1:2000 2.5 serviceability limit states in `steelsnakes.BS.checks.sls`: serviceability loads (2.5.1),
+  the Table 8 deflection limits for beams, columns and crane girders (2.5.2), and floor frequency (2.5.3, SCI P076).
+- `BS`: 3.5.6.3 and 3.5.6.4, the effective plastic modulus of class 3 RHS and CHS (`effective_plastic_modulus_rhs()`,
+  `effective_plastic_modulus_chs()`); `effective_plastic_modulus()` also takes `section_type` and `properties`.
+- Docs: "BS 5950 Member Checks" API page.
+- Tests: `tests/test_BS_uls.py` and `tests/test_BS_sls.py`, against Tables 4, 16, 17, 18, 20, 21, 24 and 26 of the
+  code and hand calculations on UK sections.
+
+### Changed
+
+- `BS`: `effective_plastic_modulus()` returns S for class 1 and 2 RHS and CHS, as it does for I-sections; before, every
+  section other than UB, UC and UBP returned Z.
 
 ### Fixed
 

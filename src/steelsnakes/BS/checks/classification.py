@@ -10,10 +10,11 @@ Implements:
     - Table 11  Limiting width-to-thickness ratios for sections other than CHS and RHS
     - Table 12  Limiting width-to-thickness ratios for CHS and RHS
     - 3.5.5     Stress ratios r1 and r2 for classification (Figure 7)
-    - 3.5.6     Effective plastic modulus Seff of class 3 semi-compact sections (3.5.6.1 and 3.5.6.2)
+    - 3.5.6     Effective plastic modulus Seff of class 3 semi-compact sections (3.5.6.1 to 3.5.6.4)
 
 Section objects come from the UK module; BS 5950 designs with the same rolled profiles (BS 4-1 ~ BS EN 10365).
 Units: stresses N/mm² (MPa), dimensions mm, forces kN, areas cm², moduli cm³; i.e. as tabulated in the UK module.
+Member checks (Sections 2.4 and 4) are in steelsnakes.BS.checks.uls, serviceability (2.5) in steelsnakes.BS.checks.sls.
 """
 
 from __future__ import annotations
@@ -873,41 +874,108 @@ def effective_plastic_modulus_i_section(
     return Sx_eff, Sy_eff, web_factor, flange_factor
 
 
+def effective_plastic_modulus_rhs(S: float, Z: float, b_t: float, d_t: float, beta_2f: float, beta_3f: float, beta_2w: float, beta_3w: float) -> tuple[float, float, float]:
+    """BS 5950-1:2000 3.5.6.3: effective plastic modulus of a class 3 semi-compact RHS, for either axis of bending.
+
+    Seff = Z + (S - Z)[((β3w/(d/t))² - 1)/((β3w/β2w)² - 1)] but Seff <= Z + (S - Z)[(β3f/(b/t) - 1)/(β3f/β2f - 1)]
+
+    where β2f, β3f are the limiting b/t of a class 2 and class 3 flange, and β2w, β3w the limiting d/t of a class 2 and
+    class 3 web, from Table 12 (epsilon included); b and d are the flange and web of the axis of bending (Table 12 note a).
+    The result is also capped at S.
+
+    Returns:
+        (Seff, web_factor, flange_factor); modulus in the units of S and Z
+    """
+    if beta_3w <= beta_2w or beta_3f <= beta_2f:
+        raise ValueError("Class 3 limits must exceed class 2 limits.")
+    web_factor = ((beta_3w / d_t) ** 2 - 1.0) / ((beta_3w / beta_2w) ** 2 - 1.0)
+    flange_factor = (beta_3f / b_t - 1.0) / (beta_3f / beta_2f - 1.0)
+    return Z + (S - Z) * min(web_factor, flange_factor, 1.0), web_factor, flange_factor
+
+
+def effective_plastic_modulus_chs(S: float, Z: float, D_t: float, py: float) -> float:
+    """BS 5950-1:2000 3.5.6.4: effective plastic modulus of a class 3 semi-compact CHS, capped at S.
+
+    Seff = Z + 1.485[(140/(D/t))(275/py))^0.5 - 1](S - Z)
+    """
+    if D_t <= 0.0 or py <= 0.0:
+        raise ValueError("D_t and py must be positive.")
+    factor = 1.485 * (math.sqrt(140.0 / D_t * 275.0 / py) - 1.0)
+    return Z + (S - Z) * min(max(factor, 0.0), 1.0)
+
+
 def effective_plastic_modulus(
-    section: BaseSection,
+    section: Optional[BaseSection] = None,
     py_mpa: Optional[float] = None,
     steel_grade: str = "S275",
     axis: Literal["major", "minor"] = "major",
+    section_type: Optional[SectionType] = None,
+    properties: Optional[dict[str, Any]] = None,
 ) -> EffectivePlasticModulusResult:
     """BS 5950-1:2000 3.5.6: effective plastic modulus Seff of a UK section in bending.
 
-    - Rolled I- or H-sections (UB, UC, UBP): 3.5.6.2, with Table 11 limits for a rolled flange outstand and a web with
-      the neutral axis at mid-depth; class 1 and 2 sections return S, class 4 sections raise ValueError.
-    - Other cross-sections: Seff = Z (3.5.6.1). For RHS and CHS this is the permitted, conservative alternative to
-      3.5.6.3 and 3.5.6.4, which are not implemented.
+    Class 1 and 2 sections return S and class 4 sections raise ValueError (use 3.6); class 3 sections take:
+        - Rolled I- or H-sections (UB, UC, UBP): 3.5.6.2, with Table 11 limits for a rolled flange outstand and a web with
+          the neutral axis at mid-depth
+        - RHS and SHS: 3.5.6.3, with the Table 12 limits of the walls in bending about `axis`
+        - CHS: 3.5.6.4
+        - Other cross-sections: Seff = Z (3.5.6.1)
+
+    Args:
+        section: UK section object e.g. `UB("457x191x67")`
+        py_mpa: Design strength py (N/mm²); defaults to Table 9 for `steel_grade` and the thickest element
+        steel_grade: "S275", "S355" or "S460"; used only when py_mpa is not given
+        axis: "major" or "minor"
+        section_type: Section type when passing plain properties
+        properties: Plain properties or overrides, in section-table units (UK keys e.g. "W_pl_yy")
 
     Returns:
         EffectivePlasticModulusResult; moduli in cm³ as tabulated
     """
-    data = section.get_properties()
-    section_type = section.get_section_type()
+    data: dict[str, Any] = {}
+    if section is not None:
+        data.update(section.get_properties())
+        data.setdefault("designation", section.designation)
+        section_type = section.get_section_type()
+    data.update(properties or {})
+    if section_type is None:
+        raise ValueError("Provide either 'section' or 'section_type' with 'properties'.")
     suffix = "yy" if axis == "major" else "zz"
     Z = _number(data, f"W_el_{suffix}", "W_el")
     S = _number(data, f"W_pl_{suffix}", "W_pl")
     if Z is None or S is None:
         raise ValueError(f"Section has no elastic/plastic moduli for {axis}-axis bending.")
 
-    if section_type not in ROLLED_I_SECTION_TYPES:
+    hollow = section_type in HF_RHS_SECTION_TYPES or section_type in CF_RHS_SECTION_TYPES or section_type in CHS_SECTION_TYPES
+    if section_type not in ROLLED_I_SECTION_TYPES and not hollow:
         return EffectivePlasticModulusResult(axis=axis, S_eff=Z, Z=Z, S=S, method="3.5.6.1: Seff = Z")
 
     pattern = StressPattern.MAJOR_AXIS_BENDING if axis == "major" else StressPattern.MINOR_AXIS_BENDING
-    result = classify_section(section=section, py_mpa=py_mpa, steel_grade=steel_grade, stress_pattern=pattern)
+    result = classify_section_from_dict(section_type, data, py_mpa=py_mpa, steel_grade=steel_grade, stress_pattern=pattern)
     if result.section_class in (SectionClass.CLASS_1, SectionClass.CLASS_2):
         return EffectivePlasticModulusResult(axis=axis, S_eff=S, Z=Z, S=S, method="Class 1/2: Seff = S")
     if result.section_class == SectionClass.CLASS_4:
         raise ValueError("Class 4 slender section: use effective section properties (3.6), not Seff.")
 
     elements = {element.name: element for element in result.elements}
+    if section_type in CHS_SECTION_TYPES:
+        wall = elements["wall"]
+        S_eff = effective_plastic_modulus_chs(S=S, Z=Z, D_t=wall.ratio, py=result.py_mpa)
+        return EffectivePlasticModulusResult(axis=axis, S_eff=S_eff, Z=Z, S=S, method="3.5.6.4: CHS")
+    if hollow:
+        flange, web = elements["flange_wall"], elements["web_wall"]
+        S_eff, web_factor, flange_factor = effective_plastic_modulus_rhs(
+            S=S,
+            Z=Z,
+            b_t=flange.ratio,
+            d_t=web.ratio,
+            beta_2f=flange.class_2_limit or 0.0,
+            beta_3f=flange.class_3_limit or 0.0,
+            beta_2w=web.class_2_limit or 0.0,
+            beta_3w=web.class_3_limit or 0.0,
+        )
+        return EffectivePlasticModulusResult(axis=axis, S_eff=S_eff, Z=Z, S=S, method="3.5.6.3: RHS", web_factor=web_factor, flange_factor=flange_factor)
+
     flange = elements["flange"]
     # A minor-axis classification omits the web; its limits are still needed for the factors
     eps = result.epsilon
