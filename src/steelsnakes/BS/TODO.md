@@ -420,7 +420,7 @@ Size: S to M, mostly rules around existing checks.
   `test_BS_classification.py` for dictionary input. Keep it as a test fixture (move it to `tests/`?), or generate BS
   notation tables for every section type.
 - [ ] **Docstring warnings.** The `a, b: ...` combined-Args idiom in `uls.py` gives about 29 griffe warnings (and 1 in
-  `sls.py`). This matters only if `mkdocs build --strict` is adopted across the repo.
+  `sls.py`). This matters only if strict documentation builds are adopted across the repo.
 - [ ] **Naming.** Check names against the other codes before 1.0: `check_bending()` is BS "moment capacity" (Mc);
   `check_simple_column()`; `effective_length()` (Table 22) vs `beam_effective_length()` (Table 13).
 - [ ] **One bending entry point.** An `analyse_member()` or `check_member()` that runs 4.2, 4.3 and 4.8 together from

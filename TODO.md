@@ -50,4 +50,9 @@
 - [ ] Match section properties and dimensions variables to units.
 - [ ] Do published worked examples e.g on websites and implement
 - [x] (AISC) Pinned connections are used when free rotation of the connected members is required as in crane booms. In the design of pin-connected members it is necessary to consider the limit states of tensile yield, tensile rupture, shear rupture, and bearing. _done: `US.checks.tension.check_pin_connected_member()` (D5), validated against Design Example D.7_
-- [ ] See if this implementation of MkDocs Material renders latex, if so, use in documentation properly
+- [ ] Verify that the Sphinx MathJax configuration renders LaTeX correctly in the published documentation
+
+## Python 3.13 migration
+- [ ] Validate Python 3.13 support.
+- [ ] Update CI and documentation.
+- [ ] Verify dependencies and test suite.

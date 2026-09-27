@@ -51,7 +51,7 @@ print(section.get_properties())
 ### Validation
 - Run the demo end-to-end after changes: `python src/steelsnakes/main.py`
 - Lint with Ruff (install separately): `pip install ruff` then `ruff format src/` and `ruff check src/`
-- Docs: `mkdocs build` (may require network; if it fails in sandboxed environments, skip and validate locally without network)
+- Docs: `uv run sphinx-build -b html docs docs/_build/html` (may require network for intersphinx; if it fails in sandboxed environments, skip and validate locally without network)
 
 ### Repository Layout (orientation)
 ```
@@ -64,13 +64,13 @@ steelsnakes/
 │   └── engine/               # Analysis engines (early)
 ├── tests/                    # Pytest suite
 ├── pyproject.toml            # Build, scripts, deps
-└── mkdocs.yaml               # Docs configuration
+└── docs/conf.py              # Sphinx documentation configuration
 ```
 
 ### Dependencies (pyproject.toml)
 - Core/runtime: numpy>=2.3.2, pydantic>=2.11.7, sqlalchemy>=2.0.43
 - Testing: pytest>=8.4.1, pytest-cov>=6.2.1, coverage==7.10.0
-- Docs/tooling packaged in project deps: mkdocs>=1.6.1, mkdocstrings[python]>=0.30.0, mkdocs-shadcn==0.9.3, pymdown-extensions>=10.16.1
+- Docs/tooling packaged in project deps: sphinx, shibuya, myst-parser, sphinx-design, sphinx-copybutton, sphinxcontrib-mermaid
 - Ruff is still used for linting/formatting and may need separate install in constrained environments.
 
 Note: This library does depend on external packages; use the PYTHONPATH approach if network is restricted and you only need to run code locally.

@@ -1,10 +1,10 @@
 **Architecture Map**
-- `README.md`, `docs/`, and `mkdocs.yaml` define the marketing/docs layer (installation/user guide/guide to codes) while `tests/test_sections.py` houses the lone current test placeholder referencing TODO rework.
+- `README.md` and `docs/` define the documentation layer (installation/user guide/guide to codes) while `tests/test_sections.py` houses the lone current test placeholder referencing TODO rework.
 - `src/steelsnakes/__init__.py` lists the regional specifications/design codes and is the entry point that should eventually expose per-region standards/links and metadata.
 - `src/steelsnakes/base/` is the shared core: `sections.py`/`connectors.py`/`materials.py` define canonical dataclasses; `checks.py` owns limit-state enums and metadata; `factory.py` maps `SectionType` to region-specific constructors; `database.py` + `sqlite3db.py` orchestrate JSON/db lookup; `exceptions.py` promises finer-grained errors.
 - `src/steelsnakes/engine/` (currently just units scaffolding) is meant to centralize unit handling across regions, with the CLI (`src/steelsnakes/cli.py`) and `main.py` providing user-entry scripts.
 - Each region under `src/steelsnakes/` (UK/US/US_Metric/EU/IN/AU/NZ) holds `sections/`, `checks/` (where implemented), `data/`, plus `database.py` and `factory.py` to bind the shared factory to region assets; some (UK/US/EU) already ship `data`/`properties.jsonc` files, while others (AU/NZ/IN) are still being shaped.
-- `docs/01-guides` and `docs/02-api-reference` mirror the MkDocs site, with JS/CSS assets in `docs/javascripts` and `docs/stylesheets`.
+- `docs/01-guides` and `docs/02-api-reference` contain the Sphinx documentation, with custom assets in `docs/_static`.
 
 **TODO inventory (per region)**
 
@@ -55,7 +55,6 @@
  - [ ]`src/steelsnakes/base/connectors.py:58` implement `Connector.from_repr` (TODO).
  - [ ]`src/steelsnakes/base/connectors.py:71` simplify connector database (TODO).
  - [ ]`src/steelsnakes/engine/__init__.py:1` properly implement “Units, Units” layer (TODO).
- - [ ]`docs/index.md:28` verify MkDocs relative links for deployment (TODO).
  - [x]`tests/test_sections.py:1` rework the tests (TODO). _done: see REPAIR.md_
 
 - **UK**

@@ -105,11 +105,11 @@ where “max” means the most restrictive class governs.
 
 ## Recommended usage for engineers
 
-/// card | Recommended order
+```{card} Recommended order
 1. Use `classify_section(...)` for normal work.
 2. Use `StressPattern` presets for common beam/column situations.
 3. Use `custom_elements` only when you need explicit stress control.
-///
+```
 
 ## API objects
 
