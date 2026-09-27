@@ -13,6 +13,7 @@ from steelsnakes.EU.sections.beams import (
     Beam,
     WideFlangeBeam,
     ExtraWideFlangeBeam,
+    ExtraWideFlangeBeamHLZ,
     ParallelFlangeBeam,
     UniversalBeam,
     HE,
@@ -24,6 +25,7 @@ from steelsnakes.EU.sections.beams import (
 
 from steelsnakes.EU.sections.channels import (
     ParallelFlangeChannel,
+    ParallelFlangeChannelUPE,
     TaperedFlangeChannel,
     PFC,
     UPE,
@@ -55,6 +57,7 @@ __all__: list[str] = [
     "Beam",
     "WideFlangeBeam",
     "ExtraWideFlangeBeam",
+    "ExtraWideFlangeBeamHLZ",
     "ParallelFlangeBeam",
     "UniversalBeam",
     "HE",
@@ -64,6 +67,7 @@ __all__: list[str] = [
     "UB",
     # Channels
     "ParallelFlangeChannel",
+    "ParallelFlangeChannelUPE",
     "TaperedFlangeChannel",
     "PFC",
     "UPE",

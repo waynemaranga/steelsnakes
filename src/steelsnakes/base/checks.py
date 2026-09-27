@@ -1,10 +1,12 @@
+"""Enumerations and result models shared by the checks of every design code in `steelsnakes`."""
+
 from __future__ import annotations
 from typing import Optional, Union, Any, Literal, Callable
 from enum import Enum
 import logging
 from abc import ABC, abstractmethod
 import math
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -12,7 +14,7 @@ class DesignCode(Enum):
     """Global enumeration of all design codes available in steelsnakes."""
     EN_1993 = "EN_1993" # Eurocode 3, Part 1-1: General rules and rules for buildings
     BS_EN_1993_UKNA = "BS_EN_1993_UKNA" # Eurocode 3 with UK National Annex
-    BS_5950_1 = "BS_5950_1" # British Standard: Loads for buildings, Part 1: General load cases
+    BS_5950_1 = "BS_5950_1" # British Standard: Structural use of steelwork in building, Part 1: Code of practice for design, rolled and welded sections
     AISC_360 = "AISC_360" # American Institute of Steel Construction: Specification for Structural Steel Buildings
     IS_800 = "IS_800" # Indian Standard: General Construction in Steel
     AS_4100 = "AS_4100" # Australian Standard: Steel Structures
@@ -22,9 +24,14 @@ class LimitState(Enum):
     """Global enumeration of all limit states available in steelsnakes."""
     # EU/UK
     ULS = "ULS" # Ultimate Limit State # TODO: expound, like US
-    SLS = "SLS" # Serviceability Limit State # TODO: expound, like US
+    SLS = "SLS" # Serviceability Limit State
+    # ... EN 1993-1-1 Section 7, with EN 1990 A1.4
+    VERTICAL_DEFLECTION = "VERTICAL_DEFLECTION" # 7.2.1; EN 1990 Figure A1.1
+    HORIZONTAL_DEFLECTION = "HORIZONTAL_DEFLECTION" # 7.2.2; EN 1990 Figure A1.2
+    VIBRATION = "VIBRATION" # 7.2.3; EN 1990 A1.4.4
+    SERVICEABILITY_STRESS = "SERVICEABILITY_STRESS" # 7.1(4): no plastic redistribution at SLS, EN 1993-2 7.3
 
-    # US. Strictly LRFD
+    # US. Strictly LRFD; the member limit states below are also tagged by the EU and BS checks e.g FLEXURAL_BUCKLING
     TENSILE_YIELDING = "TENSILE_YIELDING"
     TENSILE_RUPTURE = "TENSILE_RUPTURE"
     FLEXURAL_BUCKLING = "FLEXURAL_BUCKLING"
@@ -38,6 +45,12 @@ class LimitState(Enum):
     TENSION_FLANGE_YIELDING = "TENSION_FLANGE_YIELDING"
     FLANGE_LOCAL_BUCKLING = "FLANGE_LOCAL_BUCKLING" # FIXME: Since only in metadata, just simplify the limit states, maybe specify for which flange in metadata?
     WEB_LOCAL_BUCKLING = "WEB_LOCAL_BUCKLING" # TODO: edit while editing module
+    LOCAL_BUCKLING = "LOCAL_BUCKLING" # e.g round HSS in flexure (F8), tee stems (F9.4)
+    LEG_LOCAL_BUCKLING = "LEG_LOCAL_BUCKLING" # single angles (F10.3)
+    SHEAR_YIELDING = "SHEAR_YIELDING"
+    SHEAR_RUPTURE = "SHEAR_RUPTURE" # pin-connected members (D5)
+    BEARING = "BEARING" # pin-connected members (D5 -> J7)
+    TORSIONAL_YIELDING = "TORSIONAL_YIELDING" # HSS in torsion (H3)
 
 class SectionClass(Enum):
     # TODO: [TRIVIAL] try, using classification methods/functions, to classify a section in one code and check in other codes. Also, do global classification of all sections in all codes into a one database and find conflicts e.g class 2 in one but class 1 in another.
@@ -45,6 +58,7 @@ class SectionClass(Enum):
     
     References:
         - EN 1993-1-1:2005 Clause 5.5.2(1)
+        - BS 5950-1:2000 Clause 3.5.2: Classes 1 plastic, 2 compact, 3 semi-compact and 4 slender
         - AISC 360-22 Section B4.1
         - IS 800:2007 Clause 3.7.2
     """
@@ -95,8 +109,16 @@ class UtilisationCheck(BaseModel):
     """Simple utilisation check result."""
     utilisation: float
     metadata: dict[str, Any] = Field(default_factory=dict)
-    adequacy: Literal["OK", "FAILS"] = "OK"
+    adequacy: Literal["OK", "FAILS"] = "OK" # "FAILS" when left out and utilisation > 1.0, as every code checks
     reference: Optional["Reference"] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _adequacy_from_utilisation(cls, data: Any) -> Any:
+        utilisation = data.get("utilisation") if isinstance(data, dict) else None
+        if isinstance(utilisation, (int, float)) and "adequacy" not in data:
+            return {**data, "adequacy": "OK" if utilisation <= 1.0 else "FAILS"}
+        return data
 
 
 class Reference(BaseModel):
@@ -109,9 +131,11 @@ class Reference(BaseModel):
 
 
 # Simple formula helpers for common calculations
-def compute_utilisation(demand: float, capacity: float) -> float:
+def compute_utilisation(demand: float, capacity: Optional[float]) -> float:
     """Compute utilisation ratio, handling zero/negative capacity."""
     if capacity is None or capacity <= 0.0:
         return math.inf
     return demand / capacity
 
+
+# Look keenly at szf (https://github.com/waynemaranga/szf) for the check/utilisation ratio architecture. Results should include inputs and outputs.

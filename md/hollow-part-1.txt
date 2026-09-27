@@ -1,0 +1,184 @@
+I agree with your direction.
+
+The current UK classification layer is already a thin re-export over the shared EU/EC3 engine, so a shared-engine implementation is the right fit, not a UK-only fork. 
+
+The uploaded code also supports your scope call:
+
+* the EU classifier currently has built-ins for I-sections, channels, and angles, but not hollows;
+* its convenience stress presets only handle major-axis bending for I/channel families;
+* hollow support will need both new element builders and new stress-pattern handling. 
+
+The UK hollow dataclasses do need cleanup first. Both hollow modules contain duplicate field declarations, and the hot-finished and cold-formed files are inconsistent about core shape fields like `hxh` / `hxb`, which matches your point that the dataclasses should be aligned to the JSON schema before classification is added.  
+
+Here is the version of your spec I would use.
+
+## Recommended implementation spec
+
+### 1) Keep one EC3 backend
+
+Do not create a UK-only hollow classifier. Extend `steelsnakes.EU.checks.classification` so UK hollow families plug into the same engine the UK `UB/PFC/angles` path already uses.  
+
+### 2) Clean up UK hollow dataclasses first
+
+In:
+
+* `UK/sections/hf_hollow.py`
+* `UK/sections/cf_hollow.py`
+
+do this before any classification work:
+
+* remove duplicate dataclass fields;
+* make field types match the underlying dataset exactly;
+* keep the existing explanatory comments;
+* add `classification_elements()` only after the dataclasses are clean.  
+
+### 3) Add shared rectangular/square hollow adapters in the EC3 engine
+
+Add helper builders in `EU/checks/classification.py` for RHS/SHS that:
+
+* model both walls as `internal`, not `outstand`;
+* consume dataset ratios directly:
+
+  * `cw_t`
+  * `cf_t`
+  * `c_t`
+* build `ElementInput` by using `c_mm = ratio * t_mm`, `t_mm = t_mm`, so the current element engine stays unchanged. 
+
+That is the cleanest way to reuse the existing `classify_element()` logic without inventing a parallel plate model.
+
+### 4) Put axis-specific RHS/SHS behavior in `_apply_stress_pattern()`
+
+This is the one refinement I’d make to your wording.
+
+`classification_elements()` is currently a zero-argument extractor, while stress presets are applied later by `_apply_stress_pattern()`. So the hollow dataclasses should return neutral geometry only, and the axis-specific mapping should be implemented in `_apply_stress_pattern()`, not inside the dataclasses. 
+
+For hot-finished hollows:
+
+* `HFRHS` compression:
+
+  * both internal walls in compression
+
+* `HFRHS` major-axis bending:
+
+  * web wall in bending
+  * flange wall in compression
+
+* `HFRHS` minor-axis bending:
+
+  * flange wall in bending
+  * web wall in compression
+
+* `HFSHS`:
+
+  * same logic as `HFRHS`
+  * but both walls use `c_t`
+
+That means:
+
+* `classification_elements()` returns named neutral elements like `web_wall` and `flange_wall`
+* `_apply_stress_pattern()` maps those names to `COMPRESSION` or `BENDING` depending on section type and axis.  
+
+### 5) Scope Phase 1 to `HFRHS` and `HFSHS`
+
+This should be the first implemented hollow scope.
+
+It fits the existing engine best, requires no result-model changes, and closes the biggest gap with the least risk.
+
+### 6) Cold-formed RHS/SHS stays conditional
+
+Your conditional scope is right.
+
+Since no PDFs were uploaded here, I cannot verify whether `CFRHS/CFSHS` should follow the same path. For now, the spec should say:
+
+* if the PDF review confirms same EC3 classification treatment in this module, implement `classification_elements()` for `CFRHS/CFSHS`;
+* otherwise leave section-level classification unimplemented and raise a clear `NotImplementedError`. 
+
+### 7) Add CHS through a dedicated round-hollow path
+
+I agree this should be separate.
+
+The current engine is explicitly built around plate elements with `kind in {"internal","outstand"}` and Table 5.2-style limits. Forcing CHS through that shape would be brittle unless the reviewed rules map exactly. 
+
+So for `HFCHS` and later `CFCHS`:
+
+* add a dedicated round-hollow helper keyed off `d_t`;
+* route it through a dedicated branch in `classify_section()` and `classify_section_from_dict()` if needed;
+* only expose it via `classification_elements()` if the reviewed code checks map cleanly into the existing `ClassificationResult` / `SectionClass` model.
+
+That matches your recommendation and avoids faking a plate element.
+
+### 8) Keep `HFEHS` out of scope
+
+Yes — explicitly unsupported for now.
+
+The current uploaded code has the section family, but nothing in the shared classifier suggests elliptical hollows can be responsibly mapped yet. Leave it deferred pending the PDF review and a confirmed parameterization.  
+
+### 9) Extend `classify_section_from_dict()`
+
+This should be part of the shared-engine work.
+
+Add support for hollow-section dictionaries:
+
+* RHS: accept `cw_t`, `cf_t`, `t`
+* SHS: accept `c_t`, `t`
+* CHS: accept `d_t`
+* if raw geometry is also accepted, ratio inputs should win when both are present
+
+That fits the existing dictionary adapter pattern, which today only handles I, channel, and angle families. 
+
+### 10) Tests and docs
+
+Your proposed test split is right.
+
+Add EU and UK tests for:
+
+* `HFRHS`
+* `HFSHS`
+* `HFCHS`
+* `RHS` major-axis bending
+* `RHS` minor-axis bending
+* dictionary input paths for hollows
+* cold-formed hollows only if confirmed in scope
+
+Keep combined bending + compression as `custom_elements` only in the first pass, because the current engine already expects explicit `alpha` / `psi` for combined cases. 
+
+Update the UK classification docs to state:
+
+* supported now: `HFRHS`, `HFSHS`, and `HFCHS` once implemented
+* conditional: `CFRHS`, `CFSHS`, `CFCHS`
+* deferred: `HFEHS`
+
+## One concrete wording change I would make
+
+I would change:
+
+> “Add `classification_elements()` methods … major-axis bending should treat …”
+
+to:
+
+> “Add neutral `classification_elements()` methods for hollow families, and extend `_apply_stress_pattern()` to assign RHS/SHS wall stress cases for compression, major-axis bending, and minor-axis bending.”
+
+That matches the current architecture better and avoids overloading the section dataclasses with stress-pattern logic. 
+
+## Final scope order
+
+This is the order I’d lock in:
+
+1. `HFRHS` and `HFSHS`
+2. `HFCHS`
+3. `CFRHS` and `CFSHS` only after PDF confirmation
+4. `CFCHS` only after PDF confirmation
+5. defer `HFEHS`
+
+## What still needs external confirmation
+
+The uploaded files do not answer the PDF-review questions, so these still need reviewer sign-off:
+
+* governing clauses/tables for hot-finished `RHS/SHS/CHS`
+* whether cold-formed hollows belong in the same path here
+* whether `cw_t`, `cf_t`, `c_t`, `d_t` match the intended slenderness definitions directly
+* whether minor-axis RHS bending should be exposed as a preset
+* whether CHS maps cleanly into the existing `SectionClass.CLASS_1..CLASS_4` result model
+* whether elliptical hollows stay excluded for now
+
+So the bottom line is: your recommendation is sound, and I’d approve it with one architectural tweak — keep hollow geometry in `classification_elements()`, but put the axis-dependent stress assignment in the shared classifier.

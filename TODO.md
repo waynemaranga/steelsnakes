@@ -18,7 +18,7 @@
 - [ ] Use actual names in SQLite, and revise api to work between aliases
 - [ ] To beat SQLite's case (insensitivity) add units to the column names, e.g. h_mm, b_mm, t_mm, A_cm2, Iyy_cm4, etc.
 - [ ] Have a dev, test and docs and full version to trim the dependencies
-- [ ] Merge pilcrow featurs from old docs to new docs with shadcn
+- [ ] Merge pilcrow features from old docs to new docs with Material
 - [ ] implement mermaid diagrams
 - [ ] Try edit fonts
 - [ ] Guides and tutorials will be important, both for how to use the library and for steel design in general. Make tutorials with Jupyter notebooks in Docs, run and save cells with outputs. Have a doc'd branch. See dev/test/full installs
@@ -43,11 +43,16 @@
 - [ ] handle dataprep for hxh to h, hxb to h and b etc hy having regex/string comprehension then test. May be useful for retrieval and calculation, should be done on multiple scripts at the same time and updating dataclass properties (notfounderrors i.e when json gives new value will be useful)
 - [ ] mm4 is written as mm^4, mm\*\*4, mm4, or mm⁴ or mm^4, ensure all these representations are recognized and mapped consistently on symbol/variable/aliases system. Could even be a separate library/json-file/database; see if upgradable on Pint or forallpeople 😄
 - [ ] for calc engines, users should be able to use aliases esp for some fractions, but too much complexity.
-- [ ] Handle missing column data especially for american sections e.g WGi and SwB in some values
+- [x] Handle missing column data especially for american sections e.g WGi and SwB in some values _done: `MiscellaneousTee.WGi` added in US and US_Metric (MT2.5X9.45, MT65X14.05); `tests/test_factory.py::TestPackagedData` builds every packaged section in UK/EU/US/US_METRIC so a new column fails a test_
 - [ ] Flattening some UK/EU sections using the american script will require tweaking to handle some missing values and some dict values e.g izz for different lengths.
 - [ ] Remember: CSV files need type handling because they are all strings.
 - [ ] Implement a units library and use it in the project.
 - [ ] Match section properties and dimensions variables to units.
 - [ ] Do published worked examples e.g on websites and implement
-- [ ] (AISC) Pinned connections are used when free rotation of the connected members is required as in crane booms. In the design of pin-connected members it is necessary to consider the limit states of tensile yield, tensile rupture, shear rupture, and bearing.
-- [ ] See if this implementation of mkdocs and shadcn renders latex, if so, use in documentation properly
+- [x] (AISC) Pinned connections are used when free rotation of the connected members is required as in crane booms. In the design of pin-connected members it is necessary to consider the limit states of tensile yield, tensile rupture, shear rupture, and bearing. _done: `US.checks.tension.check_pin_connected_member()` (D5), validated against Design Example D.7_
+- [ ] Verify that the Sphinx MathJax configuration renders LaTeX correctly in the published documentation
+
+## Python 3.13 migration
+- [ ] Validate Python 3.13 support.
+- [ ] Update CI and documentation.
+- [ ] Verify dependencies and test suite.

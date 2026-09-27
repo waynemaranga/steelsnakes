@@ -52,12 +52,14 @@ print(beam_2.A)
 
 ### Building on the API
 
-The basic usage above relies on `steelsnakes.<region>` imports, but most automated workflows should build on the shared base modules:
+The basic usage above relies on `steelsnakes.<region>` imports. For practical engineering work, that is often the best place to start.
 
-- `steelsnakes.base.database.SectionDatabase` discovers JSON datasets by region, caches every supported `SectionType`, and exposes fuzzy lookups and comparison filters so pipelines can tolerate slight naming variations.
-- `steelsnakes.base.factory.SectionFactory` wires that cache to the concrete classes defined in each region (`UK`, `EU`, `US`, etc.) and exposes `create_section(...)` so you can programmatically assemble any section without hard-coding the class name.
+When your workflow becomes more automated, move to the shared base modules:
 
-See the API reference page (`docs/02-api-reference/02-database.md`) for examples of how the database and factory collaborate, and expect similar patterns to appear in the future for connectors and checks.
+- `steelsnakes.base.database.SectionDatabase` for searching regional catalogues
+- `steelsnakes.base.factory.SectionFactory` for creating typed section objects dynamically
+
+See the **Engineering Workflow** guide and the **Section Database & Factory** reference page for the architecture behind that pattern.
 
 <!-- prettier-ignore-start -->
 !!!warning "Note"

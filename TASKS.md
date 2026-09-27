@@ -1,10 +1,10 @@
 **Architecture Map**
-- `README.md`, `docs/`, and `mkdocs.yaml` define the marketing/docs layer (installation/user guide/guide to codes) while `tests/test_sections.py` houses the lone current test placeholder referencing TODO rework.
+- `README.md` and `docs/` define the documentation layer (installation/user guide/guide to codes) while `tests/test_sections.py` houses the lone current test placeholder referencing TODO rework.
 - `src/steelsnakes/__init__.py` lists the regional specifications/design codes and is the entry point that should eventually expose per-region standards/links and metadata.
 - `src/steelsnakes/base/` is the shared core: `sections.py`/`connectors.py`/`materials.py` define canonical dataclasses; `checks.py` owns limit-state enums and metadata; `factory.py` maps `SectionType` to region-specific constructors; `database.py` + `sqlite3db.py` orchestrate JSON/db lookup; `exceptions.py` promises finer-grained errors.
 - `src/steelsnakes/engine/` (currently just units scaffolding) is meant to centralize unit handling across regions, with the CLI (`src/steelsnakes/cli.py`) and `main.py` providing user-entry scripts.
 - Each region under `src/steelsnakes/` (UK/US/US_Metric/EU/IN/AU/NZ) holds `sections/`, `checks/` (where implemented), `data/`, plus `database.py` and `factory.py` to bind the shared factory to region assets; some (UK/US/EU) already ship `data`/`properties.jsonc` files, while others (AU/NZ/IN) are still being shaped.
-- `docs/01-guides` and `docs/02-api-reference` mirror the MkDocs site, with JS/CSS assets in `docs/javascripts` and `docs/stylesheets`.
+- `docs/01-guides` and `docs/02-api-reference` contain the Sphinx documentation, with custom assets in `docs/_static`.
 
 **TODO inventory (per region)**
 
@@ -16,7 +16,7 @@
  - [ ]`src/steelsnakes/__init__.py:6` create per-region `standards` modules with reliable links.
  - [ ]`src/steelsnakes/base/checks.py:19` “Add more codes…” to broaden supported limit states/checkgroups.
  - [ ]`src/steelsnakes/base/checks.py:24` expand ULS definition to match US detail.
- - [ ]`src/steelsnakes/base/checks.py:25` expand SLS definition similarly.
+ - [x]`src/steelsnakes/base/checks.py:25` expand SLS definition similarly. _done: `LimitState` has VERTICAL_DEFLECTION, HORIZONTAL_DEFLECTION, VIBRATION and SERVICEABILITY_STRESS, used by `EU.checks.sls` (EN 1993-1-1 Section 7)_
  - [ ]`src/steelsnakes/base/checks.py:39` rethink flange/web local buckling metadata simplification (FIXME).
  - [ ]`src/steelsnakes/base/checks.py:40` revisit `WEB_LOCAL_BUCKLING` definition while editing module.
  - [ ]`src/steelsnakes/base/checks.py:43` try cross-code classification/resolution (TODO).
@@ -43,11 +43,11 @@
  - [ ]`src/steelsnakes/base/sections.py:178` implement `section_type` enum.
  - [ ]`src/steelsnakes/base/sections.py:191` implement `SectionType.metadata` helper (TODO).
  - [ ]`src/steelsnakes/base/sections.py:204` implement `clone`/`from_repr` (TODO).
- - [ ]`src/steelsnakes/base/factory.py:123` handle HL vs HLZ differentiation in file-based factory.
- - [ ]`src/steelsnakes/base/factory.py:331` fix SectionType vs str handling in factory registry (FIXME).
- - [ ]`src/steelsnakes/base/database.py:65` double-check TODO comment (needs clarity).
- - [ ]`src/steelsnakes/base/database.py:192` properly honour `sqlite_db_path` when injected (FIXME).
- - [ ]`src/steelsnakes/base/database.py:240` redocument “Find section” logic (TODO).
+ - [x]`src/steelsnakes/base/factory.py:123` handle HL vs HLZ differentiation in file-based factory. _done: HLZ registers `ExtraWideFlangeBeamHLZ`, which reports `SectionType.HLZ`_
+ - [x]`src/steelsnakes/base/factory.py:331` fix SectionType vs str handling in factory registry (FIXME). _done: `create_section()` takes a `SectionType` or its value e.g "UB"; unknown values raise `SectionTypeNotRegisteredError`_
+ - [x]`src/steelsnakes/base/database.py:65` double-check TODO comment (needs clarity). _done: lists match each region's JSON files; EU listed Sigma and Zed twice_
+ - [x]`src/steelsnakes/base/database.py:192` properly honour `sqlite_db_path` when injected (FIXME). _done: `SectionDatabase(..., use_sqlite=True, sqlite_db_path=...)`_
+ - [x]`src/steelsnakes/base/database.py:240` redocument “Find section” logic (TODO). _done: `find_section()` documents the exact match, then the case-insensitive, separator-free and unambiguous `difflib` matches_
  - [ ]`src/steelsnakes/base/exceptions.py:2` add custom exceptions for database/sections.
  - [ ]`src/steelsnakes/base/connectors.py:21` preload bolt data or support DataPrep for non-preloaded bolts.
  - [ ]`src/steelsnakes/base/connectors.py:44` collect universal connector properties (TODO).
@@ -55,14 +55,13 @@
  - [ ]`src/steelsnakes/base/connectors.py:58` implement `Connector.from_repr` (TODO).
  - [ ]`src/steelsnakes/base/connectors.py:71` simplify connector database (TODO).
  - [ ]`src/steelsnakes/engine/__init__.py:1` properly implement “Units, Units” layer (TODO).
- - [ ]`docs/index.md:28` verify MkDocs relative links for deployment (TODO).
- - [ ]`tests/test_sections.py:1` rework the tests (TODO).
+ - [x]`tests/test_sections.py:1` rework the tests (TODO). _done: see REPAIR.md_
 
 - **UK**
  - [ ]`src/steelsnakes/UK/sections/angles.py:4` reprocess UK/EU angle classes/properties or remake JSON before use.
  - [ ]`src/steelsnakes/UK/sections/angles.py:142` resolve `hxh` vs `t` dataprep or incorporate into calc engine.
- - [ ]`src/steelsnakes/UK/sections/angles.py:151` fix mutable default for `i_zz`.
- - [ ]`src/steelsnakes/UK/sections/angles.py:181` fix mutable default for `i_zz`.
+ - [x]`src/steelsnakes/UK/sections/angles.py:151` fix mutable default for `i_zz`. _done: `field(default_factory=dict)`_
+ - [x]`src/steelsnakes/UK/sections/angles.py:181` fix mutable default for `i_zz`. _done: `field(default_factory=dict)`_
  - [ ]`src/steelsnakes/UK/checks/uls.py:7` write equations with clauses (TODO).
  - [ ]`src/steelsnakes/UK/checks/uls.py:25` fix referencing style, pin exact code versions (FIXME).
  - [ ]`src/steelsnakes/UK/checks/uls.py:38` tighten adequacy tolerances (TODO).
@@ -114,7 +113,7 @@
  - [ ]`src/steelsnakes/US/checks/classification.py:11` document reproduction of tables B4.1a/b.
  - [ ]`src/steelsnakes/US/checks/classification.py:12` just expose case numbers/checks in docs.
  - [ ]`src/steelsnakes/US/checks/classification.py:13` tie section libs to equation references.
- - [ ]`src/steelsnakes/US/checks/classification.py:14` clarify stiffened vs unstiffened wording for UK/EU readers.
+ - [x]`src/steelsnakes/US/checks/classification.py:14` clarify stiffened vs unstiffened wording for UK/EU readers. _done: NOTE in the module header maps unstiffened to the EC3 outstand and stiffened to the internal part; case lines carry the Table B4.1 element descriptions_
  - [ ]`src/steelsnakes/US/checks/classification.py:46` enrich metadata with case detail.
  - [ ]`src/steelsnakes/US/checks/classification.py:48` same for slender-element branch.
  - [ ]`src/steelsnakes/US/checks/classification.py:58` find better approximation for kc limits.
@@ -132,8 +131,8 @@
  - [ ]`src/steelsnakes/US/checks/classification.py:133` slender metadata.
  - [ ]`src/steelsnakes/US/checks/classification.py:142` metadata.
  - [ ]`src/steelsnakes/US/checks/classification.py:144` slender metadata.
- - [ ]`src/steelsnakes/US/checks/classification.py:153` finish Case 16 notes (TODO).
- - [ ]`src/steelsnakes/US/checks/classification.py:159` implement Case 16 support (TODO).
+ - [x]`src/steelsnakes/US/checks/classification.py:153` finish Case 16 notes (TODO). _done: case 16 note gives lambda_p = (hc/hp)sqrt(E/Fy)/(0.54Mp/My - 0.09)^2 <= lambda_r with footnote [c]; footnote [b] FL note completed for case 11_
+ - [x]`src/steelsnakes/US/checks/classification.py:159` implement Case 16 support (TODO). _done: `classify_flexure("case16", hc=, hp=, Mp=, My=)` or `ElementInput.metadata={"hc_hp", "Mp_My"}`; also angles in flexure (case 12), HSS and round HSS minor-axis flexure_
  - [ ]`src/steelsnakes/US/checks/classification.py:231` reconcile HSS designation vs EDI naming (TODO).
  - [ ]`src/steelsnakes/US/checks/classification.py:232` set EDI_Nomenclature for round HSS (FIXME).
  - [ ]`src/steelsnakes/US/checks/classification.py:233` investigate designations for round sections (FIXME).
@@ -141,6 +140,7 @@
  - [ ]`src/steelsnakes/US/sections/channels.py:10` rename `type` field to `section_type` in database (TODO).
  - [ ]`src/steelsnakes/US/sections/channels.py:80` figure out double channel properties (TODO).
  - [ ]`src/steelsnakes/US/sections/hollow.py:9` same `section_type` rename (TODO).
+ - _`lrfd.py` is now a legacy prototype, not imported anywhere; tension.py (D), compression.py (E), flexure.py (F), shear.py (G), combined.py (H) and stability.py (C, App. 7/8) supersede it, so the `lrfd.py` items below only matter if it is revived._
  - [ ]`src/steelsnakes/US/checks/lrfd.py:12` add custom errors/graceful handling.
  - [ ]`src/steelsnakes/US/checks/lrfd.py:15` flesh out equations & clause references.
  - [ ]`src/steelsnakes/US/checks/lrfd.py:18` document chapter/table guidance from ACI 360.
@@ -189,25 +189,29 @@
  - [ ]`src/steelsnakes/US/checks/lrfd.py:633` clarify 20% Tr provision (TODO).
 
 - **US_Metric**
- - [ ]`src/steelsnakes/US_Metric/factory.py:42` factory test must create real US Metric sections (FIXME).
- - [ ]`src/steelsnakes/US_Metric/sections/angles.py:148` reconcile alternative LLBB/SLBB suggestions (FIXME).
+ - [x] AISC 360-22 checks in SI units (0.0.1a7: "added US AISC checks; not added to US_Metric"). _done: `steelsnakes.US_Metric.checks` (classification.py, members.py) reuses `steelsnakes.US.checks` with the metric tables converted to mm (I 10⁶ mm⁴, Z/S/C 10³ mm³, J 10³ mm⁴, Cw 10⁹ mm⁶) and the SI constants of B4.3b, D5, D6, App. 8.2 and Table C-F10.1; `tests/test_US_Metric_checks.py`_
+ - [x] unit comments in `US_Metric/sections/*.py` said in, in², lb/ft. _done: now mm, mm², kg/m, 10⁶ mm⁴, 10³ mm³, 10³ mm⁴ (J), 10⁹ mm⁶_
+ - [x]`src/steelsnakes/US_Metric/factory.py:42` factory test must create real US Metric sections (FIXME). _done: US_METRIC region wired into the database and factory; `tests/test_US_Metric_module.py`_
+ - [x]`src/steelsnakes/US_Metric/sections/angles.py:148` reconcile alternative LLBB/SLBB suggestions (FIXME). _done: suggestions stay within LLBB; the SLBB match shows as a Note_
  - [ ]`src/steelsnakes/US_Metric/sections/channels.py:10` rename `section_type` field in database (TODO).
  - [ ]`src/steelsnakes/US_Metric/sections/channels.py:80` find a way to support double channel properties.
  - [ ]`src/steelsnakes/US_Metric/sections/hollow.py:9` rename `section_type` field (TODO).
 
 - **EU**
+ - [x]`src/steelsnakes/EU/checks/classification.py:235` URGENT FIXME on `rectangular_hollow_section_elements`. _done: an axis-free BENDING pattern put all four RHS/SHS walls on the bending limits (72ε/83ε/124ε), unconservative for the flanges; it is now major-axis bending (h walls in bending, b walls in compression) per Table 5.2 Sheet 1_
+ - [x] flange outstand c of rolled I/H and channels ignored the root radius. _done: c = (b - tw - 2r)/2 and b - tw - r per Table 5.2 Sheet 2, matching the tabulated cf/tf of all 763 EU/UK rolled sections; UPN (tapered) keeps b - tw_
  - [ ]`src/steelsnakes/EU/MEMBERS.md:5` add analysis section for Chapter 5.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:6` document calculation processes once for all.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:7` add textbook/published examples.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:11` use Arya/memo references.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:65` complete/tabulate programming notes.
- - [ ]`src/steelsnakes/EU/sections/beams.py:119` cope with HL vs HLZ file naming (TODO).
- - [ ]`src/steelsnakes/EU/sections/beams.py:126` ditto for second case.
- - [ ]`src/steelsnakes/EU/sections/channels.py:109` check for unions being an issue (FIXME).
+ - [x]`src/steelsnakes/EU/sections/beams.py:119` cope with HL vs HLZ file naming (TODO). _done: see factory.py:123_
+ - [x]`src/steelsnakes/EU/sections/beams.py:126` ditto for second case.
+ - [x]`src/steelsnakes/EU/sections/channels.py:109` check for unions being an issue (FIXME). _done: it was; UPE sections reported PFC. UPE registers `ParallelFlangeChannelUPE`_
  - [ ]`src/steelsnakes/EU/sections/piles.py:94` unexpected UC/UBP cross-match behaviour (FIXME).
  - [ ]`src/steelsnakes/EU/sections/piles.py:95` unexpected HP/HD matching (FIXME).
- - [ ]`src/steelsnakes/EU/sections/angles.py:154` fix mutable `i_zz` default (FIXME).
- - [ ]`src/steelsnakes/EU/sections/angles.py:185` fix mutable default again (FIXME).
+ - [x]`src/steelsnakes/EU/sections/angles.py:154` fix mutable `i_zz` default (FIXME). _done: `field(default_factory=dict)`_
+ - [x]`src/steelsnakes/EU/sections/angles.py:185` fix mutable default again (FIXME). _done: `field(default_factory=dict)`_
 
 - **IN**
  - [ ]`src/steelsnakes/IN/__init__.py:2` validate data against IS 808:2021 clauses 5.1/5.2/6.

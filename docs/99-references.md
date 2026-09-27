@@ -1,6 +1,6 @@
 # References
 
-This page collects the trusted references that the project is currently aligning with. Most of the citations mirror the same sources listed under the Codes and Standards guide, but this stub exists so the MkDocs build no longer complains about missing pages.
+This page collects the trusted references that the project is currently aligning with. Most of the citations mirror the same sources listed under the Codes and Standards guide.
 
 ## Section data
 

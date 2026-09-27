@@ -8,8 +8,8 @@ class HollowStructuralSection(BaseSection):
     designation: str
     section_type: str # read as 'type' in database # TODO: change to section_type in database
     EDI_Std_Nomenclature: str = ""
-    W: float = 0.0 # Nominal weight (lb/ft)
-    A: float = 0.0 # Area (in²)
+    W: float = 0.0 # Nominal weight (kg/m)
+    A: float = 0.0 # Area (mm²)
 
     tnom: float = 0.0
     tdes: float = 0.0

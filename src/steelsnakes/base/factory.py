@@ -39,7 +39,7 @@ class SectionFactory:
         This method attempts to import and map section classes automatically
         but gracefully handles missing imports.
         """
-        region = self.database.region
+        region: str = self.database.region
         
         try:
             # 
@@ -49,6 +49,8 @@ class SectionFactory:
                 self._load_EU_classes()
             elif region == "US":
                 self._load_US_classes()
+            elif region == "US_METRIC":
+                self._load_US_Metric_classes()
             elif region == "AU":
                 self._load_AU_classes()
             elif region == "NZ":
@@ -115,13 +117,13 @@ class SectionFactory:
         """Load EU section classes."""
         try:
             # Beams
-            from steelsnakes.EU.sections.beams import Beam, ParallelFlangeBeam, WideFlangeBeam, ExtraWideFlangeBeam, UniversalBeam
+            from steelsnakes.EU.sections.beams import Beam, ParallelFlangeBeam, WideFlangeBeam, ExtraWideFlangeBeam, ExtraWideFlangeBeamHLZ, UniversalBeam
             self._section_classes[SectionType.UB] = UniversalBeam # loaded in UK in also
             self._section_classes.update({
                 SectionType.IPE: ParallelFlangeBeam,
                 SectionType.HE: WideFlangeBeam, 
-                SectionType.HL: ExtraWideFlangeBeam, # TODO: handle HL/HLZ differentiator, since file-name factory system expects HL.json and HLZ.json
-                SectionType.HLZ: ExtraWideFlangeBeam,
+                SectionType.HL: ExtraWideFlangeBeam,
+                SectionType.HLZ: ExtraWideFlangeBeamHLZ,
             })
             # Columns
             from steelsnakes.EU.sections.columns import Column, WideFlangeColumn, UniversalColumn
@@ -134,9 +136,9 @@ class SectionFactory:
             self._section_classes[SectionType.HP] = WideFlangeBearingPile
             
             # Channels
-            from steelsnakes.EU.sections.channels import ParallelFlangeChannel, TaperedFlangeChannel
+            from steelsnakes.EU.sections.channels import ParallelFlangeChannel, ParallelFlangeChannelUPE, TaperedFlangeChannel
             self._section_classes[SectionType.PFC] = ParallelFlangeChannel # loaded in UK also
-            self._section_classes[SectionType.UPE] = ParallelFlangeChannel
+            self._section_classes[SectionType.UPE] = ParallelFlangeChannelUPE
             self._section_classes[SectionType.UPN] = TaperedFlangeChannel
             
             # Angles
@@ -186,17 +188,6 @@ class SectionFactory:
                 SectionType.L2L_LLBB: LongLegBackToBackUnequalAngle,
                 SectionType.L2L_SLBB: ShortLegBackToBackUnequalAngle,
             })
-            # Channels
-            from steelsnakes.US.sections.channels import (
-                StandardChannel,
-                MiscellaneousChannel,
-                # DoubleStandardChannel,
-                # DoubleMiscellaneousChannel
-            )
-            self._section_classes.update({
-                SectionType.C: StandardChannel,
-                SectionType.MC: MiscellaneousChannel,
-            })
             # Hollow sections
             from steelsnakes.US.sections.hollow import (
                 RectangularHSS,
@@ -229,6 +220,63 @@ class SectionFactory:
         except ImportError as e:
             logger.warning(f"Some US section classes not available: {e}")
 
+    # --- 🇺🇸 US_Metric; same shapes as US, in SI units
+    def _load_US_Metric_classes(self) -> None:
+        """Load US Metric section classes."""
+        try:
+            # Beams
+            from steelsnakes.US_Metric.sections.beams import WideFlangeBeam, StandardBeam, MiscellaneousBeam
+            self._section_classes.update({
+                SectionType.W: WideFlangeBeam,
+                SectionType.S: StandardBeam,
+                SectionType.M: MiscellaneousBeam,
+            })
+            # Channels
+            from steelsnakes.US_Metric.sections.channels import StandardChannel, MiscellaneousChannel
+            self._section_classes.update({
+                SectionType.C: StandardChannel,
+                SectionType.MC: MiscellaneousChannel,
+            })
+            # Angles
+            from steelsnakes.US_Metric.sections.angles import (
+                EqualAngle,
+                UnequalAngle,
+                BackToBackEqualAngle,
+                LongLegBackToBackUnequalAngle,
+                ShortLegBackToBackUnequalAngle,
+            )
+            self._section_classes.update({
+                SectionType.L_EQUAL: EqualAngle,
+                SectionType.L_UNEQUAL: UnequalAngle,
+                SectionType.L2L_EQUAL: BackToBackEqualAngle,
+                SectionType.L2L_LLBB: LongLegBackToBackUnequalAngle,
+                SectionType.L2L_SLBB: ShortLegBackToBackUnequalAngle,
+            })
+            # Hollow sections
+            from steelsnakes.US_Metric.sections.hollow import RectangularHSS, SquareHSS, RoundHSS
+            self._section_classes.update({
+                SectionType.HSS_RCT: RectangularHSS,
+                SectionType.HSS_SQR: SquareHSS,
+                SectionType.HSS_RND: RoundHSS,
+            })
+            # Bearing Piles
+            from steelsnakes.US_Metric.sections.piles import BearingPile
+            self._section_classes[SectionType.HP] = BearingPile
+            # Pipes
+            from steelsnakes.US_Metric.sections.pipes import Pipe
+            self._section_classes[SectionType.PIPE] = Pipe
+            # Tees
+            from steelsnakes.US_Metric.sections.tees import StandardTee, MiscellaneousTee, WideFlangeTee
+            self._section_classes.update({
+                SectionType.ST: StandardTee,
+                SectionType.MT: MiscellaneousTee,
+                SectionType.WT: WideFlangeTee,
+            })
+
+        except ImportError as e:
+            logger.warning(f"Some US Metric section classes not available: {e}")
+
+    # --- 🇦🇺 AU
     def _load_AU_classes(self) -> None:
         """Load AU section classes."""
         try:
@@ -238,6 +286,7 @@ class SectionFactory:
         except ImportError as e:
             logger.warning(f"Some AU section classes not available: {e}")
 
+    # --- 🇳🇿 NZ
     def _load_NZ_classes(self) -> None:
         """Load NZ section classes."""
         try:
@@ -246,6 +295,28 @@ class SectionFactory:
             pass
         except ImportError as e:
             logger.warning(f"Some NZ section classes not available: {e}")
+
+    # --- 🇲🇽 MX (Mexico)
+    def _load_MX_classes(self) -> None:
+        """Load MX section classes."""
+        try:
+            # MX section imports would go here
+            # This is a placeholder for MX section class loading
+            pass
+        except ImportError as e:
+            logger.warning(f"Some MX section classes not available: {e}")
+
+    # --- 🇯🇵 JP (Japan)
+    def _load_JP_classes(self) -> None:
+        """Load JP section classes."""
+        try:
+            # JP section imports would go here
+            # This is a placeholder for JP section class loading
+            pass
+        except ImportError as e:
+            logger.warning(f"Some JP section classes not available: {e}")
+
+    # --- 
 
     def register_section_class(self, section_type: SectionType, section_class: Type[BaseSection]) -> None:
         """Register a section class for a specific type.
@@ -261,21 +332,30 @@ class SectionFactory:
         return list(self._section_classes.keys())
 
     # 🌟 - Create section
-    def create_section(self, designation: str, section_type: Optional[SectionType] = None) -> BaseSection:
+    def create_section(self, designation: str, section_type: Optional[SectionType | str] = None) -> BaseSection:
         """Create a section instance given its designation and optional type.
-        
+
         Args:
             designation: Section designation (e.g., "457x191x67", "IPE200")
-            section_type: Optional section type. If not provided, will search all types
-            
+            section_type: Optional section type, as a `SectionType` or its value (e.g., "UB"). If not provided, will search all types
+
         Returns:
             BaseSection instance
-            
+
         Raises:
             SectionNotFoundError: If section designation not found
-            SectionTypeNotRegisteredError: If section type has no registered class
+            SectionTypeNotRegisteredError: If section type is unknown or has no registered class
         """
-        
+
+        if isinstance(section_type, str):
+            try:
+                section_type = SectionType(section_type)
+            except ValueError:
+                raise SectionTypeNotRegisteredError(
+                    f"Unknown section type '{section_type}'. "
+                    f"Available types: {[t.value for t in self.get_registered_types()]}"
+                ) from None
+
         if section_type:
             # Use specified type
             section_data: Optional[dict[str, Any]] = self.database.get_section_data(
@@ -327,11 +407,10 @@ class SectionFactory:
         # Get the section class
         section_class: Optional[Type[BaseSection]] = self._section_classes.get(section_type)
         if not section_class:
-            available_types = [t.value for t in self._section_classes.keys()] # type: ignore[reportAssignmentType] 
-            # FIXME: handle section class SectionType vs str properly
+            registered_types: list[str] = [t.value for t in self.get_registered_types()]
             raise SectionTypeNotRegisteredError(
                 f"No registered class for section type '{section_type.value}'. "
-                f"Available types: {available_types}"
+                f"Available types: {registered_types}"
             )
 
         # Create and return instance
@@ -345,23 +424,29 @@ class SectionFactory:
         return section_class(**clean_data)
 
 
-# Convenience functions for creating region-specific factories
+# Convenience functions for creating region-specific factories; each region's own factory module is the source
 def get_UK_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for UK sections."""
-    database = SectionDatabase(data_directory, region="UK", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for UK sections; see `steelsnakes.UK.factory.get_UK_factory()`."""
+    from steelsnakes.UK.factory import get_UK_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 def get_EU_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for EU sections."""
-    database = SectionDatabase(data_directory, region="EU", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for EU sections; see `steelsnakes.EU.factory.get_EU_factory()`."""
+    from steelsnakes.EU.factory import get_EU_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 def get_US_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for US sections."""
-    database = SectionDatabase(data_directory, region="US", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for US sections; see `steelsnakes.US.factory.get_US_factory()`."""
+    from steelsnakes.US.factory import get_US_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
+
+
+def get_US_Metric_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
+    """Create a factory configured for US Metric sections; see `steelsnakes.US_Metric.factory.get_US_Metric_factory()`."""
+    from steelsnakes.US_Metric.factory import get_US_Metric_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 # def get_AU_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
