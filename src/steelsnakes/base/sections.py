@@ -14,7 +14,7 @@ logger: logging.Logger = logging.getLogger(__name__)
 
 class SectionType(Enum):
     """Global enumeration of all section types available in steelsnakes.
-    Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
+    Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US (and US_Metric, the same shapes in SI units); BS 5950 checks use the UK sections.
     Developing 🇮🇳 IS.
     Considering 🇦🇺 AU / 🇳🇿 NZ, 🇯🇵 JP, 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
     """
@@ -99,7 +99,7 @@ class SectionType(Enum):
     # L_UNEQUAL = "L_UNEQUAL"         # Unequal Angles (also in UK & EU)
     L2L_EQUAL = "L2L_EQUAL"           # Back-to-Back Equal Angles
     L2L_LLBB = "L2L_LLBB"             # Back-to-Back Unequal Angles, Long Leg Back-to-Back
-    L2L_SLBB = "L2L_SLBB"             # Back-to-
+    L2L_SLBB = "L2L_SLBB"             # Back-to-Back Unequal Angles, Short Leg Back-to-Back
 
     #  Structural Tees 
     WT = "WT" # cut from W shapes
@@ -204,10 +204,10 @@ class BaseSection(ABC):
         # TODO: implement...
         pass
 
-    def list_properties(self):
-        """Print all section properties to the console."""
-        properties = self.get_properties()
-        properties_list = []
+    def list_properties(self) -> list[str]:
+        """Return the names of all section properties."""
+        properties: dict[str, Any] = self.get_properties()
+        properties_list: list[str] = []
         for prop, value in properties.items():
             # return list of properties/keys only
             properties_list.append(prop)

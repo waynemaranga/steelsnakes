@@ -120,11 +120,33 @@
 - Docs: "BS 5950 Member Checks" API page.
 - Tests: `tests/test_BS_uls.py` and `tests/test_BS_sls.py`, against Tables 4, 16, 17, 18, 20, 21, 24 and 26 of the
   code and hand calculations on UK sections.
+- `engine`: section analysis with sectionproperties in `steelsnakes.engine.sections`:
+    - `analyse_section()` works out A, I, i, W_el, W_pl, the principal axes, I_t, I_w, the shear centre and i_0
+    - it takes a tabulated section, plain dimensions (e.g a welded I-section) or any sectionproperties geometry
+      (e.g a plate girder, or a beam with a cover plate from `section_geometry()`)
+    - it draws I/H, parallel flange channels, tees, angles, RHS/SHS, CHS and EHS from the UK, EU, US and US_METRIC
+      tables, with the EN 10210-2, EN 10219-2 and AISC corner radii
+    - `SectionAnalysis.to_properties()` returns the UK, EU, BS, US or US_METRIC table keys and units, for the
+      `properties` of the checks; for US this includes ro and H of E4
+- `engine`: `steelsnakes.engine.units`, with units of length powers and their aliases (`get_unit("cm^4")`), and the
+  dimension and property units of every region's section tables (`LENGTH_UNITS`, `SECTION_TABLE_UNITS`).
+- `base`: exports `SectionClass4Error`, `SectionDatabaseError` and the shared check models (`DesignCode`, `LimitState`,
+  `SectionClass`, `Reference`, `UtilisationCheck`, ...); adds `get_US_Metric_factory()`.
+- Docs: "Section Analysis" API page.
+- Tests: `tests/test_engine.py`, which checks the engine against the tables of each region and against closed forms
+  for welded and built-up sections; `tests/test_base.py`.
 
 ### Changed
 
 - `BS`: `effective_plastic_modulus()` returns S for class 1 and 2 RHS and CHS, as it does for I-sections; before, every
   section other than UB, UC and UBP returned Z.
+- `base`: `UtilisationCheck` sets `adequacy` from `utilisation` ("FAILS" above 1.0) when it is left out, as every
+  code module does; before, it defaulted to "OK".
+- `base`: `get_UK_factory()`, `get_EU_factory()` and `get_US_factory()` in `base.factory` return the regional factories
+  (`UKSectionFactory`, ...) from the regional modules, instead of building their own.
+- `base`: `materials.py` is an index of where each code's materials live (`EU.checks.uls.steel_material()`,
+  `BS.checks.classification.design_strength()`, ...); `renders.py` no longer defines E and G, which it did not use
+  and which disagreed with BS 5950 3.1.3 (G = 80 000 against E/2.6 = 78 846 N/mm²).
 
 ### Fixed
 
@@ -146,3 +168,5 @@
 - `US`: the Table B4.1b case descriptions for cases 10, 11, 16, 18 and 21 did not match the Specification.
 - `US_Metric`: the section unit comments said in, in² and lb/ft; the data is in SI.
 - Docs: the US classification page's examples passed `context=`, `Fy=` and `ratio=`, which the API does not take.
+- `base`: the US factory registered C and MC channels twice; `L2L_SLBB`'s comment was cut off; `list_properties()`
+  said it printed the properties, and `find_section()` re-imported `json`.

@@ -222,7 +222,6 @@ class SectionDatabase:
                 sections: dict[str, dict[str, Any]] = {}
                 for row in rows:
                     # Parse the JSON data column which contains the full section data
-                    import json
                     section_data: dict[str, Any] = json.loads(row['data'])
                     designation: str = row['designation']
                     sections[designation] = section_data
@@ -243,9 +242,17 @@ class SectionDatabase:
         """List all section designations for a given type."""
         return list(self._cache.get(section_type, {}).keys())
     
-    # 🌟 - Find section # TODO: redocument
+    # 🌟 - Find section
     def find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
-        """Find a section by designation across all types with robust fuzzy matching."""
+        """Find a section by designation across all supported types, in the order of `get_supported_types()`.
+
+        An exact match wins; failing that, `_fuzzy_find_section()` tries a case-insensitive match, then one that ignores
+        spaces, hyphens and underscores (and reads "×" as "x"), then the closest designation by `difflib` (cutoff 0.8),
+        which must be unambiguous: a tie, e.g "254x146x30" between 254x146x31 and 254x146x37, returns None.
+
+        Returns:
+            (section_type, section data), or None if nothing matches
+        """
         # Try exact match first
         for section_type in self._supported_types:
             section_data: Optional[dict[str, Any]] = self.get_section_data(designation=designation, section_type=section_type)

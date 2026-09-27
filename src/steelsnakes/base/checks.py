@@ -1,10 +1,12 @@
+"""Enumerations and result models shared by the checks of every design code in `steelsnakes`."""
+
 from __future__ import annotations
 from typing import Optional, Union, Any, Literal, Callable
 from enum import Enum
 import logging
 from abc import ABC, abstractmethod
 import math
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -29,7 +31,7 @@ class LimitState(Enum):
     VIBRATION = "VIBRATION" # 7.2.3; EN 1990 A1.4.4
     SERVICEABILITY_STRESS = "SERVICEABILITY_STRESS" # 7.1(4): no plastic redistribution at SLS, EN 1993-2 7.3
 
-    # US. Strictly LRFD
+    # US. Strictly LRFD; the member limit states below are also tagged by the EU and BS checks e.g FLEXURAL_BUCKLING
     TENSILE_YIELDING = "TENSILE_YIELDING"
     TENSILE_RUPTURE = "TENSILE_RUPTURE"
     FLEXURAL_BUCKLING = "FLEXURAL_BUCKLING"
@@ -56,6 +58,7 @@ class SectionClass(Enum):
     
     References:
         - EN 1993-1-1:2005 Clause 5.5.2(1)
+        - BS 5950-1:2000 Clause 3.5.2: Classes 1 plastic, 2 compact, 3 semi-compact and 4 slender
         - AISC 360-22 Section B4.1
         - IS 800:2007 Clause 3.7.2
     """
@@ -106,8 +109,16 @@ class UtilisationCheck(BaseModel):
     """Simple utilisation check result."""
     utilisation: float
     metadata: dict[str, Any] = Field(default_factory=dict)
-    adequacy: Literal["OK", "FAILS"] = "OK"
+    adequacy: Literal["OK", "FAILS"] = "OK" # "FAILS" when left out and utilisation > 1.0, as every code checks
     reference: Optional["Reference"] = None
+
+    @model_validator(mode="before")
+    @classmethod
+    def _adequacy_from_utilisation(cls, data: Any) -> Any:
+        utilisation = data.get("utilisation") if isinstance(data, dict) else None
+        if isinstance(utilisation, (int, float)) and "adequacy" not in data:
+            return {**data, "adequacy": "OK" if utilisation <= 1.0 else "FAILS"}
+        return data
 
 
 class Reference(BaseModel):
@@ -120,7 +131,7 @@ class Reference(BaseModel):
 
 
 # Simple formula helpers for common calculations
-def compute_utilisation(demand: float, capacity: float) -> float:
+def compute_utilisation(demand: float, capacity: Optional[float]) -> float:
     """Compute utilisation ratio, handling zero/negative capacity."""
     if capacity is None or capacity <= 0.0:
         return math.inf
