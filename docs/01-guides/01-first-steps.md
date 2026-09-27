@@ -1,34 +1,35 @@
 # First Steps
 
-$steelsnakes$ is for civil & structural engineers with beginner to intermediate Python skill.
+**steelsnakes** is for civil & structural engineers with beginner to intermediate Python skill.
 
 ## Installation
 
-<!-- prettier-ignore-start -->
-/// tab | pip
+::::{tab-set}
 
-    :::bash
-    pip install steelsnakes
-///
+:::{tab-item} pip
+```bash
+pip install steelsnakes
+```
+:::
 
-/// tab | uv
+:::{tab-item} uv
+```bash
+uv add steelsnakes
+```
+:::
 
-    :::bash
-    uv add steelsnakes
-///
+:::{tab-item} poetry
+```bash
+poetry add steelsnakes
+```
+:::
 
-/// tab | poetry
+::::
 
-    :::bash
-    poetry add steelsnakes
-///
-<!-- prettier-ignore-end -->
+:::{warning} Installing in Colab
+As of September 2025, installing **steelsnakes** in Google Colab replaces the pre-installed `numpy` version with a newer one, and Colab prompts to restart the runtime, losing the runtime's state and local variables. Future implementations of **steelsnakes** will resolve this by using a version of `numpy` compatible with Colab (2.0.2 in September 2025) or doing away with `numpy` as a dependency altogether.
+:::
 
-<!-- prettier-ignore-start -->
-!!!warning "Installing in Colab"
-    As of September 2025, installing $steelsnakes$ in Google Colab replaces the pre-installed `numpy` version with a newer one, and Colab prompts to restart the runtime, losing the runtime's state and local variables. Future implementations of $steelsnakes$ will resolve this by using a version of `numpy` compatible with Colab (2.0.2 in September 2025) or doing away with `numpy` as a dependency altogether.
-
-<!-- prettier-ignore-end -->
 
 ## Basic Usage
 
@@ -61,10 +62,9 @@ When your workflow becomes more automated, move to the shared base modules:
 
 See the **Engineering Workflow** guide and the **Section Database & Factory** reference page for the architecture behind that pattern.
 
-<!-- prettier-ignore-start -->
-!!!warning "Note"
-    The package does not currently enforce unit conversions or normalized inputs. Always feed inputs in the units the region expects (e.g., millimetres/kN if you are using Eurocode sections) and double-check the results before relying on them.
-<!-- prettier-ignore-end -->
+:::{warning} Note
+The package does not currently enforce unit conversions or normalized inputs. Always feed inputs in the units the region expects (e.g., millimetres/kN if you are using Eurocode sections) and double-check the results before relying on them.
+:::
 
 ### What else is coming
 

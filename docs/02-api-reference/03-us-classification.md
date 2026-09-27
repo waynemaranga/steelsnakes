@@ -26,9 +26,10 @@ That context decides which element is active and which case is checked.
 
 So the mental model is:
 
-\[
+$$
+
 \text{result} = f(\text{context},\, \lambda,\, F_y,\, E,\, \text{case metadata})
-\]
+$$
 
 where \(\lambda\) is the relevant slenderness ratio for the active plate or wall.
 
@@ -124,28 +125,44 @@ takes `Fy_MPa` and `E_MPa` and reports them on its result.
 
 ## API objects
 
-::: steelsnakes.US.checks.classification.StressPattern
+```{eval-rst}
+.. autoclass:: steelsnakes.US.checks.classification.StressPattern
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.ClassificationContext
+.. autoclass:: steelsnakes.US.checks.classification.ClassificationContext
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.CompressionCase
+.. autoclass:: steelsnakes.US.checks.classification.CompressionCase
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.FlexureCase
+.. autoclass:: steelsnakes.US.checks.classification.FlexureCase
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.ElementInput
+.. autoclass:: steelsnakes.US.checks.classification.ElementInput
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.ElementClassification
+.. autoclass:: steelsnakes.US.checks.classification.ElementClassification
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.ClassificationResult
+.. autoclass:: steelsnakes.US.checks.classification.ClassificationResult
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.US.checks.classification.classify_compression
+.. autofunction:: steelsnakes.US.checks.classification.classify_compression
 
-::: steelsnakes.US.checks.classification.classify_flexure
+.. autofunction:: steelsnakes.US.checks.classification.classify_flexure
 
-::: steelsnakes.US.checks.classification.classify_element
+.. autofunction:: steelsnakes.US.checks.classification.classify_element
 
-::: steelsnakes.US.checks.classification.classify_elements
+.. autofunction:: steelsnakes.US.checks.classification.classify_elements
 
-::: steelsnakes.US.checks.classification.classify_section
+.. autofunction:: steelsnakes.US.checks.classification.classify_section
 
-::: steelsnakes.US.checks.classification.classify_section_from_dict
+.. autofunction:: steelsnakes.US.checks.classification.classify_section_from_dict
+```

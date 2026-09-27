@@ -91,9 +91,10 @@ Use the database/factory layer when you need to:
 
 The current architecture is simple enough to explain as:
 
-\[
+$$
+
 \text{section object} = \text{factory}(\text{database}(\text{region data}))
-\]
+$$
 
 That may look abstract, but in practice it keeps responsibilities separate:
 
@@ -112,9 +113,9 @@ That may look abstract, but in practice it keeps responsibilities separate:
 
 ## Minimal rule of thumb
 
-/// card | Recommended pattern
+:::{card} Recommended pattern
 For exploratory engineering work:
 
 1. use a **regional direct import** for quick one-off checks
 2. use **database + factory** for automation or apps
-///
+:::

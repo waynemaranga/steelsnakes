@@ -11,7 +11,7 @@
     <!-- pypi version -->
      <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
     <!-- documentation -->
-     <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-material-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+     <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-sphinx-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
     <!-- build status -->
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
     <!-- pypi stats -->

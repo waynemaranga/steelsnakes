@@ -1,6 +1,6 @@
 # References
 
-This page collects the trusted references that the project is currently aligning with. Most of the citations mirror the same sources listed under the Codes and Standards guide, but this stub exists so the MkDocs build no longer complains about missing pages.
+This page collects the trusted references that the project is currently aligning with. Most of the citations mirror the same sources listed under the Codes and Standards guide, but this stub exists so this page stays out of the "document isn't included in any toctree" warnings.
 
 ## Section data
 
@@ -14,7 +14,6 @@ This page collects the trusted references that the project is currently aligning
 - AISC 360-22 and the ASTM steel specifications that feed the US databases.  
 - IS 808:2021 / IS 800:2007 (India) and AS/NZS 3679.1 + AS/NZS 5131 (Australia / New Zealand) where those profiles are planned.
 
-<!-- prettier-ignore-start -->
-!!!info "Reminder"
-    This reference list is a work in progress. Always consult the official document from the issuing standards body before making design decisions.
-<!-- prettier-ignore-end -->
+:::{note} Reminder
+This reference list is a work in progress. Always consult the official document from the issuing standards body before making design decisions.
+:::

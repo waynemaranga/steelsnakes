@@ -1,6 +1,6 @@
 # Codes and Standards
 
-$steelsnakes$ references codes and standards divided by **region**. Each region contains **specification** standards that contain steel profile properties and dimensions, and **design** standards that contain design rules and verification checks.
+**steelsnakes** references codes and standards divided by **region**. Each region contains **specification** standards that contain steel profile properties and dimensions, and **design** standards that contain design rules and verification checks.
 
 ## Current coverage (September 26, 2026)
 
@@ -11,15 +11,13 @@ $steelsnakes$ references codes and standards divided by **region**. Each region 
 - **IN**: IS 808:2021 data ingestion is in progress; clamp-to-table helpers and clause references are on the roadmap (look for TODO markers in `src/steelsnakes/IN/checks/__init__.py`).
 - **AU / NZ / JP / MX / SA / CN / CA / KR**: These regions remain on the roadmap. SectionType enums already reference the expected series (`AS/NZS`, `JIS`, `NMX`, etc.), so adding the data is mostly a matter of aligning the JSON assets and connectors.
 
-<!-- prettier-ignore-start -->
-!!!info "Reminder"
-    The list below is for orientation only. Always check the latest editions of the cited standards (via BSI, AISC, ISO, etc.) before relying on prescriptions or clause numbers.
-<!-- prettier-ignore-end -->
+:::{note} Reminder
+The list below is for orientation only. Always check the latest editions of the cited standards (via BSI, AISC, ISO, etc.) before relying on prescriptions or clause numbers.
+:::
 
-<!-- prettier-ignore-start -->
-!!!info "Note"
-    $steelsnakes$ is not a replacement for given design codes and standards. Always refer to the original documents for complete information and context.
-<!-- prettier-ignore-end -->
+:::{note} Note
+**steelsnakes** is not a replacement for given design codes and standards. Always refer to the original documents for complete information and context.
+:::
 
 <!-- ## Table of Contents
 
@@ -35,7 +33,7 @@ $steelsnakes$ references codes and standards divided by **region**. Each region 
 
 ## 🇪🇺 `EU` - European Union
 
-The European Union uses the Eurocode suite of standards. Countries in the EU may have their own **National Annexes** that modify some of the design rules. $steelsnakes$ currently does not implement any National Annexes other than the UK NA in the `UK` section.
+The European Union uses the Eurocode suite of standards. Countries in the EU may have their own **National Annexes** that modify some of the design rules. **steelsnakes** currently does not implement any National Annexes other than the UK NA in the `UK` section.
 
 - EN 1993-1-1:2022 - Eurocode 3: Design of steel structures - Part 1-1: General rules and rules for buildings [↗](https://policycommons.net/artifacts/21775967/en-1993-1-12022-design-of-steel-structures-part-1-1/22676156/)
 - EN 1993-1-8:2024 - Eurocode 3: Design of steel structures - Part 1-8: Design of joints [↗](https://knowledge.bsigroup.com/products/eurocode-3-design-of-steel-structures-joints)
@@ -81,8 +79,8 @@ The United States the AISC suite of standards for design and ASTM standards for 
 
 Uses the IS suite of standards. Look out for IS 800:2025 which is currently under development.
 
-- IS 800:2007 - General Construction in Steel - Code of Practice [↗]()
-- IS 808:2021 - Dimensions for Hot Rolled Steel Sections [↗]()
+- IS 800:2007 - General Construction in Steel - Code of Practice
+- IS 808:2021 - Dimensions for Hot Rolled Steel Sections
 
 ## 🇦🇺 `AU` - Australia
 

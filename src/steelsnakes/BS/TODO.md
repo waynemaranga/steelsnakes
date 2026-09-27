@@ -419,8 +419,10 @@ Size: S to M, mostly rules around existing checks.
 - [ ] **`BS/data/UC.json`.** A BS-notation copy (D, B, t, T, I_xx) of the UK UC table, used only by
   `test_BS_classification.py` for dictionary input. Keep it as a test fixture (move it to `tests/`?), or generate BS
   notation tables for every section type.
-- [ ] **Docstring warnings.** The `a, b: ...` combined-Args idiom in `uls.py` gives about 29 griffe warnings (and 1 in
-  `sls.py`). This matters only if `mkdocs build --strict` is adopted across the repo.
+- [ ] **Docstring warnings.** The `a, b: ...` combined-Args idiom in `uls.py` gives about 29 warnings (and 1 in
+  `sls.py`) under Sphinx/napoleon (docs migrated off MkDocs 2026-09-27) — same root cause as the old griffe warnings,
+  now surfaced as `Unexpected indentation` / `Enumerated list ends without a blank line` docutils errors instead.
+  This matters only if `sphinx-build -W` (strict mode) is adopted across the repo.
 - [ ] **Naming.** Check names against the other codes before 1.0: `check_bending()` is BS "moment capacity" (Mc);
   `check_simple_column()`; `effective_length()` (Table 22) vs `beam_effective_length()` (Table 13).
 - [ ] **One bending entry point.** An `analyse_member()` or `check_member()` that runs 4.2, 4.3 and 4.8 together from

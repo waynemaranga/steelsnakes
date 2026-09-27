@@ -11,16 +11,18 @@ requires-python = ">=3.11"
 dependencies = [
     "coverage==7.10.0",
     "matplotlib>=3.10.8",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.6.0",
-    "mkdocstrings[python]>=0.30.0",
+    "myst-parser>=4.0.0",
     "numpy>=2.3.2",
     "plotly>=6.0.0",
     "pydantic>=2.11.7",
-    "pymdown-extensions>=10.16.1",
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
     "sectionproperties>=3.10.2",
+    "shibuya>=2024.8.30",
+    "sphinx>=8.1.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.6.1",
+    "sphinxcontrib-mermaid>=1.0.0",
     "sqlalchemy>=2.0.43",
 ]
 
@@ -39,7 +41,7 @@ dependencies = [
 #     # "steelsnakes[extras]", # ... only if extras has been implemented, otherwise no.
 #     # ...plus...
 #     # - testing: pytest, pytest-cov, coverage
-#     # - documentation: mkdocs, mkdocs-material, mkdocstrings, pymdown-extensions
+#     # - documentation: sphinx, shibuya, myst-parser, sphinx-design, sphinxcontrib-mermaid
 # ]
 
 

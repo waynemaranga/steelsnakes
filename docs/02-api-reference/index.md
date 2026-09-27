@@ -8,7 +8,7 @@ Use it to answer three questions quickly:
 2. **How do I get a section object?** `SectionFactory`
 3. **Where do classification checks live?** Regional `checks` modules
 
-/// card | Core architecture
+:::{card} Core architecture
 `steelsnakes` currently has a practical internal architecture:
 
 - **data files** hold section properties
@@ -16,7 +16,7 @@ Use it to answer three questions quickly:
 - **factory classes** build section objects
 - **regional section classes** expose geometry/properties
 - **regional checks** perform code-specific verification
-///
+:::
 
 ## Mental model
 
@@ -61,8 +61,9 @@ That means:
 
 A good rule is:
 
-\[
+$$
+
 \text{workflow today} = \text{data access} + \text{section object} + \text{regional check}
-\]
+$$
 
 That is the pattern this documentation now emphasizes.

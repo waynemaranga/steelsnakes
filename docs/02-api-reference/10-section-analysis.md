@@ -8,14 +8,16 @@ universal beam with a cover plate. The finite element analysis is done by
 The engine sits next to the regional modules, not above them. It reads their sections, converts its results into their
 section-table keys and units, and those results go into their checks through `properties`.
 
-!!! warning "Units and axes"
-    The engine works in mm: A in mm², W in mm³, I and I_t in mm⁴, I_w in mm⁶. Dimensions are converted from the section
-    tables on read, so US inches become mm. `to_properties(region)` converts back to a module's table units.
-    Axes follow EN 1993-1-1 1.7: y-y is major (horizontal), z-z is minor (vertical), and u-u and v-v are principal.
+:::{warning} Units and axes
+The engine works in mm: A in mm², W in mm³, I and I_t in mm⁴, I_w in mm⁶. Dimensions are converted from the section
+tables on read, so US inches become mm. `to_properties(region)` converts back to a module's table units.
+Axes follow EN 1993-1-1 1.7: y-y is major (horizontal), z-z is minor (vertical), and u-u and v-v are principal.
+:::
 
-!!! note "Coming later"
-    Applying forces to a section (stress analysis) and member analysis (`steelsnakes.engine.analysis`) come later.
-    `SectionAnalysis.model` keeps the sectionproperties `Section` for that.
+:::{note} Coming later
+Applying forces to a section (stress analysis) and member analysis (`steelsnakes.engine.analysis`) come later.
+`SectionAnalysis.model` keeps the sectionproperties `Section` for that.
+:::
 
 ## Module map
 
@@ -113,6 +115,14 @@ The plate girder's I_w is compared with the thin-walled h_s²·I_f1·I_f2/(I_f1 
 
 ## API objects
 
-::: steelsnakes.engine.sections
+```{eval-rst}
+.. automodule:: steelsnakes.engine.sections
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-::: steelsnakes.engine.units
+.. automodule:: steelsnakes.engine.units
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

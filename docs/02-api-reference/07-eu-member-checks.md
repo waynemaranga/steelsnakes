@@ -7,17 +7,19 @@ and B.
 Every check returns a Pydantic result carrying the resistances, the intermediate values an engineer would write on a
 calculation sheet, the utilisation when the design action is given, and a `Reference` to the clause and equation.
 
-!!! warning "Units"
-    The checks work in N, mm and N/mm². Moments are in Nmm, so 1 kNm = `1e6`.
-    Section properties are read from the tables (cm², cm³, cm⁴, cm, dm⁶) and converted.
-    Values passed through `properties=` use the section-table units; keyword arguments such as `A_net` or `A_eff`
-    are in mm².
+:::{warning} Units
+The checks work in N, mm and N/mm². Moments are in Nmm, so 1 kNm = `1e6`.
+Section properties are read from the tables (cm², cm³, cm⁴, cm, dm⁶) and converted.
+Values passed through `properties=` use the section-table units; keyword arguments such as `A_net` or `A_eff`
+are in mm².
+:::
 
-!!! note "Nationally Determined Parameters"
-    The defaults are the recommended values: γM0 = γM1 = 1.00, γM2 = 1.25, λLT,0 = 0.4, β = 0.75 and
-    kfl = 1.10. η is 1.0, as the 6.2.6(3) note allows.
-    Pass your National Annex values where they differ; for example, the UK NA uses γM2 = 1.10.
-    The UK NA's own lateral-torsional buckling curve selection is not built in.
+:::{note} Nationally Determined Parameters
+The defaults are the recommended values: γM0 = γM1 = 1.00, γM2 = 1.25, λLT,0 = 0.4, β = 0.75 and
+kfl = 1.10. η is 1.0, as the 6.2.6(3) note allows.
+Pass your National Annex values where they differ; for example, the UK NA uses γM2 = 1.10.
+The UK NA's own lateral-torsional buckling curve selection is not built in.
+:::
 
 ## Module map
 
@@ -71,9 +73,10 @@ print(result.utilisations)  # {"V_z (6.17)": 0.171, "N (6.9)": 0.079, "M_y (6.31
 Fastener holes are not accounted for, as 6.2.9.1(5) requires. Check net sections with `check_tension()` and
 `tension_flange_holes_negligible()`.
 
-!!! warning "Class 4"
-    Effective widths to EN 1993-1-5 are not implemented. A Class 4 check raises `SectionClass4Error` until you
-    pass the effective properties it needs.
+:::{warning} Class 4
+Effective widths to EN 1993-1-5 are not implemented. A Class 4 check raises `SectionClass4Error` until you
+pass the effective properties it needs.
+:::
 
 ## Members
 
@@ -117,4 +120,9 @@ Built-up members (6.4) and the Annex BB provisions are not implemented.
 
 ## API objects
 
-::: steelsnakes.EU.checks.uls
+```{eval-rst}
+.. automodule:: steelsnakes.EU.checks.uls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

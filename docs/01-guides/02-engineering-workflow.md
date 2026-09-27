@@ -91,9 +91,10 @@ The current architecture is well suited to:
 
 A practical way to explain the app is:
 
-\[
+$$
+
 \text{engineering result} = \text{check}(\text{section geometry},\, \text{material strength},\, \text{design context})
-\]
+$$
 
 and `steelsnakes` helps by giving you the section geometry in a structured way.
 
@@ -109,11 +110,11 @@ and `steelsnakes` helps by giving you the section geometry in a structured way.
 
 ## Present limitations to keep in mind
 
-/// card | Important
+:::{card} Important
 - Unit handling is still your responsibility.
 - Coverage varies by region and shape family.
 - Some APIs are engineering-useful but not yet polished as a final public API.
-///
+:::
 
 ## Recommended reading order
 

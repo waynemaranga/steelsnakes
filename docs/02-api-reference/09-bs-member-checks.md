@@ -17,18 +17,20 @@ Every check returns a Pydantic result. It carries the capacities, the values an 
 calculation sheet (py, λ, pc, λLT, pb, ρ and so on) and, when the design action is given, a `UtilisationCheck`.
 Each result also has a `Reference` to the clause.
 
-!!! warning "Units"
-    The checks use BS 5950 units: kN, kNm, N/mm² and mm.
-    Section properties stay in the table units: A cm², Z and S cm³, I and J cm⁴, r cm and H dm⁶.
-    Arguments carry their unit, e.g `Fc_kN`, `Mx_kNm`, `LE_mm` and `An_cm2`.
-    Values passed through `properties=` take either the UK table keys (`h`, `tw`, `W_pl_yy`, `I_w` …) or BS notation
-    (`D`, `t`, `Sx`, `H` …).
+:::{warning} Units
+The checks use BS 5950 units: kN, kNm, N/mm² and mm.
+Section properties stay in the table units: A cm², Z and S cm³, I and J cm⁴, r cm and H dm⁶.
+Arguments carry their unit, e.g `Fc_kN`, `Mx_kNm`, `LE_mm` and `An_cm2`.
+Values passed through `properties=` take either the UK table keys (`h`, `tw`, `W_pl_yy`, `I_w` …) or BS notation
+(`D`, `t`, `Sx`, `H` …).
+:::
 
-!!! note "Axes and design strength"
-    BS 5950 takes x-x as the major axis and y-y as the minor axis. These are y-y and z-z in the UK tables.
-    Angles use u-u and v-v for their principal axes.
-    When `py_mpa` is omitted, py comes from Table 9 for `steel_grade` and the thickest element, as in the
-    classification.
+:::{note} Axes and design strength
+BS 5950 takes x-x as the major axis and y-y as the minor axis. These are y-y and z-z in the UK tables.
+Angles use u-u and v-v for their principal axes.
+When `py_mpa` is omitted, py comes from Table 9 for `steel_grade` and the thickest element, as in the
+classification.
+:::
 
 ## Module map
 
@@ -174,6 +176,14 @@ row, so such sections are at best class 3. This is conservative.
 
 ## API objects
 
-::: steelsnakes.BS.checks.uls
+```{eval-rst}
+.. automodule:: steelsnakes.BS.checks.uls
+   :members:
+   :undoc-members:
+   :show-inheritance:
 
-::: steelsnakes.BS.checks.sls
+.. automodule:: steelsnakes.BS.checks.sls
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

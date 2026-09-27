@@ -86,9 +86,10 @@ For a structural engineer, the useful pattern is:
 
 In compact notation:
 
-\[
+$$
+
 \text{section class} = \max\left(\text{element classes derived from Table 5.2 logic}\right)
-\]
+$$
 
 where “max” means the most restrictive class governs.
 
@@ -105,34 +106,46 @@ where “max” means the most restrictive class governs.
 
 ## Recommended usage for engineers
 
-/// card | Recommended order
+:::{card} Recommended order
 1. Use `classify_section(...)` for normal work.
 2. Use `StressPattern` presets for common beam/column situations.
 3. Use `custom_elements` only when you need explicit stress control.
-///
+:::
 
 ## API objects
 
-::: steelsnakes.UK.checks.classification.StressPattern
+```{eval-rst}
+.. autoclass:: steelsnakes.UK.checks.classification.StressPattern
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.UK.checks.classification.ElementStressDistribution
+.. autoclass:: steelsnakes.UK.checks.classification.ElementStressDistribution
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.UK.checks.classification.ElementInput
+.. autoclass:: steelsnakes.UK.checks.classification.ElementInput
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.UK.checks.classification.ElementClassification
+.. autoclass:: steelsnakes.UK.checks.classification.ElementClassification
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.UK.checks.classification.ClassificationResult
+.. autoclass:: steelsnakes.UK.checks.classification.ClassificationResult
+   :members:
+   :show-inheritance:
 
-::: steelsnakes.UK.checks.classification.classify_circular_hollow
+.. autofunction:: steelsnakes.UK.checks.classification.classify_circular_hollow
 
-::: steelsnakes.UK.checks.classification.classify_element
+.. autofunction:: steelsnakes.UK.checks.classification.classify_element
 
-::: steelsnakes.UK.checks.classification.classify_internal_part
+.. autofunction:: steelsnakes.UK.checks.classification.classify_internal_part
 
-::: steelsnakes.UK.checks.classification.classify_outstand_flange
+.. autofunction:: steelsnakes.UK.checks.classification.classify_outstand_flange
 
-::: steelsnakes.UK.checks.classification.classify_elements
+.. autofunction:: steelsnakes.UK.checks.classification.classify_elements
 
-::: steelsnakes.UK.checks.classification.classify_section
+.. autofunction:: steelsnakes.UK.checks.classification.classify_section
 
-::: steelsnakes.UK.checks.classification.classify_section_from_dict
+.. autofunction:: steelsnakes.UK.checks.classification.classify_section_from_dict
+```

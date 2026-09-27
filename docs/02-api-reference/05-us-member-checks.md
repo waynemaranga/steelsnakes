@@ -6,9 +6,10 @@ Appendices 7 and 8.
 Every check returns a Pydantic result carrying the governing limit state, the nominal and design strengths, the
 intermediate values an engineer would write on a calculation sheet, and a `Reference` to the clause and equation.
 
-!!! warning "Units"
-    The `US` module works in kips, inches and ksi, as tabulated in the AISC Shapes Database v16.0.
-    Moments are in kip-in. Divide by 12 for kip-ft.
+:::{warning} Units
+The `US` module works in kips, inches and ksi, as tabulated in the AISC Shapes Database v16.0.
+Moments are in kip-in. Divide by 12 for kip-ft.
+:::
 
 ## Module map
 
@@ -87,8 +88,9 @@ check = check_axial_flexure_interaction(Pr=174.0, Pc=1080.0, Mrx=2304.0, Mcx=590
 print(check.reference.equation, check.utilisation)  # H1-1b, 0.873; Design Example H.3
 ```
 
-!!! note
-    Required strengths must already include second-order effects (Chapter C). Chapter H applies no amplification.
+:::{note}
+Required strengths must already include second-order effects (Chapter C). Chapter H applies no amplification.
+:::
 
 ## Stability: Chapter C and Appendices 7 and 8
 
@@ -124,11 +126,12 @@ Pe_story = calculate_Pe_story(H=1.21, L=240.0, delta_H=0.304, RM=RM)  # 884 kips
 print(calculate_B2(288.0, Pe_story))          # 1.48; Design Example C.1C
 ```
 
-!!! tip "Placing notional loads"
-    Per C2.2b(b), distribute Ni over each level in the same way as the gravity load, and apply it in the most
-    destabilizing direction. For gravity-only combinations, that means four cases (±X, ±Y). The Modern Steel
-    Construction article in `codes/notional-loads-how-to-approach.pdf` explains how to apply them as point loads at
-    every column.
+:::{tip} Placing notional loads
+Per C2.2b(b), distribute Ni over each level in the same way as the gravity load, and apply it in the most
+destabilizing direction. For gravity-only combinations, that means four cases (±X, ±Y). The Modern Steel
+Construction article in `codes/notional-loads-how-to-approach.pdf` explains how to apply them as point loads at
+every column.
+:::
 
 ## SI units: US_Metric
 
@@ -180,4 +183,9 @@ Most remaining differences come from the examples rounding intermediate values. 
 
 ## API objects
 
-::: steelsnakes.US.checks.stability
+```{eval-rst}
+.. automodule:: steelsnakes.US.checks.stability
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```

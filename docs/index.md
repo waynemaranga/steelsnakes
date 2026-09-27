@@ -1,20 +1,19 @@
-# $steelsnakes$
+# **steelsnakes**
 
 ![Logo](./logo-4.png)
 
 <div align="center">
   <p>
-    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-sphinx-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
   </p>
 </div>
 
-A python package for structural steel design. $steelsnakes$ aims to provide a unified interface for designing steel members and connections for civil & structural engineers using Python. Users can import steel section data from international standards, perform verification checks from prior analysis and more.
+A python package for structural steel design. **steelsnakes** aims to provide a unified interface for designing steel members and connections for civil & structural engineers using Python. Users can import steel section data from international standards, perform verification checks from prior analysis and more.
 
-<!-- prettier-ignore-start -->
-!!! warning "Work in Progress"
-$steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
-<!-- prettier-ignore-end -->
+:::{warning} Work in Progress
+**steelsnakes** is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
+:::
 
 ## Latest Progress (September 26, 2026)
 
@@ -31,12 +30,11 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
 - The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
-<!-- prettier-ignore-start -->
-!!! warning "Note"
-    These capabilities are still evolving; metadata gaps, non-unit-aware helpers, and TODOs remain in the source. Double-check the implementation against the codebase whenever you need precise behavior, especially before using it in production.
-<!-- prettier-ignore-end -->
+:::{warning} Note
+These capabilities are still evolving; metadata gaps, non-unit-aware helpers, and TODOs remain in the source. Double-check the implementation against the codebase whenever you need precise behavior, especially before using it in production.
+:::
 
-$steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
+**steelsnakes** is divided into `regions`, and is currently developing support for the following regional standards:
 
 1. 🇪🇺 `EU` European Union - Eurocode 3
 2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA; legacy BS 5950-1:2000 classification under `BS`, on the same UK sections
@@ -45,35 +43,37 @@ $steelsnakes$ is divided into `regions`, and is currently developing support for
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
 6. 🇳🇿 `NZ` New Zealand - NZS 3404 & AS/NZS 5131
 
-See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs-material supports simple relative links -->
+See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information.
 
 ## Quick Start
 
 ### Installation
 
-<!-- prettier-ignore-start -->
-/// tab | pip
+::::{tab-set}
 
-    :::bash
-    pip install steelsnakes
-///
+:::{tab-item} pip
+```bash
+pip install steelsnakes
+```
+:::
 
-/// tab | uv
+:::{tab-item} uv
+```bash
+uv add steelsnakes
+```
+:::
 
-    :::bash
-    uv add steelsnakes
-///
+:::{tab-item} poetry
+```bash
+poetry add steelsnakes
+```
+:::
 
-/// tab | poetry
-
-    :::bash
-    poetry add steelsnakes
-///
-<!-- prettier-ignore-end -->
+::::
 
 ## Example
 
-For available steel profiles implemented in $steelsnakes$, properties can be accessed directly from the object.
+For available steel profiles implemented in **steelsnakes**, properties can be accessed directly from the object.
 See the [Profiles](02-api-reference/02-database.md) for all available steel profiles.
 
 ```python
@@ -94,10 +94,9 @@ print(beam_2.A)
 98.5
 ```
 
-<!-- prettier-ignore-start -->
-!!!warning "Note"
-    $steelsnakes$ does not currently implement any units or unit conversion; it is up to the user to ensure that all inputs are in the correct units as required by calculations
-<!-- prettier-ignore-end -->
+:::{warning} Note
+**steelsnakes** does not currently implement any units or unit conversion; it is up to the user to ensure that all inputs are in the correct units as required by calculations
+:::
 
 ## Contributing
 
@@ -120,6 +119,40 @@ See [References](./99-references.md)
 - SAISC (South African Institute of Steel Construction)
 
 ---
+
+```{toctree}
+:hidden:
+:caption: Guides
+
+01-guides/index
+01-guides/01-first-steps
+01-guides/02-engineering-workflow
+01-guides/03-codesandstds
+01-guides/04-classification-architecture-decision
+01-guides/05-eu-classification
+```
+
+```{toctree}
+:hidden:
+:caption: API Reference
+
+02-api-reference/index
+02-api-reference/02-database
+02-api-reference/04-uk-classification
+02-api-reference/03-us-classification
+02-api-reference/05-us-member-checks
+02-api-reference/07-eu-member-checks
+02-api-reference/08-eu-serviceability-checks
+02-api-reference/06-bs-classification
+02-api-reference/09-bs-member-checks
+02-api-reference/10-section-analysis
+```
+
+```{toctree}
+:hidden:
+
+99-references
+```
 
 
 <!-- [1]: ...

@@ -104,12 +104,18 @@ result = classify_section_from_dict(
 )
 ```
 
-!!! warning "Design strength of S460"
-    The S460 row of Table 9 is taken as 460/440/430/410/400 N/mm² for t ≤ 16/40/63/80/100 mm. The earlier draft in
-    `BS/checks/classification.py.md` had 445 and 415 for the 40 mm and 80 mm steps. Check these against your copy of
-    BS 5950-1:2000 before relying on S460 results. The draft also used the superseded BS 5950-1:1990 Table 7 limits
-    (8.5ε, 9.5ε, 15ε and 79ε, 98ε, 120ε).
+:::{warning} Design strength of S460
+The S460 row of Table 9 is taken as 460/440/430/410/400 N/mm² for t ≤ 16/40/63/80/100 mm. The earlier draft in
+`BS/checks/classification.py.md` had 445 and 415 for the 40 mm and 80 mm steps. Check these against your copy of
+BS 5950-1:2000 before relying on S460 results. The draft also used the superseded BS 5950-1:1990 Table 7 limits
+(8.5ε, 9.5ε, 15ε and 79ε, 98ε, 120ε).
+:::
 
 ## API objects
 
-::: steelsnakes.BS.checks.classification
+```{eval-rst}
+.. automodule:: steelsnakes.BS.checks.classification
+   :members:
+   :undoc-members:
+   :show-inheritance:
+```
