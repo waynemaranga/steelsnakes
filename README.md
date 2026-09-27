@@ -23,7 +23,7 @@
 
 A python library for structural steel.
 Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
-Active development: 🇮🇳 IN.
+Active development: 🇮🇳 IN (IS 800:2025 draft checks; IS 808 section data to follow).
 Legacy code: 🇬🇧 BS (BS 5950-1:2000 classification and member checks on UK sections).
 Checks available: 🇺🇸 US_Metric (AISC shapes and checks in SI units).
 Scaffolded/early modules: 🇦🇺 AU, 🇳🇿 NZ, 🇯🇵 JP.
@@ -69,6 +69,7 @@ print(f"Channel shear center: {channel.e0} mm")
 - **[US Member Checks](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/05-us-member-checks/)** - AISC 360-22 Chapters C to H
 - **[BS 5950 Classification](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/06-bs-classification/)** - BS 5950-1:2000 Section 3.5
 - **[BS 5950 Member Checks](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/09-bs-member-checks/)** - BS 5950-1:2000 Sections 2.4, 2.5, 3.4, 3.6 and 4
+- **[IS 800 Member Checks](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/11-in-member-checks/)** - IS 800:2025 (draft) Sections 10.8, 12 to 16 and Annex C
 - **[API Reference](https://steelsnakes.readthedocs.io/en/latest/02-api-reference/)** - API and integration reference
 
 ## Eurocode Classification Example

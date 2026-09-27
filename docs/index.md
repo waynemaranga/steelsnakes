@@ -160,6 +160,7 @@ See [References](./99-references.md)
 02-api-reference/08-eu-serviceability-checks
 02-api-reference/09-bs-member-checks
 02-api-reference/10-section-analysis
+02-api-reference/11-in-member-checks
 ```
 
 ```{toctree}
