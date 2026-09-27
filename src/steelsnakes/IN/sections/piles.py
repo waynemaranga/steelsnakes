@@ -1,5 +1,6 @@
 from __future__ import annotations
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
+from typing import Any
 from steelsnakes.base import BaseSection, SectionType
 
 @dataclass
@@ -27,10 +28,16 @@ class BearingPile(BaseSection):
     I_t: float = 0.0 # Torsional constant (x10⁴ mm⁴)
     I_w: float = 0.0 # Warping constant (x10⁶ mm⁶)
 
+    def get_properties(self) -> dict[str, Any]:
+        """Return all section properties as a dictionary."""
+        return asdict(self)
+
 
 @dataclass
 class ParallelFlangeBearingPile(BearingPile):
-    pass
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.PBP
 
 def PBP(designation: str) -> ParallelFlangeBearingPile:
     raise NotImplementedError("PBP section creation not implemented yet.")

@@ -36,7 +36,7 @@ flowchart LR
 | Shared core | `steelsnakes.base.sections`, `steelsnakes.base.database`, `steelsnakes.base.factory` | Common section typing, data loading, lookup, and object creation |
 | Regional data | `steelsnakes.<region>.data` | Region-specific section tables |
 | Regional sections | `steelsnakes.<region>.sections` | Concrete classes such as `UB`, `UC`, `IPE`, `W`, `HSS` |
-| Regional checks | `steelsnakes.EU.checks`, `steelsnakes.UK.checks`, `steelsnakes.US.checks`, `steelsnakes.BS.checks` | Code-specific classification and design helpers |
+| Regional checks | `steelsnakes.EU.checks`, `steelsnakes.UK.checks`, `steelsnakes.US.checks`, `steelsnakes.BS.checks`, `steelsnakes.IN.checks` | Code-specific classification and design helpers |
 
 ## What to read next
 
@@ -48,6 +48,7 @@ flowchart LR
 - **EU Serviceability Checks** for EN 1993-1-1 Section 7: deflections, vibration and SLS stresses, with the EN 1990 combinations.
 - **BS 5950 Classification** for BS 5950-1:2000 Section 3.5 on UK sections.
 - **BS 5950 Member Checks** for BS 5950-1:2000 Sections 2.4, 3.4, 3.6, 4 and 2.5: stability, tension, compression, bending, lateral-torsional buckling, combined forces and deflections.
+- **IS 800 Member Checks** for the IS 800:2025 draft: classification (10.8), tension, compression, bending, lateral torsional buckling, shear and combined forces (Sections 13 to 16), deflections and floor vibration (12.6, Annex C).
 
 ## Current public API stance
 

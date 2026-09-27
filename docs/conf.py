@@ -66,6 +66,8 @@ html_css_files = ["custom.css"]
 html_baseurl = "https://steelsnakes.readthedocs.io/en/latest/"
 
 html_theme_options = {
+    "accent_color": "orange",
+    "color_mode": "auto",
     "github_url": "https://github.com/waynemaranga/steelsnakes",
     "globaltoc_expand_depth": 1,
     "nav_links": [

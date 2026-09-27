@@ -135,6 +135,32 @@
 - Docs: "Section Analysis" API page.
 - Tests: `tests/test_engine.py`, which checks the engine against the tables of each region and against closed forms
   for welded and built-up sections; `tests/test_base.py`.
+- `IN`: IS 800:2025 checks (the draft for comments CED 07 (27869) WC of April 2025, clause numbers as in the draft) in
+  `steelsnakes.IN.checks`, with the main entry points exported from `steelsnakes.IN`, in kN, kNm, N/mm² and mm with
+  the IS 808 table units. The IN sections have no data yet, so the checks take IN section objects built with their
+  properties, or plain properties. They cover:
+    - Table 1 IS 2062 yield and ultimate stress, and 10.8 classification to Table 2 (EN 1993-1-1 Table 5.2 with
+      ε = (250/fy)^0.5), with the stress ratios r1 and r2, compound elements and the 10.8.2 d) effective widths
+      (`classify_section()`)
+    - Tables 3, 4 and 5: maximum slenderness, load combinations and partial safety factors (`factored_load()`)
+    - 13 tension: yielding, rupture with net areas and the shear lag factor β of angles and other sections, and block
+      shear (`check_tension()`)
+    - 14 compression: buckling classes a0 to d (Tables 7 to 10), χ and fcd (Tables 8 and 9), torsional flexural
+      buckling (14.1.2.2), Table 11 and Annex D effective lengths, the effective area of slender sections, and single
+      angle struts with Kf of Table 12 (`check_compression()`, `check_angle_strut()`)
+    - 15 bending: laterally supported beams with the 1.2Ze limit and high shear (`check_bending()`); lateral torsional
+      buckling with fm (Table 14), λy and αLT (Table 13), Mcr of 15.2.2.1 and Annex E (Table 42), and the LLT of
+      Tables 15 and 16 (`check_lateral_torsional_buckling()`); shear with the simple post-critical and tension field
+      methods (`check_shear()`)
+    - 16 combined forces: Mdv (16.2), the section strength of 16.3.1 with Mnd and Table 17, and the member strength of
+      16.3.2 with Table 18 (`check_tension_and_bending()`, `check_compression_and_bending()`)
+    - 12.6 serviceability: the Table 6 deflection limits, camber (12.6.1.1) and the Annex C floor frequency and
+      heel impact acceleration (`check_vibration()`)
+    - the draft's misprints, following its own tables or EN 1993-1-1:2022, which it restates, e.g χ with φ² − λ²
+      (Table 8) and αLT(λy − 0.2) in φLT; each is listed on the docs page
+- Docs: "IS 800 Member Checks" API page.
+- Tests: `tests/test_IN_classification.py`, `tests/test_IN_uls.py` and `tests/test_IN_sls.py`, against Tables 2, 4, 6,
+  8, 9, 10, 12 to 18 and 42 of the draft and hand calculations on IS 808 sections.
 
 ### Changed
 
@@ -151,6 +177,9 @@
 ### Fixed
 
 - `pytest.ini` used `[tool:pytest]`, so pytest ignored it; coverage and the 80% gate are now enforced.
+- `IN`: `StandardColumn`, `HeavyWeightBeam` and `ParallelFlangeBearingPile` had no section type, and `Column`,
+  `Channel` and `BearingPile` no `get_properties()`, so columns, channels and piles could not be created.
+- `IN`: `checks/Tables.md` had wrong rows in Table 11 (rows 2, 5 and 6) and Table 15 (row iii).
 - `base`: `find_section()` could silently return a different section for a typo, e.g `"254x146x30"` gave 254x146x37
   because it was as close as 254x146x31. A tie now raises `SectionNotFoundError` with both as suggestions.
 - `base`: passing a string section type to `create_section()` crashed with `AttributeError`.
