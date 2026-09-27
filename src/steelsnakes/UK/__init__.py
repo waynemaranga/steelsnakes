@@ -4,22 +4,8 @@ from __future__ import annotations
 
 from typing import Optional
 
-from steelsnakes.base.sections import SectionType
-from steelsnakes.UK.checks import (
-    ClassificationResult,
-    ElementClassification,
-    ElementInput,
-    ElementStressDistribution,
-    StressPattern,
-    outstand_buckling_factor,
-    classify_circular_hollow,
-    classify_element,
-    classify_elements,
-    classify_internal_part,
-    classify_outstand_flange,
-    classify_section,
-    classify_section_from_dict,
-)
+# Import base infrastructure
+from steelsnakes.base.sections import BaseSection, SectionType
 from steelsnakes.UK.database import UKSectionDatabase, get_UK_database
 from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
 from steelsnakes.UK.sections import angles, channels, cf_hollow, hf_hollow, universal
@@ -80,59 +66,5 @@ def create_section(designation: str, section_type: Optional[SectionType] = None)
     return factory.create_section(designation, section_type)
 
 
-__all__: list[str] = [
-    "UKSectionFactory",
-    "get_UK_factory",
-    "UKSectionDatabase",
-    "get_UK_database",
-    "ElementInput",
-    "ElementStressDistribution",
-    "StressPattern",
-    "outstand_buckling_factor",
-    "ElementClassification",
-    "ClassificationResult",
-    "classify_circular_hollow",
-    "classify_element",
-    "classify_internal_part",
-    "classify_outstand_flange",
-    "classify_elements",
-    "classify_section",
-    "classify_section_from_dict",
-    "create_section",
-    "UniversalSection",
-    "UniversalBeam",
-    "UniversalColumn",
-    "UniversalBearingPile",
-    "UB",
-    "UC",
-    "UBP",
-    "ParallelFlangeChannel",
-    "PFC",
-    "EqualAngle",
-    "UnequalAngle",
-    "EqualAngleBackToBack",
-    "UnequalAngleBackToBack",
-    "L_EQUAL",
-    "L_UNEQUAL",
-    "L_EQUAL_B2B",
-    "L_UNEQUAL_B2B",
-    "ColdFormedCircularHollowSection",
-    "ColdFormedSquareHollowSection",
-    "ColdFormedRectangularHollowSection",
-    "CFCHS",
-    "CFSHS",
-    "CFRHS",
-    "HotFinishedCircularHollowSection",
-    "HotFinishedSquareHollowSection",
-    "HotFinishedRectangularHollowSection",
-    "HotFinishedEllipticalHollowSection",
-    "HFCHS",
-    "HFSHS",
-    "HFRHS",
-    "HFEHS",
-    "angles",
-    "channels",
-    "cf_hollow",
-    "hf_hollow",
-    "universal",
-]
+# Add create_section to exports
+# __all__.append("create_section")

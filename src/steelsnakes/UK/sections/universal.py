@@ -62,16 +62,10 @@ class UniversalSection(BaseSection):
     # Buckling and torsion properties
     U: float = 0.0  # Buckling parameter
     X: float = 0.0  # Torsional index
-    I_w: float = 0.0  # Warping constant (cm^6)
-    I_t: float = 0.0  # Torsional constant (cm^4)
-    A: float = 0.0  # Cross-sectional area (cm^2)
-
-    def classification_elements(self) -> list[Any]:
-        """Return UK universal geometry as generic EC3 classification elements."""
-        from steelsnakes.EU.checks.classification import i_section_elements
-
-        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = (b - tw - 2r)/2
-
+    I_w: float = 0.0  # Warping constant (cm⁶)
+    I_t: float = 0.0  # Torsional constant (cm⁴)
+    A: float = 0.0  # Cross-sectional area (cm²)
+    
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
 

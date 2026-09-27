@@ -1,14 +1,3 @@
-# pyright: reportAttributeAccessIssue=false
-# pyright: reportOptionalOperand=false
-# pyright: reportOperatorIssue=false
-# pyright: reportMissingImports=false
-# pyright: reportArgumentType=false
-# pyright: reportReturnType=false
-# pyright: reportCallIssue=false
-
-# NOTE: legacy prototype; not imported anywhere. Superseded by the chapter modules tension.py (D), compression.py (E),
-# flexure.py (F), shear.py (G), combined.py (H) and stability.py (C, Appendices 7 and 8).
-
 # D: Tension - tensile yielding in gross section and tensile rupture in net section
 # E: Compression - flexural buckling, torsional buckling, flexural-torsional buckling
 # F: Flexure -
@@ -420,7 +409,8 @@ def calc_effective_width_be(lambda_value: float, lambda_r: float, Fy: float, Fn:
         case False:
             c1 = kwargs.get("c1")
             Fel = kwargs.get("Fel")
-            return b * (1 - c1 * (np.sqrt(Fel / Fn))) * np.sqrt(Fel / Fn) # AISC 360-22 uses Fn (was Fcr in 360-16)
+            Fcr = kwargs.get("Fcr")
+            return b * (1 - c1 * (np.sqrt(Fel / Fcr))) * np.sqrt(Fel / Fcr)
         case _:
             raise NotImplementedError("Function is still rudimentary & untested.")
 

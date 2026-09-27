@@ -57,12 +57,6 @@ class Beam(BaseSection):
     I_w: float = 0.0  # Warping constant (cm⁶)
     I_t: float = 0.0  # Torsional constant (cm⁴)
     A: float = 0.0  # Cross-sectional area (cm²)
-
-    def classification_elements(self) -> list[Any]:
-        """Return beam geometry as generic EC3 classification elements."""
-        from steelsnakes.EU.checks.classification import i_section_elements
-
-        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = (b - tw - 2r)/2
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""
@@ -143,34 +137,10 @@ if __name__ == "__main__":
     # test_section = factory.create_section("1100x400x607", section_type=SectionType.UB)
     # print(test_section.get_properties())
 
-    # print(UB("1100x400x433").get_properties())
-    # print(HL("HL-1100-M").get_properties())
-    # print(HLZ("HLZ-1100-A").get_properties())
-    # print(IPE("IPE-750x220").get_properties())
-
-    # Classification examples. Geometry stays here in the section module,
-    # while the stress case is selected in the classification check.
-    from steelsnakes.EU.checks.classification import (
-        ElementStressDistribution,
-        classify_section,
-    )
-    section = IPE("IPE-750x220")
-    classification_result = classify_section(section=section, fy_mpa=355.0)
-
-    print(f"Compression class: {classification_result.section_class}")
-    for element in classification_result.elements:
-        print(f" - {element.name}: kind={element.kind}, c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}")
+    print(UB("1100x400x433").get_properties())
+    print(HL("HL-1100-M").get_properties())
+    print(HLZ("HLZ-1100-A").get_properties())
+    print(IPE("IPE-750x220").get_properties())
     
-    section_2 = HE("HE-100-A")
-    classification_result_2 = classify_section(
-        section=section_2,
-        fy_mpa=355.0,
-        stress_pattern=ElementStressDistribution.BENDING,
-    )
-    print(f"Major-axis bending class: {classification_result_2.section_class}")
-    for element in classification_result_2.elements:
-        print(
-            f" - {element.name}: kind={element.kind}, stress={element.stress}, "
-            f"c={element.c_mm}mm, t={element.t_mm}mm, class={element.section_class}"
-        )
+    
     print("🐬")

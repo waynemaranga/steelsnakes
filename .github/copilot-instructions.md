@@ -68,10 +68,9 @@ steelsnakes/
 ```
 
 ### Dependencies (pyproject.toml)
-- Core/runtime: numpy>=2.3.2, pydantic>=2.11.7, sqlalchemy>=2.0.43
-- Testing: pytest>=8.4.1, pytest-cov>=6.2.1, coverage==7.10.0
-- Docs/tooling packaged in project deps: sphinx, shibuya, myst-parser, sphinx-design, sphinx-copybutton, sphinxcontrib-mermaid
-- Ruff is still used for linting/formatting and may need separate install in constrained environments.
+- Runtime: pydantic>=2.11, sqlalchemy>=2.0
+- Dev/Test: pytest>=8.4, coverage==7.10.0, ruff (install separately)
+- Docs: mkdocs>=1.6, mkdocstrings[python]>=0.30.0, mkdocs-shadcn, pymdown-extensions
 
 Note: This library does depend on external packages; use the PYTHONPATH approach if network is restricted and you only need to run code locally.
 

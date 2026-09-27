@@ -27,9 +27,8 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - `SectionDatabase` now auto-discovers regional JSON files, keeps the cache keyed by `SectionType`, and exposes both fuzzy lookups and comparison-based search helpers so you can handle designations that vary in case, hyphenation, or separator characters.
 - `SectionFactory` wires that cache to concrete section classes for `UK`, `EU`, and `US` while gracefully warning when the region linked in `SectionDatabase` does not yet have a corresponding module; extension hooks for `AU`/`NZ` are already in place.
 - Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
-- Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, and `src/steelsnakes/US/checks/` already capture clauses for limit state verifications; `US/checks/lrfd.py` is the legacy prototype, superseded by the chapter modules `tension`, `compression`, `flexure`, `shear`, `combined` and `stability`.
-- `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
-- The API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
+- Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, `src/steelsnakes/US/checks/classification.py`, and `lrfd.py` already capture clauses for limit state verifications; expect more worked examples and metadata refinement as the TODO comments are closed.
+- The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
 <!-- prettier-ignore-start -->
 !!! warning "Note"
@@ -39,7 +38,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
 
 1. 🇪🇺 `EU` European Union - Eurocode 3
-2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA; legacy BS 5950-1:2000 classification under `BS`, on the same UK sections
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA
 3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
 4. 🇮🇳 `IN` India - IS 800 & IS 808
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
@@ -127,39 +126,4 @@ See [References](./99-references.md)
 
 ```
 
-``` -->
-
-```{toctree}
-:maxdepth: 2
-:caption: Guides
-
-01-guides/index
-01-guides/01-first-steps
-01-guides/02-engineering-workflow
-01-guides/03-codesandstds
-01-guides/04-classification-architecture-decision
-01-guides/05-eu-classification
-```
-
-```{toctree}
-:maxdepth: 2
-:caption: API Reference
-
-02-api-reference/index
-02-api-reference/02-database
-02-api-reference/03-us-classification
-02-api-reference/04-uk-classification
-02-api-reference/05-us-member-checks
-02-api-reference/06-bs-classification
-02-api-reference/07-eu-member-checks
-02-api-reference/08-eu-serviceability-checks
-02-api-reference/09-bs-member-checks
-02-api-reference/10-section-analysis
-```
-
-```{toctree}
-:maxdepth: 1
-:caption: References
-
-99-references
 ```

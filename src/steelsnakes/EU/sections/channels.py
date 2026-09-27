@@ -19,6 +19,9 @@ class ParallelFlangeChannel(BaseSection):
 
     C-shaped section with parallel flanges, commonly used for
     secondary beams, purlins, and cladding rails.
+    
+    Supports both PFC and UPE section types through factory registration.
+    The factory will register this class for both SectionType.PFC and SectionType.UPE.
     """
 
     serial_size: str = ""
@@ -51,13 +54,7 @@ class ParallelFlangeChannel(BaseSection):
     I_w: float = 0.0
     I_t: float = 0.0
     A: float = 0.0
-
-    def classification_elements(self) -> list[Any]:
-        """Return channel geometry as generic EC3 classification elements."""
-        from steelsnakes.EU.checks.classification import channel_section_elements
-
-        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = b - tw - r
-
+    
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.PFC
@@ -112,12 +109,6 @@ class TaperedFlangeChannel(BaseSection):
     I_t: float = 0.0
     A: float = 0.0
 
-    def classification_elements(self) -> list[Any]:
-        """Return channel geometry as generic EC3 classification elements."""
-        from steelsnakes.EU.checks.classification import channel_section_elements
-
-        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf) # tapered flange: c = b - tw with the mean tf; Table 5.2 has no tapered-flange rule
-
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.UPN
@@ -134,11 +125,11 @@ def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlan
     factory: EUSectionFactory = get_EU_factory(data_directory)
     return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
 
-
-def UPE(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannelUPE:
-    """Create a UPE Parallel Flange Channel section by designation."""
+def UPE(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
+    """Create a Parallel Flange Channel section by designation."""
     factory: EUSectionFactory = get_EU_factory(data_directory)
-    return cast(ParallelFlangeChannelUPE, factory.create_section(designation, SectionType.UPE))
+    # return factory.create_section(designation, SectionType.UPE)
+    return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.UPE))
 
 
 def UPN(designation: str, data_directory: Optional[Path] = None) -> TaperedFlangeChannel:
@@ -148,20 +139,7 @@ def UPN(designation: str, data_directory: Optional[Path] = None) -> TaperedFlang
 
 
 if __name__ == "__main__":
-    from steelsnakes.EU.checks.classification import (
-        ElementStressDistribution,
-        classify_section,
-    )
-
-    section = UPE("UPE-400")
-    print(section.get_properties())
-
-    compression_result = classify_section(section=section, fy_mpa=355.0)
-    print(f"Compression class: {compression_result.section_class}")
-
-    bending_result = classify_section(
-        section=section,
-        fy_mpa=355.0,
-        stress_pattern=ElementStressDistribution.BENDING,
-    )
-    print(f"Major-axis bending class: {bending_result.section_class}")
+    print(PFC("430x100x64").get_properties())
+    print(UPE("UPE-400").get_properties())
+    print(UPN("UPN-400").get_properties())
+    print("🐬")

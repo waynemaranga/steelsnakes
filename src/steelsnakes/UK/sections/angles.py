@@ -7,9 +7,7 @@ to clean up properties OR remarshall json for fixing
 """
 
 from __future__ import annotations
-
-import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Optional, cast
 
@@ -186,8 +184,8 @@ class EqualAngleBackToBack(BaseSection):
     I_yy: float = 0.0
     i_yy: float = 0.0
     W_el_yy: float = 0.0
-    i_zz: dict[str, float] = field(default_factory=dict)  # Radius of gyration, z-axis (cm), keyed by spacing between angles (mm)
-
+    i_zz: Any = () # FIXME: dict/list/set/OrderedDict mutable defaults not allowed
+    
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_EQUAL_B2B
@@ -220,8 +218,9 @@ class UnequalAngleBackToBack(BaseSection):
     I_yy: float = 0.0
     i_yy: float = 0.0
     W_el_yy: float = 0.0
-    i_zz: dict[str, float] = field(default_factory=dict)  # Radius of gyration, z-axis (cm), keyed by spacing between angles (mm)
-
+    i_zz: Any = () # FIXME: dict/list/set/OrderedDict mutable defaults not allowed
+    
+    
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.L_UNEQUAL_B2B

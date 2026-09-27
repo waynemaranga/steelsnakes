@@ -56,13 +56,7 @@ class ParallelFlangeChannel(BaseSection):
     I_w: float = 0.0
     I_t: float = 0.0
     A: float = 0.0
-
-    def classification_elements(self) -> list[Any]:
-        """Return UK channel geometry as generic EC3 classification elements."""
-        from steelsnakes.EU.checks.classification import channel_section_elements
-
-        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = b - tw - r
-
+    
     @classmethod
     def get_section_type(cls) -> SectionType:
         return SectionType.PFC
