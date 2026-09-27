@@ -42,7 +42,7 @@ def test_case_enums_expose_string_values_and_descriptions() -> None:
     assert "Flanges of rolled I-shaped sections" in CompressionCase.CASE_1.description
     assert FlexureCase.CASE_10.value == "case10"
     assert FlexureCase.CASE_10.label == "case10"
-    assert "compression flanges" in FlexureCase.CASE_10.description.lower()
+    assert "flanges of rolled i-shaped sections" in FlexureCase.CASE_10.description.lower() # Table B4.1b wording
 
 
 def test_case11_requires_explicit_built_up_information() -> None:
@@ -265,7 +265,7 @@ def test_classify_section_tee_extracts_stem_and_flange_and_uses_case10_for_flang
     assert cases == {"stem": FlexureCase.CASE_14, "flange": FlexureCase.CASE_10}
 
 
-def test_classify_section_angle_is_compression_only_for_now() -> None:
+def test_classify_section_angle_flexure_uses_case12() -> None:
     section = EqualAngle(
         designation="L4X4X1/2",
         d=4.0,
@@ -276,13 +276,15 @@ def test_classify_section_angle_is_compression_only_for_now() -> None:
     compression = classify_section(section=section, E_ksi=29000.0, Fy_ksi=50.0)
     assert {item.name for item in compression.elements} == {"leg_1", "leg_2"}
 
-    with pytest.raises(NotImplementedError):
-        classify_section(
-            section=section,
-            E_ksi=29000.0,
-            Fy_ksi=50.0,
-            stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
-        )
+    # F10.3: leg local buckling with Table B4.1b case 12; b/t = 8 < lambda_p = 0.54sqrt(E/Fy) = 13.0
+    flexure = classify_section(
+        section=section,
+        E_ksi=29000.0,
+        Fy_ksi=50.0,
+        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+    )
+    assert {item.case for item in flexure.elements} == {FlexureCase.CASE_12}
+    assert flexure.section_class == SectionClass.COMPACT
 
 
 def test_classify_section_rejects_i_shape_without_h_tw() -> None:
@@ -347,3 +349,45 @@ def test_public_us_api_exports_section_classifier() -> None:
 
     assert result.section_class == SectionClass.COMPACT
     assert result.classification_context == PublicStressPattern.MAJOR_AXIS_BENDING
+
+
+# --- Table B4.1b case 16 and flexure about the minor axis ---
+def test_case16_singly_symmetric_web() -> None:
+    # lambda_p = (hc/hp)sqrt(E/Fy)/(0.54Mp/My - 0.09)^2 <= lambda_r = 5.70sqrt(E/Fy); hc = 40 in., hp = 30 in., Mp/My = 250/150
+    from steelsnakes.US.checks.flexure import calculate_singly_symmetric_web_lambda_p
+
+    result = classify_flexure(FlexureCase.CASE_16, E=29000.0, Fy=50.0, hc=40.0, tw=0.35, hp=30.0, Mp=250.0 * 50.0, My=150.0 * 50.0)
+    assert result.metadata["wttr"] == pytest.approx(40.0 / 0.35)
+    assert result.metadata["lambda_p"] == pytest.approx(calculate_singly_symmetric_web_lambda_p(40.0, 30.0, 250.0 * 50.0, 150.0 * 50.0, 50.0))
+    assert result.section_class == SectionClass.NONCOMPACT
+
+    element = ElementInput(name="web", ratio_label="hc/tw", wttr=40.0 / 0.35, flexure_case=FlexureCase.CASE_16, metadata={"hc_hp": 40.0 / 30.0, "Mp_My": 250.0 / 150.0})
+    assert classify_elements([element], classification_context="flexure_major_axis").section_class == SectionClass.NONCOMPACT
+
+    capped = classify_flexure("case16", E=29000.0, Fy=50.0, wttr=100.0, hc_hp=10.0, Mp_My=1.2)
+    assert capped.metadata["lambda_p"] == pytest.approx(capped.metadata["lambda_r"]) # lambda_p <= lambda_r
+    with pytest.raises(ValueError):
+        classify_flexure("case16", E=29000.0, Fy=50.0, wttr=100.0)
+
+
+def test_rectangular_hss_minor_axis_flexure_swaps_the_walls() -> None:
+    # F7 about the minor axis: the h walls are the compression flanges (case 17), the b walls the webs (case 19)
+    data: dict[str, float | str | bool] = {"h_tdes": 66.0, "b_tdes": 20.0, "tdes": 0.174}
+    major = classify_section_from_dict(SectionType.HSS_RCT, data, classification_context="flexure_major_axis")
+    minor = classify_section_from_dict(SectionType.HSS_RCT, data, classification_context="flexure_minor_axis")
+
+    assert {item.name: (item.case, item.wttr) for item in major.elements} == {"web": (FlexureCase.CASE_19, 66.0), "flange": (FlexureCase.CASE_17, 20.0)}
+    assert {item.name: (item.case, item.wttr) for item in minor.elements} == {"web": (FlexureCase.CASE_19, 20.0), "flange": (FlexureCase.CASE_17, 66.0)}
+    assert major.section_class == SectionClass.NONCOMPACT # web: 58.3 < 66 <= 137
+    assert minor.section_class == SectionClass.SLENDER_ELEMENT # flange: 66 > 1.40sqrt(E/Fy) = 33.7
+
+
+def test_round_hss_and_single_angles_classify_about_the_minor_axis() -> None:
+    rnd = classify_section_from_dict(SectionType.HSS_RND, {"D_t": 41.3}, classification_context="flexure_minor_axis")
+    angle = classify_section_from_dict(SectionType.L_UNEQUAL, {"d": 4.0, "b": 8.0, "t": 0.5}, classification_context="flexure_minor_axis")
+
+    assert {item.case for item in rnd.elements} == {FlexureCase.CASE_20}
+    assert {item.case for item in angle.elements} == {FlexureCase.CASE_12}
+    assert angle.section_class == SectionClass.NONCOMPACT # long leg b/t = 16: 13.0 < 16 <= 21.9
+    with pytest.raises(NotImplementedError): # F9 covers tees in the plane of symmetry only
+        classify_section_from_dict(SectionType.WT, {"D_t": 25.6, "bf_2tf": 8.74}, classification_context="flexure_minor_axis")

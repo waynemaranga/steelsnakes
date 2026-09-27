@@ -308,3 +308,24 @@ def test_example_F11B_equal_angle_restrained_at_midspan() -> None:
     # The example conservatively reuses leg local buckling from F.11A (0.80Sc, 53.0 kip-in.); with restraint Sc = Sx
     assert result.limit_states[LimitState.LEG_LOCAL_BUCKLING.value] >= 53.0
     assert result.phi_b_Mn >= 3.98 * 12
+
+
+def test_built_up_F4_and_F5_flanges_use_table_B4_1b_case_11() -> None:
+    # Case 11: lambda_rf = 0.95sqrt(kc*E/FL), below case 10's 1.0sqrt(E/Fy); h/tw = 176 gives kc = 0.35 (lower bound)
+    rolled = check_slender_web_i_shape_flexure(Fy=50.0, Sxc=1100.0, Sxt=1100.0, hc=66.0, tw=0.375, bfc=18.0, tfc=0.75)
+    built_up = check_slender_web_i_shape_flexure(Fy=50.0, Sxc=1100.0, Sxt=1100.0, hc=66.0, tw=0.375, bfc=18.0, tfc=0.75, built_up=True)
+
+    assert rolled.lambda_rf == pytest.approx(math.sqrt(29000.0 / 50.0))
+    assert built_up.lambda_rf == pytest.approx(0.95 * math.sqrt(0.35 * 29000.0 / (0.7 * 50.0))) # FL = 0.7Fy for slender webs
+    assert built_up.limit_state == LimitState.COMPRESSION_FLANGE_LOCAL_BUCKLING
+    assert built_up.Mn < rolled.Mn # F5-8 interpolates over the shorter range
+
+    f4 = check_noncompact_web_i_shape_flexure(
+        Fy=50.0, Zx=250.0, Sxc=220.0, Sxt=220.0, Iy=100.0, Iyc=50.0, J=3.0, ho=35.0, hc=33.0, tw=0.3, bfc=10.0, tfc=0.5, built_up=True
+    )
+    assert f4.lambda_rf == pytest.approx(0.95 * math.sqrt(max(4.0 / math.sqrt(110.0), 0.35) * 29000.0 / f4.FL))
+
+
+def test_angle_beta_w_matches_soft_converted_legs() -> None:
+    # Commentary Table C-F10.1: L8x4 is L203x102; 203/25.4 = 7.99 in. still finds beta_w = 5.48 in.
+    assert angle_beta_w(203.0 / 25.4, 102.0 / 25.4) == pytest.approx(5.48)

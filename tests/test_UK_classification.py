@@ -110,8 +110,8 @@ def test_hfrhs_classify_bending() -> None:
 
     stress_cases = {item.name: item.stress for item in result.elements}
     assert stress_cases == {
-        "web_wall": ElementStressDistribution.BENDING,
-        "flange_wall": ElementStressDistribution.BENDING,
+        "web_wall": ElementStressDistribution.BENDING, # Table 5.2 Sheet 1/3: axis-free bending is major-axis bending
+        "flange_wall": ElementStressDistribution.COMPRESSION,
     }
 
 

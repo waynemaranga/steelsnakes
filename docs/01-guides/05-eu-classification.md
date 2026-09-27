@@ -36,6 +36,12 @@ These are exported from `steelsnakes.EU.checks` and also from `steelsnakes.EU`.
 - an `ElementStressDistribution` value, which applies that stress to every element
 
 For hollow sections, the axis decides which walls act as webs (in bending) and which act as flanges (in compression).
+An axis-free `"bending"` is major-axis bending: the h walls are in bending and the b walls in compression, as Table 5.2
+Sheet 1 requires.
+
+Outstand flanges of rolled sections are measured from the toe of the root radius, as on Table 5.2 Sheet 2, and as the
+tabulated cf/tf: c = (b − tw − 2r)/2 for I- and H-sections and c = b − tw − r for parallel flange channels. Angles in
+bending follow Sheet 3's "refer also to outstand flanges": each full leg is checked as an outstand in compression.
 
 ## Common Usage
 
@@ -71,8 +77,8 @@ for element in result.elements:
 
 For the current hot-rolled beam/channel convenience path:
 
-- the web is checked as an internal part in bending
-- the flange is checked as an outstand part in compression
+- the web is checked as an internal part in bending, c = d
+- the flange is checked as an outstand part in compression, c = (b − tw − 2r)/2
 
 If you prefer explicit enums, this is equivalent to:
 
@@ -185,7 +191,7 @@ Currently implemented in the lean preset API:
 
 - hot-rolled I/H sections
 - channels
-- angles for compression-only section-level classification
+- angles in compression (Sheet 3) and in bending (legs as outstands, Sheet 2)
 
 For more specific stress distributions, use `custom_elements`.
 

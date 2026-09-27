@@ -62,7 +62,7 @@ class Beam(BaseSection):
         """Return beam geometry as generic EC3 classification elements."""
         from steelsnakes.EU.checks.classification import i_section_elements
 
-        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
+        return i_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = (b - tw - 2r)/2
     
     def get_properties(self) -> dict[str, Any]:
         """Return all section properties as a dictionary."""

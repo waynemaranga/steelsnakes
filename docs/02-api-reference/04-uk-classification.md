@@ -98,7 +98,7 @@ where “max” means the most restrictive class governs.
 |---|---|---|
 | `UB`, `UC`, `UBP` | Supported | Main I/H section workflow |
 | `PFC` | Supported | Channel workflow |
-| Angles | Supported | Compression-oriented use cases are in place |
+| Angles | Supported | Compression (Table 5.2 Sheet 3) and bending (legs as outstands, Sheet 2) |
 | `HFRHS`, `HFSHS`, `HFCHS` | Supported | Hot-finished hollow sections |
 | `CFRHS`, `CFSHS`, `CFCHS` | Supported | Shared engine, with explicit Class 4 exits |
 | `HFEHS` | Deferred | No implemented Table 5.2 path yet |

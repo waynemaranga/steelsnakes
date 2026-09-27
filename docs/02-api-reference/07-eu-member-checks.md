@@ -40,8 +40,11 @@ calculation sheet, the utilisation when the design action is given, and a `Refer
 
 The checks classify the section to Table 5.2 unless you pass `section_class=`. `check_cross_section()` classifies for
 the actions given. With compression and major-axis bending, the web of an I-section or channel is classified in
-bending and compression, using α = (1 + N_Ed/(c·t_w·fy))/2 and ψ = 2N_Ed/(A·fy) − 1. Other combinations with
-compression use the uniform-compression limits, which is conservative.
+bending and compression, using α = (1 + N_Ed/(c·t_w·fy))/2 and ψ = 2N_Ed/(A·fy) − 1. For an RHS or SHS under
+compression and bending about one axis, the two walls in bending use α = (1 + N_Ed/(2c·t·fy))/2 and the other two
+stay in compression. Other combinations with compression use the uniform-compression limits, which is conservative.
+Angle tables give no W_pl, so a Class 1 or 2 angle uses W_el. 6.2.1(4) permits this elastic resistance, and it is
+conservative.
 
 ## Cross-sections
 

@@ -20,46 +20,49 @@ from steelsnakes.base.sections import BaseSection, SectionType
 # B4.1. Classification of Sections for Local Buckling
 # -- For axial compression: nonslender-element members have with-to-thickness ratios <= lambda_r from table B4.1a, else slender-element.
 # --- For flexure: compact sections have width-to-thickness ratios <= lambda_p from table B4.1b, else noncompact if <= lambda_r, else slender-element.
-# B4.1a. Unstiffened elements
-# B4.1b. Stiffened elements
+# B4.1a. Members subjected to axial compression; cases 1 to 9
+# B4.1b. Members subjected to flexure; cases 10 to 21
 # TODO: Reproduce necessary tables in documentation e.g Tables B4.1a, B4.1b.
 # TODO: For programming and documentation, only provide case numbers and checks per case, user should refer to tables
 # TODO: In section libraries, have functions referring to case as eq. et cetera
-# TODO: Clarify stiffened vs unstiffened elements in docstring and documentation especially for UK/EU people
+# NOTE: Unstiffened elements (B4.1(a)) are supported along only one edge parallel to the force, i.e the EC3 "outstand";
+# ... stiffened elements (B4.1(b)) are supported along two edges, i.e the EC3 "internal compression part". Unlike EC3's
+# ... Classes 1 to 4, AISC grades compression members as nonslender/slender and flexural members as compact/noncompact/slender.
 
 # Table B4.1a. lambda_r for compression elements
 # (Unstiffened: cases 1, 2, 3 and 4)
-# Case 1: wttr = b/t; lambda_r = 0.56*sqrt(E/Fy);
-# Case 2: wttr = b/t; lambda_r = 0.64*sqrt(kc*E/Fy); and kc = 4/sqrt(h/tw) but 0.35 <= kc <= 0.76
-# Case 3: wttr = b/t; lambda_r = 0.45*sqrt(E/Fy);
-# Case 4: wttr = d/t; lambda_r = 0.75*sqrt(E/Fy);
+# Case 1: wttr = b/t; lambda_r = 0.56*sqrt(E/Fy); flanges of rolled I-shapes, channels and tees; outstanding legs of angle pairs in continuous contact
+# Case 2: wttr = b/t; lambda_r = 0.64*sqrt(kc*E/Fy); and kc = 4/sqrt(h/tw) but 0.35 <= kc <= 0.76; flanges of built-up I-shapes
+# Case 3: wttr = b/t; lambda_r = 0.45*sqrt(E/Fy); legs of single angles, of double angles with separators; all other unstiffened elements
+# Case 4: wttr = d/t; lambda_r = 0.75*sqrt(E/Fy); stems of tees
 # (Stiffened: cases 5, 6, 7, 8 and 9)
-# Case 5: wttr = h/tw; lambda_r = 1.49*sqrt(E/Fy);
-# Case 6: wttr = b/t; lambda_r = 1.40*sqrt(E/Fy);
-# Case 7: wttr = b/t; lambda_r = 1.40*sqrt(E/Fy);
-# Case 8: wttr = b/t; lambda_r = 1.49*sqrt(E/Fy);
-# Case 9: wttr = D/t; lambda_r = 0.11*E/Fy;
+# Case 5: wttr = h/tw; lambda_r = 1.49*sqrt(E/Fy); webs of doubly symmetric rolled and built-up I-shapes and channels
+# Case 6: wttr = b/t; lambda_r = 1.40*sqrt(E/Fy); walls of rectangular HSS
+# Case 7: wttr = b/t; lambda_r = 1.40*sqrt(E/Fy); flange cover plates between lines of fasteners or welds
+# Case 8: wttr = b/t; lambda_r = 1.49*sqrt(E/Fy); all other stiffened elements
+# Case 9: wttr = D/t; lambda_r = 0.11*E/Fy; round HSS # NOTE: linear E/Fy, not sqrt
 
 # Table B4.1b. lambda_p and lambda_r for flexural elements
 # Unstiffened i.e cases 10, 11, 12, 13, and 14
-# Case 10: wttr = b/t; lambda_p = 0.38*sqrt(E/Fy); lambda_r = 1.0*sqrt(E/Fy);
+# Case 10: wttr = b/t; lambda_p = 0.38*sqrt(E/Fy); lambda_r = 1.0*sqrt(E/Fy); flanges of rolled I-shapes, channels and tees
 # Case 11: wttr = b/t; lambda_p = 0.38*sqrt(E/Fy); lambda_r = 0.95*sqrt(kc*E/Fl); and kc = 4/sqrt(h/tw) but 0.35 <= kc <= 0.76
-# ... Fl = 0.7*Fy for ... # TODO: is elaborate. Complete.
-# Case 12: wttr = b/t; lambda_p = 0.54*sqrt(E/Fy); lambda_r = 0.91*sqrt(E/Fy);
-# Case 13: wttr = b/t; lambda_p = 0.38*sqrt(E/Fy); lambda_r = 1.0*sqrt(E/Fy);
-# Case 14: wttr = d/t; lambda_p = 0.84*sqrt(E/Fy); lambda_r = 1.52*sqrt(E/Fy);
-# Stiffened i.e cases 15, 16, 17, 18, and 21
-# Case 15: wttr = h/tw: lambda_p = 3.76*sqrt(E/Fy); lambda_r = 5.70*sqrt(E/Fy);
-# Case 16: wttr = hc/tw: lambda_p = [UNSUPPORTED]; lambda_r = 5.70*sqrt(E/Fy); # TODO: implement support for case 16 tho. no implementation currently for unsymmetric sections.
-# Case 17: wttr = b/t: lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.40*sqrt(E/Fy);
-# Case 18: wttr = b/t: lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.40*sqrt(E/Fy);
-# Case 19: wttr = h/t: lambda_p = 2.42*sqrt(E/Fy); lambda_r = 5.70*sqrt(E/Fy);
-# Case 20: wttr = D/t: lambda_p = 0.07*(E/Fy); lambda_r = 0.31*(E/Fy);  # NOTE: linear E/Fy, not sqrt
-# Case 21: wttr = b/t; lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.49*sqrt(E/Fy);
-
-# NOTE: round HSS / pipe flexure uses the linear E/Fy limits in Table B4.1b.
-# The original working note above is retained intentionally because the user asked
-# for notes and concerns to remain in the module while the implementation matures.
+# ... [b] Fl = 0.7*Fy for slender-web I-shapes, and for major-axis bending of compact and noncompact web built-up I-shapes with Sxt/Sxc >= 0.7;
+# ... Fl = Fy*Sxt/Sxc >= 0.5*Fy for major-axis bending of compact and noncompact web built-up I-shapes with Sxt/Sxc < 0.7
+# Case 12: wttr = b/t; lambda_p = 0.54*sqrt(E/Fy); lambda_r = 0.91*sqrt(E/Fy); legs of single angles (and double-angle legs via F9.3(b), F9.4(b) -> F10.3)
+# Case 13: wttr = b/t; lambda_p = 0.38*sqrt(E/Fy); lambda_r = 1.0*sqrt(E/Fy); flanges of all I-shapes and channels bent about the minor axis
+# Case 14: wttr = d/t; lambda_p = 0.84*sqrt(E/Fy); lambda_r = 1.52*sqrt(E/Fy); stems of tees
+# Stiffened i.e cases 15 to 21
+# Case 15: wttr = h/tw: lambda_p = 3.76*sqrt(E/Fy); lambda_r = 5.70*sqrt(E/Fy); webs of doubly symmetric I-shapes and channels
+# Case 16: wttr = hc/tw: lambda_p = (hc/hp)*sqrt(E/Fy)/(0.54*Mp/My - 0.09)^2 <= lambda_r; lambda_r = 5.70*sqrt(E/Fy); webs of singly symmetric I-shapes
+# ... [c] My = moment at yielding of the extreme fibre; Mp = Fy*Zx; hp = twice the distance from the PNA to the compression flange
+# Case 17: wttr = b/t: lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.40*sqrt(E/Fy); flanges of rectangular HSS
+# Case 18: wttr = b/t: lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.40*sqrt(E/Fy); flange cover plates between lines of fasteners or welds
+# Case 19: wttr = h/t: lambda_p = 2.42*sqrt(E/Fy); lambda_r = 5.70*sqrt(E/Fy); webs of rectangular HSS and box sections
+# Case 20: wttr = D/t: lambda_p = 0.07*(E/Fy); lambda_r = 0.31*(E/Fy); round HSS # NOTE: linear E/Fy, not sqrt
+# Case 21: wttr = b/t; lambda_p = 1.12*sqrt(E/Fy); lambda_r = 1.49*sqrt(E/Fy); flanges of box sections
+# NOTE: B4.1b(d): for rectangular HSS, b and h are the clear flats; if the corner radius is unknown, the outside dimension less 3t
+# NOTE: B4.2: t of HSS is the design wall thickness, tdes = 0.93*tnom except for ASTM A1065 and A1085 (= tnom)
+# NOTE: the working notes above are retained intentionally, as asked, while the implementation matures.
 
 class CompressionCase(str, Enum):
     """AISC Table B4.1a compression case identifiers.
@@ -85,12 +88,13 @@ class CompressionCase(str, Enum):
 
     @property
     def description(self) -> str:
+        # Table B4.1a, "Description of Element"
         descriptions: dict[CompressionCase, str] = {
-            CompressionCase.CASE_1: "Flanges of rolled I-shaped sections; Plates projecting from rolled I-shaped sections; Outstanding legs of pairs of angles connected with continuous contact; Flanges of channels; Flanges of tees",
-            CompressionCase.CASE_2: "Flanges of built-up I-shaped sections; Plates or angles projecting from built-up I-shaped sections",
+            CompressionCase.CASE_1: "Flanges of rolled I-shaped sections; plates projecting from rolled I-shaped sections; outstanding legs of pairs of angles connected with continuous contact; flanges of channels; flanges of tees",
+            CompressionCase.CASE_2: "Flanges of built-up I-shaped sections; plates or angle legs projecting from built-up I-shaped sections",
             CompressionCase.CASE_3: "Legs of single angles; legs of double angles with separators; all other unstiffened elements",
             CompressionCase.CASE_4: "Stems of tees",
-            CompressionCase.CASE_5: "Webs of doubly symmetric rolled I-shaped sections and channels; webs of built-up I-shaped sections and channels",
+            CompressionCase.CASE_5: "Webs of doubly symmetric rolled and built-up I-shaped sections and channels",
             CompressionCase.CASE_6: "Walls of rectangular HSS",
             CompressionCase.CASE_7: "Flange cover plates between lines of fasteners or welds",
             CompressionCase.CASE_8: "All other stiffened elements",
@@ -126,19 +130,20 @@ class FlexureCase(str, Enum):
 
     @property
     def description(self) -> str:
+        # Table B4.1b, "Description of Element"
         descriptions: dict[FlexureCase, str] = {
-            FlexureCase.CASE_10: "Compression flanges of doubly symmetric I-shaped members and channels in flexure; also tee flanges checked with bf/2tf",
-            FlexureCase.CASE_11: "Compression flanges of built-up I-shaped members in flexure using kc and Fl",
-            FlexureCase.CASE_12: "Legs of single angles in flexure (unstiffened element); b/t with lambda_p = 0.54 sqrt(E/Fy), lambda_r = 0.91 sqrt(E/Fy)",
-            FlexureCase.CASE_13: "Flanges of all I-shaped sections and channels in flexure about their minor axis",
-            FlexureCase.CASE_14: "Tee stems using d/t in flexure",
-            FlexureCase.CASE_15: "Webs of doubly symmetric I-shaped members and channels in major-axis flexure",
-            FlexureCase.CASE_16: "Unsymmetric flexural web case using hc/tw; not implemented yet",
-            FlexureCase.CASE_17: "Rectangular or square HSS compression flanges using b/t",
-            FlexureCase.CASE_18: "Other stiffened flexural flange elements using b/t",
-            FlexureCase.CASE_19: "Rectangular or square HSS webs using h/t",
-            FlexureCase.CASE_20: "Round HSS and pipe using D/t",
-            FlexureCase.CASE_21: "Other stiffened flexural elements using b/t with lambda_r = 1.49 sqrt(E/Fy)",
+            FlexureCase.CASE_10: "Flanges of rolled I-shaped sections; flanges of channels; flanges of tees",
+            FlexureCase.CASE_11: "Flanges of doubly and singly symmetric I-shaped built-up sections; lambda_r uses kc and FL",
+            FlexureCase.CASE_12: "Legs of single angles",
+            FlexureCase.CASE_13: "Flanges of all I-shaped sections and channels in flexure about the minor axis",
+            FlexureCase.CASE_14: "Stems of tees",
+            FlexureCase.CASE_15: "Webs of doubly symmetric I-shaped sections and channels",
+            FlexureCase.CASE_16: "Webs of singly symmetric I-shaped sections; hc/tw with lambda_p from hc/hp and Mp/My",
+            FlexureCase.CASE_17: "Flanges of rectangular HSS",
+            FlexureCase.CASE_18: "Flange cover plates between lines of fasteners or welds",
+            FlexureCase.CASE_19: "Webs of rectangular HSS and box sections",
+            FlexureCase.CASE_20: "Round HSS",
+            FlexureCase.CASE_21: "Flanges of box sections",
         }
         return descriptions[self]
 
@@ -174,6 +179,7 @@ ANGLE_SECTION_TYPES = (
     SectionType.L2L_LLBB,
     SectionType.L2L_SLBB,
 )
+SINGLE_ANGLE_TYPES = (SectionType.L_EQUAL, SectionType.L_UNEQUAL)
 TEE_SECTION_TYPES = (
     SectionType.WT,
     SectionType.ST,
@@ -368,15 +374,16 @@ def angle_section_elements(
 ) -> list[ElementInput]:
     """Build classification elements for single and double angles.
 
-    Flexural angle classification stays explicit for now; compression support is
-    wired through section adapters because that is already well-defined by B4.1a.
+    Compression: Table B4.1a case 3 (single angles, double angles with separators), or case 1 for the outstanding legs
+    of pairs of angles in continuous contact. Flexure: Table B4.1b case 12 for both; F10.3 for single angles, and F9.3(b)
+    and F9.4(b) send double-angle flange and web legs to F10.3.
     """
-    compression_case = CompressionCase.CASE_1 if continuous_contact else CompressionCase.CASE_3
+    compression_case: CompressionCase = CompressionCase.CASE_1 if continuous_contact else CompressionCase.CASE_3
 
     return _build_elements(
         [
-            ("leg_1", "b/t", leg_1_over_t, compression_case, None),
-            ("leg_2", "b/t", leg_2_over_t, compression_case, None),
+            ("leg_1", "b/t", leg_1_over_t, compression_case, FlexureCase.CASE_12), # b = full width of the leg, B4.1a(b)
+            ("leg_2", "b/t", leg_2_over_t, compression_case, FlexureCase.CASE_12),
         ]
     )
 
@@ -453,8 +460,12 @@ def _ratio_from_kwargs(case: ClassificationCase, kwargs: dict[str, float | None]
     if case in {CompressionCase.CASE_4, FlexureCase.CASE_14}:
         return _require_positive(kwargs.get("d"), "d") / _require_positive(kwargs.get("t"), "t")
 
-    if case in {CompressionCase.CASE_5, FlexureCase.CASE_15, FlexureCase.CASE_16}:
+    if case in {CompressionCase.CASE_5, FlexureCase.CASE_15}:
         return _require_positive(kwargs.get("h"), "h") / _require_positive(kwargs.get("tw"), "tw")
+
+    if case == FlexureCase.CASE_16:
+        hc: Optional[float] = kwargs.get("hc") if kwargs.get("hc") is not None else kwargs.get("h") # hc/tw
+        return _require_positive(hc, "hc") / _require_positive(kwargs.get("tw"), "tw")
 
     if case == FlexureCase.CASE_19:
         denominator = kwargs.get("t")
@@ -501,6 +512,23 @@ def _Fl_case11(Fy: float, kwargs: dict[str, float | bool | None]) -> float:
     return max(Fy * ratio, 0.5 * Fy)
 
 
+def _case16_lambda_p(E: float, Fy: float, lambda_r: float, kwargs: dict[str, float | None]) -> tuple[float, dict[str, float]]:
+    """Table B4.1b case 16: lambda_p = (hc/hp)*sqrt(E/Fy) / (0.54*Mp/My - 0.09)^2 <= lambda_r.
+
+    Pass hc_hp and Mp_My, or hc, hp, Mp and My, where hc is twice the distance from the centroid to the inside face of
+    the compression flange, hp twice the distance from the plastic neutral axis to it, Mp = Fy*Zx and My the yield moment.
+    """
+    hc_hp: Optional[float] = kwargs.get("hc_hp")
+    if hc_hp is None:
+        hc_hp = _require_positive(kwargs.get("hc"), "hc") / _require_positive(kwargs.get("hp"), "hp")
+    Mp_My: Optional[float] = kwargs.get("Mp_My")
+    if Mp_My is None:
+        Mp_My = _require_positive(kwargs.get("Mp"), "Mp") / _require_positive(kwargs.get("My"), "My")
+    denominator: float = (0.54 * _require_positive(Mp_My, "Mp_My") - 0.09) ** 2
+    lambda_p_raw: float = _require_positive(hc_hp, "hc_hp") * math.sqrt(E / Fy) / denominator
+    return min(lambda_p_raw, lambda_r), {"hc_hp": hc_hp, "Mp_My": Mp_My, "lambda_p_raw": lambda_p_raw}
+
+
 def _rectangular_hss_ratio(
     ratio_value: float,
     clear_dimension: float,
@@ -529,26 +557,26 @@ def _compression_lambda_r(
     metadata: dict[str, float | str | None] = {}
 
     match case:
-        case CompressionCase.CASE_1:
+        case CompressionCase.CASE_1: # flanges of rolled I-shapes, channels and tees; b = bf/2 for I-shapes and tees, bf for channels
             return 0.56 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_2:
+        case CompressionCase.CASE_2: # flanges of built-up I-shapes; kc per footnote [a]
             kc, kc_metadata = _kc_from_kwargs(kwargs)
             metadata.update(kc_metadata)
             metadata["note"] = "steelsnakes does not yet implement built-up sections."
             return 0.64 * math.sqrt(kc * E / Fy), metadata
-        case CompressionCase.CASE_3:
+        case CompressionCase.CASE_3: # legs of single angles and of double angles with separators; b = full leg width
             return 0.45 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_4:
+        case CompressionCase.CASE_4: # stems of tees; d = full depth of the tee
             return 0.75 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_5:
+        case CompressionCase.CASE_5: # webs of doubly symmetric I-shapes and channels; h = clear distance less the fillets
             return 1.49 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_6:
+        case CompressionCase.CASE_6: # walls of rectangular HSS; flats per B4.1b(d)
             return 1.40 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_7:
+        case CompressionCase.CASE_7: # flange cover plates between lines of fasteners or welds
             return 1.40 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_8:
+        case CompressionCase.CASE_8: # all other stiffened elements
             return 1.49 * math.sqrt(E / Fy), metadata
-        case CompressionCase.CASE_9:
+        case CompressionCase.CASE_9: # round HSS; D/t with the design wall thickness
             return 0.11 * E / Fy, metadata
         case _:
             raise ValueError(
@@ -566,36 +594,37 @@ def _flexure_limits(
     metadata: dict[str, float | str | None] = {}
 
     match case:
-        case FlexureCase.CASE_10:
+        case FlexureCase.CASE_10: # flanges of rolled I-shapes, channels and tees
             return 0.38 * math.sqrt(E / Fy), 1.0 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_11:
+        case FlexureCase.CASE_11: # flanges of built-up I-shapes; kc per [a], FL per [b]
             kc, kc_metadata = _kc_from_kwargs(kwargs)
             metadata.update(kc_metadata)
             Fl = _Fl_case11(Fy, kwargs)
             metadata["Fl"] = Fl
             metadata["note"] = "steelsnakes does not yet implement built-up sections."
             return 0.38 * math.sqrt(E / Fy), 0.95 * math.sqrt(kc * E / Fl), metadata
-        case FlexureCase.CASE_12:
+        case FlexureCase.CASE_12: # legs of single angles; F10.3
             return 0.54 * math.sqrt(E / Fy), 0.91 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_13:
+        case FlexureCase.CASE_13: # flanges of I-shapes and channels, minor-axis bending; F6
             return 0.38 * math.sqrt(E / Fy), 1.0 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_14:
+        case FlexureCase.CASE_14: # stems of tees; F9.4
             return 0.84 * math.sqrt(E / Fy), 1.52 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_15:
+        case FlexureCase.CASE_15: # webs of doubly symmetric I-shapes and channels
             return 3.76 * math.sqrt(E / Fy), 5.70 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_16:
-            raise NotImplementedError(
-                "Flexure case16 is reserved for unsymmetric sections and is not implemented yet."
-            )
-        case FlexureCase.CASE_17:
+        case FlexureCase.CASE_16: # webs of singly symmetric I-shapes; lambda_p per [c]
+            lambda_r: float = 5.70 * math.sqrt(E / Fy)
+            lambda_p, case16_metadata = _case16_lambda_p(E, Fy, lambda_r, kwargs)
+            metadata.update(case16_metadata)
+            return lambda_p, lambda_r, metadata
+        case FlexureCase.CASE_17: # flanges of rectangular HSS; F7.2
             return 1.12 * math.sqrt(E / Fy), 1.40 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_18:
+        case FlexureCase.CASE_18: # flange cover plates between lines of fasteners or welds
             return 1.12 * math.sqrt(E / Fy), 1.40 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_19:
+        case FlexureCase.CASE_19: # webs of rectangular HSS and box sections; F7.3
             return 2.42 * math.sqrt(E / Fy), 5.70 * math.sqrt(E / Fy), metadata
-        case FlexureCase.CASE_20:
+        case FlexureCase.CASE_20: # round HSS; F8
             return 0.07 * E / Fy, 0.31 * E / Fy, metadata
-        case FlexureCase.CASE_21:
+        case FlexureCase.CASE_21: # flanges of box sections; F7.2
             return 1.12 * math.sqrt(E / Fy), 1.49 * math.sqrt(E / Fy), metadata
         case _:
             raise ValueError(
@@ -681,6 +710,15 @@ def classify_flexure(case: FlexureCase | str, **kwargs) -> Classification:
     )
 
 
+# Inputs a case needs beyond wttr, read from ElementInput.metadata: kc (cases 2, 11), Fl or web_is_slender with Sxt and
+# ... Sxc (case 11), hc_hp and Mp_My, or hc, hp, Mp and My (case 16)
+_CASE_INPUT_KEYS: tuple[str, ...] = ("kc", "h", "tw", "Fl", "web_is_slender", "Sxt", "Sxc", "hc", "hp", "Mp", "My", "hc_hp", "Mp_My")
+
+
+def _case_inputs(element: ElementInput) -> dict[str, float | str | None]:
+    return {key: value for key, value in element.metadata.items() if key in _CASE_INPUT_KEYS}
+
+
 def classify_element(
     element: ElementInput,
     E_ksi: float = 29000.0,
@@ -711,7 +749,7 @@ def classify_element(
             raise NotImplementedError(
                 f"Compression classification is not implemented for element '{element.name}'."
             )
-        result = classify_compression(element.compression_case, E=E, Fy=Fy, wttr=wttr)
+        result = classify_compression(element.compression_case, E=E, Fy=Fy, wttr=wttr, **_case_inputs(element))
         metadata.update(result.metadata)
         return ElementClassification(
             name=element.name,
@@ -730,7 +768,7 @@ def classify_element(
             raise NotImplementedError(
                 f"Major-axis flexural classification is not implemented for element '{element.name}'."
             )
-        result = classify_flexure(element.flexure_case, E=E, Fy=Fy, wttr=wttr)
+        result = classify_flexure(element.flexure_case, E=E, Fy=Fy, wttr=wttr, **_case_inputs(element))
         metadata.update(result.metadata)
         return ElementClassification(
             name=element.name,
@@ -749,7 +787,7 @@ def classify_element(
             raise NotImplementedError(
                 f"Minor-axis flexural classification is not implemented for element '{element.name}'."
             )
-        result = classify_flexure(element.flexure_case, E=E, Fy=Fy, wttr=wttr)
+        result = classify_flexure(element.flexure_case, E=E, Fy=Fy, wttr=wttr, **_case_inputs(element))
         metadata.update(result.metadata)
         return ElementClassification(
             name=element.name,
@@ -854,22 +892,38 @@ def _validate_classification_context(
         return list(elements)
 
     if classification_context == ClassificationContext.FLEXURE_MINOR_AXIS:
-        if section_type not in I_SECTION_TYPES and section_type not in CHANNEL_SECTION_TYPES:
-            raise NotImplementedError(
-                f"Classification context '{classification_context.value}' is not implemented for section type '{section_type.value}'. "
-                "Use custom_elements for explicit control."
-            )
+        # F6: I-shapes and channels bent about the minor axis; only the flanges are checked, Table B4.1b case 13
+        if section_type in I_SECTION_TYPES or section_type in CHANNEL_SECTION_TYPES:
+            flange_elements: list[ElementInput] = [
+                element.model_copy(update={"flexure_case": FlexureCase.CASE_13})
+                for element in elements
+                if element.name == "flange"
+            ]
+            if not flange_elements:
+                raise NotImplementedError(
+                    f"Minor-axis flexural classification requires a 'flange' element for section type '{section_type.value}'."
+                )
+            return flange_elements
 
-        flange_elements = [
-            element.model_copy(update={"flexure_case": FlexureCase.CASE_13})
-            for element in elements
-            if element.name == "flange"
-        ]
-        if not flange_elements:
-            raise NotImplementedError(
-                f"Minor-axis flexural classification requires a 'flange' element for section type '{section_type.value}'."
-            )
-        return flange_elements
+        # F7: rectangular HSS bent about the minor axis; the h walls become the flanges (case 17), the b walls the webs (case 19)
+        if section_type in RECT_HSS_SECTION_TYPES:
+            walls: dict[str, ElementInput] = {element.name: element for element in elements}
+            if "web" not in walls or "flange" not in walls:
+                raise NotImplementedError(f"Minor-axis flexural classification requires 'web' and 'flange' walls for '{section_type.value}'.")
+            return [
+                walls["flange"].model_copy(update={"name": "web", "flexure_case": FlexureCase.CASE_19}), # b/tdes, now a web
+                walls["web"].model_copy(update={"name": "flange", "flexure_case": FlexureCase.CASE_17}), # h/tdes, now a flange
+            ]
+
+        # F8: round HSS are axisymmetric; F10: single angles about the minor principal axis keep the legs in case 12
+        if section_type in ROUND_HSS_SECTION_TYPES or section_type in SINGLE_ANGLE_TYPES:
+            return list(elements)
+
+        # F9 covers tees and double angles loaded in the plane of symmetry only
+        raise NotImplementedError(
+            f"Classification context '{classification_context.value}' is not implemented for section type '{section_type.value}'. "
+            "Use custom_elements for explicit control."
+        )
 
     raise NotImplementedError(
         f"Classification context '{classification_context.value}' is not implemented for section type '{section_type.value}'. "
@@ -985,20 +1039,11 @@ def classify_section_from_dict(
         return classify_elements(_validate_classification_context(elements, section_type, context), E_ksi=E_ksi, Fy_ksi=Fy_ksi, classification_context=context)
 
     if section_type in ANGLE_SECTION_TYPES:
-        if context != ClassificationContext.AXIAL_COMPRESSION:
-            raise NotImplementedError(
-                f"Classification context '{context.value}' is not implemented for section type '{section_type.value}'. "
-                "Use custom_elements for explicit control."
-            )
-        t = _dict_value(data, "t")
-        leg_1 = _dict_value(data, "d", "b")
-        leg_2 = _dict_value(data, "b", "d")
-        return classify_elements(
-            angle_section_elements(leg_1_over_t=leg_1 / t, leg_2_over_t=leg_2 / t),
-            E_ksi=E_ksi,
-            Fy_ksi=Fy_ksi,
-            classification_context=context,
-        )
+        t: float = _require_ratio_value(_dict_value(data, "t"), "t")
+        leg_1: float = _dict_value(data, "d", "b") # full width of each leg, B4.1a(b)
+        leg_2: float = _dict_value(data, "b", "d")
+        elements = angle_section_elements(leg_1_over_t=leg_1 / t, leg_2_over_t=leg_2 / t)
+        return classify_elements(_validate_classification_context(elements, section_type, context), E_ksi=E_ksi, Fy_ksi=Fy_ksi, classification_context=context)
 
     if section_type in TEE_SECTION_TYPES:
         elements = tee_section_elements(

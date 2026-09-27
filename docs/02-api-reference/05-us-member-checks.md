@@ -69,6 +69,9 @@ that was evaluated.
 F13. Pass `axis="minor"` for minor-axis bending, and for single angles use `geometric_axis=True` and
 `restrained_at_max_moment=True` as needed. `calculate_Cb()` implements Equation F1-1.
 
+For built-up I-shapes, call `check_noncompact_web_i_shape_flexure()` (F4) or `check_slender_web_i_shape_flexure()` (F5)
+with `built_up=True`, so the flange limits are Table B4.1b case 11, λr = 0.95√(kcE/FL), rather than the rolled case 10.
+
 ## Shear: Chapter G
 
 `shear()` handles rolled and built-up I-shapes (G2.1, and tension field action per G2.2), channels, single angles and
@@ -126,6 +129,43 @@ print(calculate_B2(288.0, Pe_story))          # 1.48; Design Example C.1C
     destabilizing direction. For gravity-only combinations, that means four cases (±X, ±Y). The Modern Steel
     Construction article in `codes/notional-loads-how-to-approach.pdf` explains how to apply them as point loads at
     every column.
+
+## SI units: US_Metric
+
+`steelsnakes.US_Metric` applies the same checks to the AISC metric shapes, in N, mm and MPa. Forces come out in N and
+moments in N-mm (1 kN-m = 1e6 N-mm). The defaults are E = 200 000 MPa, G = 77 200 MPa, Fy = 345 MPa and Fu = 450 MPa
+(ASTM A992).
+
+```python
+from steelsnakes.US_Metric import compression, flexure
+from steelsnakes.US_Metric.sections.beams import W
+
+column = compression(W("W360X134"), Lx=9144.0, Ly=4572.0, Lz=4572.0)  # W14X90, Design Example E.1D
+print(column.phi_c_Pn / 1e3)  # 4 130 kN, i.e. 927 kips
+
+beam = flexure(W("W460X74"), Lb=3566.0, Cb=1.01)  # W18X50, Design Example F.1-2B
+print(beam.Mn / 1e6)  # 461 kN-m, i.e. 4 060 kip-in.
+```
+
+The equations in `steelsnakes.US.checks` are dimensionally consistent, so the SI module reuses them. It changes only
+two things:
+
+- **Section data.** The metric tables follow the AISC Shapes Database v16.0: I in 10⁶ mm⁴, Z, S and C in 10³ mm³,
+  J in 10³ mm⁴ and Cw in 10⁹ mm⁶. `metric_properties()` converts these to mm on read. Values you pass as
+  `properties` use the same table units.
+- **Constants.** Where the Specification states a constant in inches or ksi, the SI value it gives alongside is used:
+
+| Clause | US | SI |
+|---|---|---|
+| B4.3b hole allowance | 1/16 in. | 2 mm |
+| D5.1 be = 2t + ... | 0.63 in. | 16 mm |
+| D5.1(b) dh − d for Cr = 1.0 / 0.95 | 1/32, 1/16 in. | 1, 2 mm |
+| D6.2 eyebar t, dh − d, Fy | 1/2 in., 1/32 in., 70 ksi | 13 mm, 1 mm, 485 MPa |
+| App. 8.2 moment redistribution Fy | 65 ksi | 450 MPa |
+| Commentary Table C-F10.1 βw | in. | mm |
+
+The test suite checks every section type against its imperial twin (e.g. W360X134 is W14X90); the results agree to
+within 1.5%, which is the rounding of the metric tables.
 
 ## Validation
 

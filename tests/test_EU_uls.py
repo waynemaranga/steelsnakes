@@ -860,3 +860,29 @@ def test_general_method_6_63_to_6_66() -> None:
     assert interpolated.utilisation.reference is not None and interpolated.utilisation.reference.equation == "6.66"
     with pytest.raises(ValueError):
         check_general_method(1.5, 2.0, "b", "c", interpolate=True)
+
+
+# --- 5.5 Classification under the design actions ---
+def test_rhs_under_axial_force_and_major_axis_bending_uses_alpha_for_the_webs() -> None:
+    # RHS 200x100x5.0, S355: cw/t = 37 > 42ε = 34.2, Class 4 in uniform compression. Under N + M_y the h walls are parts in
+    # ... bending and compression, alpha = (1 + 100e3/(2 x 185 x 5 x 355))/2 = 0.576, 396ε/(13alpha - 1) = 49.6: Class 1
+    section = HFRHS("200x100x5.0")
+    with pytest.raises(SectionClass4Error):
+        check_compression(section, FY, N_Ed=100e3)
+
+    result = check_cross_section(section, FY, N_Ed=100e3, M_y_Ed=50e6)
+    assert result.section_class == SectionClass.CLASS_1
+    assert result.method == "plastic"
+    # Under N + M_z the h walls are flanges in compression, so the section stays Class 4 (Table 5.2 Sheet 1/3)
+    with pytest.raises(SectionClass4Error):
+        check_cross_section(section, FY, N_Ed=100e3, M_z_Ed=20e6)
+
+
+def test_angle_in_bending_is_classified_as_outstand_legs() -> None:
+    # Table 5.2 Sheet 3/3 -> Sheet 2/3; L 100x100x13: h/t = 7.7 <= 10ε = 8.14, Class 2, W_el used as W_pl is not tabulated
+    class_2 = check_bending(L_EQUAL("100x100x13.0"), FY, axis="y", M_Ed=10e6)
+    assert class_2.section_class == SectionClass.CLASS_2
+    assert class_2.reference is not None and class_2.reference.equation == "6.14"
+    # L 100x100x10: h/t = 10 <= 14ε = 11.4, Class 3
+    assert check_bending(L_EQUAL("100x100x10.0"), FY, axis="y").section_class == SectionClass.CLASS_3
+    assert section_modulus_for_class(2, W_el=90.0) == (90.0, "6.14") # 6.2.1(4)

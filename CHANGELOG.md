@@ -72,6 +72,25 @@
 - `EU`: `ExtraWideFlangeBeamHLZ` and `ParallelFlangeChannelUPE`, so HLZ and UPE sections report their own section type.
 - Tests: restored `tests/test_UK_module.py` and `tests/test_fuzzy_matching.py`; added `tests/test_US_Metric_module.py`,
   SQLite fallback tests, and a test that builds every packaged section in UK, EU, US and US_METRIC.
+- `US_Metric`: AISC 360-22 checks in SI units (N, mm, MPa) in `steelsnakes.US_Metric.checks`, also exported from
+  `steelsnakes.US_Metric`, covering:
+    - `classify_section()` (B4.1) and the `tension()`, `compression()`, `flexure()`, `shear()` and `hss_torsion()`
+      dispatchers
+    - the metric tables converted to mm on read (I in 10⁶ mm⁴, Z, S and C in 10³ mm³, J in 10³ mm⁴, Cw in 10⁹ mm⁶)
+    - the SI constants of B4.3b (2 mm), D5 (16 mm; 1 and 2 mm), D6 (13 mm, 1 mm, 485 MPa), Appendix 8.2 (450 MPa) and
+      Commentary Table C-F10.1 (βw in mm)
+- `US`: Table B4.1b case 16 (webs of singly symmetric I-shapes), classification of angles in flexure (case 12), and
+  minor-axis flexure classification of rectangular HSS (the h walls become the flanges), round HSS and single angles.
+- `US`: `ElementInput.metadata` carries the case inputs (kc, Fl, hc_hp, Mp_My) through `classify_element()`.
+- `US`: `built_up=True` on the F4 and F5 checks uses Table B4.1b case 11 for the flange limits.
+- `US`: the inch and ksi constants of D5, D6 and Appendix 8.2 are parameters (`be_offset`, `clearances`, `t_min`,
+  `hole_clearance`, `Fy_limit`); `angle_beta_w()` takes a `tolerance`.
+- `EU`/`UK`: angles in bending classify each leg as an outstand (Table 5.2 Sheet 3 to Sheet 2).
+- `EU`/`UK`: under compression and bending about one axis, `check_cross_section()` and the member checks classify the
+  two RHS/SHS walls in bending with α = (1 + N_Ed/(2c·t·fy))/2.
+- `EU`/`UK`: a Class 1 or 2 section without a tabulated W_pl, such as an angle, uses W_el (6.2.1(4)).
+- Tests: `tests/test_US_Metric_checks.py`, which reproduces AISC Design Examples on the metric twins and compares every
+  section type with its imperial twin.
 
 ### Fixed
 
@@ -84,3 +103,12 @@
 - `EU`: HLZ sections reported `SectionType.HL`, and UPE sections reported `SectionType.PFC`.
 - `UK`/`EU`: back-to-back angles used `()` as the default for `i_zz`, which the data holds as a dict of radius of
   gyration per spacing; it now defaults to an empty dict per instance.
+- `EU`/`UK`: an axis-free `"bending"` stress pattern put all four RHS/SHS walls on the bending limits
+  (72ε, 83ε, 124ε), which is unconservative for the flanges. It is now major-axis bending: the h walls are in bending
+  and the b walls in compression, per Table 5.2 Sheet 1.
+- `EU`/`UK`: the flange outstand c of rolled I/H sections and parallel flange channels now excludes the root radius,
+  c = (b − tw − 2r)/2 and b − tw − r, per Table 5.2 Sheet 2 and as the tabulated cf/tf. Before, (b − tw)/2
+  overstated c/t and could put a flange in a higher class than the code gives.
+- `US`: the Table B4.1b case descriptions for cases 10, 11, 16, 18 and 21 did not match the Specification.
+- `US_Metric`: the section unit comments said in, in² and lb/ft; the data is in SI.
+- Docs: the US classification page's examples passed `context=`, `Fy=` and `ratio=`, which the API does not take.

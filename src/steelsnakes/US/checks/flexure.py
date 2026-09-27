@@ -115,8 +115,9 @@ def _worst(*classes: Optional[SectionClass]) -> Optional[SectionClass]:
     return max(present, key=lambda value: rank[value]) if present else None
 
 
-def _limits(case: FlexureCase, wttr: float, Fy: float, E: float) -> tuple[float, float, SectionClass]:
-    result = classify_flexure(case, E=E, Fy=Fy, wttr=wttr)
+def _limits(case: FlexureCase, wttr: float, Fy: float, E: float, **kwargs: float) -> tuple[float, float, SectionClass]:
+    # kwargs carry the extra case inputs, e.g kc and Fl for Table B4.1b case 11
+    result = classify_flexure(case, E=E, Fy=Fy, wttr=wttr, **kwargs)
     return float(result.metadata["lambda_p"]), float(result.metadata["lambda_r"]), result.section_class
 
 
@@ -374,6 +375,7 @@ def check_noncompact_web_i_shape_flexure(
     Sx: Optional[float] = None,
     lambda_pw: Optional[float] = None,
     lambda_rw: Optional[float] = None,
+    built_up: bool = False,
     E: float = E_STEEL,
 ) -> NoncompactWebIShapeFlexureResult:
     """AISC 360-22 Section F4: Other I-shaped members with compact or noncompact webs bent about their major axis.
@@ -395,6 +397,7 @@ def check_noncompact_web_i_shape_flexure(
         h_tw: h/tw for kc; defaults to hc/tw
         Sx: Elastic section modulus for the Mp limit; defaults to min(Sxc, Sxt)
         lambda_pw, lambda_rw: Web limits; default to Table B4.1b case 15 (doubly symmetric). Use case 16 for singly symmetric.
+        built_up: True for built-up I-shapes; the flange limits are then Table B4.1b case 11 (kc, FL), else case 10 (rolled)
         E: Modulus of elasticity (ksi)
     """
     Sxc = _require_positive(Sxc, "Sxc")
@@ -425,10 +428,13 @@ def check_noncompact_web_i_shape_flexure(
         else:
             Fcr = Cb * math.pi**2 * E / (Lb / rt) ** 2 * math.sqrt(1.0 + 0.078 * term * (Lb / rt) ** 2) # F4-5
             states[LimitState.LATERAL_TORSIONAL_BUCKLING] = (min(Fcr * Sxc, Rpc * Myc), "F4-3")
-    # F4.3 Compression flange local buckling
+    # F4.3 Compression flange local buckling; lambda_pf, lambda_rf per Table B4.1b, case 10 (rolled) or 11 (built-up)
     lambda_f = bfc / (2.0 * tfc)
-    lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_10, lambda_f, Fy, E)
     kc = calculate_kc(h_tw if h_tw is not None else lambda_w)
+    if built_up:
+        lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_11, lambda_f, Fy, E, kc=kc, Fl=FL)
+    else:
+        lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_10, lambda_f, Fy, E)
     match flange_class:
         case SectionClass.NONCOMPACT:
             states[LimitState.COMPRESSION_FLANGE_LOCAL_BUCKLING] = (_interpolate(Rpc * Myc, FL * Sxc, lambda_f, lambda_pf, lambda_rf), "F4-13")
@@ -446,7 +452,7 @@ def check_noncompact_web_i_shape_flexure(
         rt=rt, aw=aw, hc=hc, Lp=Lp, Lr=Lr, Fcr=Fcr, lambda_w=lambda_w, lambda_pw=lambda_pw, lambda_rw=lambda_rw,
         lambda_f=lambda_f, lambda_pf=lambda_pf, lambda_rf=lambda_rf,
         reference=Reference(code=DesignCode.AISC_360, clause="F4", equation=equation, title="Other I-shaped members with compact or noncompact webs"),
-        metadata={"Iyc_Iy": Iyc_Iy, "kc": kc},
+        metadata={"Iyc_Iy": Iyc_Iy, "kc": kc, "built_up": built_up},
     )
 
 
@@ -487,12 +493,25 @@ def check_slender_web_i_shape_flexure(
     Lb: float = 0.0,
     Cb: float = 1.0,
     h_tw: Optional[float] = None,
+    built_up: bool = False,
     E: float = E_STEEL,
 ) -> SlenderWebIShapeFlexureResult:
     """AISC 360-22 Section F5: I-shaped members with slender webs bent about their major axis.
 
     Mn is the lowest of compression flange yielding (F5-1), LTB (F5-2), compression flange local buckling (F5-7) and
     tension flange yielding (F5-10).
+
+    Args:
+        Fy: Specified minimum yield stress (ksi)
+        Sxc, Sxt: Elastic section moduli referred to the compression and tension flanges (in³)
+        hc: Twice the distance from the centroid to the inside face of the compression flange (in)
+        tw: Web thickness (in)
+        bfc, tfc: Compression flange width and thickness (in)
+        Lb, Cb: Unbraced length (in) and LTB modification factor
+        h_tw: h/tw for kc; defaults to hc/tw
+        built_up: True for built-up I-shapes (plate girders); the flange limits are then Table B4.1b case 11 with
+            FL = 0.7Fy (slender web, footnote [b]), else case 10 (rolled)
+        E: Modulus of elasticity (ksi)
     """
     Sxc = _require_positive(Sxc, "Sxc")
     Sxt = _require_positive(Sxt, "Sxt")
@@ -512,16 +531,20 @@ def check_slender_web_i_shape_flexure(
             Fcr_ltb, equation = min(Cb * math.pi**2 * E / (Lb / rt) ** 2, Fy), "F5-4"
         states[LimitState.LATERAL_TORSIONAL_BUCKLING] = (Rpg * Fcr_ltb * Sxc, equation)
 
-    # F5.3 Compression flange local buckling
+    # F5.3 Compression flange local buckling; lambda_pf, lambda_rf per Table B4.1b, case 10 (rolled) or 11 (built-up)
     lambda_f = bfc / (2.0 * tfc)
-    lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_10, lambda_f, Fy, E)
+    kc = calculate_kc(h_tw if h_tw is not None else hc_tw)
+    if built_up:
+        lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_11, lambda_f, Fy, E, kc=kc, Fl=0.7 * Fy)
+    else:
+        lambda_pf, lambda_rf, flange_class = _limits(FlexureCase.CASE_10, lambda_f, Fy, E)
     Fcr_flb: Optional[float] = None
     match flange_class:
         case SectionClass.NONCOMPACT:
             Fcr_flb = Fy - 0.3 * Fy * (lambda_f - lambda_pf) / (lambda_rf - lambda_pf) # F5-8
             states[LimitState.COMPRESSION_FLANGE_LOCAL_BUCKLING] = (Rpg * Fcr_flb * Sxc, "F5-8")
         case SectionClass.SLENDER_ELEMENT:
-            Fcr_flb = 0.9 * E * calculate_kc(h_tw if h_tw is not None else hc_tw) / lambda_f**2 # F5-9
+            Fcr_flb = 0.9 * E * kc / lambda_f**2 # F5-9
             states[LimitState.COMPRESSION_FLANGE_LOCAL_BUCKLING] = (Rpg * Fcr_flb * Sxc, "F5-9")
     # F5.4 Tension flange yielding
     if Sxt < Sxc:
@@ -533,7 +556,7 @@ def check_slender_web_i_shape_flexure(
         section_class=SectionClass.SLENDER_ELEMENT, Rpg=Rpg, aw=aw, rt=rt, Sxc=Sxc, Sxt=Sxt, Lp=Lp, Lr=Lr,
         Fcr_ltb=Fcr_ltb, Fcr_flb=Fcr_flb, lambda_f=lambda_f, lambda_pf=lambda_pf, lambda_rf=lambda_rf,
         reference=Reference(code=DesignCode.AISC_360, clause="F5", equation=equation, title="I-shaped members with slender webs"),
-        metadata={"hc_tw": hc_tw, "flange_class": flange_class.value},
+        metadata={"hc_tw": hc_tw, "flange_class": flange_class.value, "kc": kc, "built_up": built_up},
     )
 
 
@@ -1017,13 +1040,18 @@ BETA_W_ANGLES: dict[tuple[float, float], float] = {
 }
 
 
-def angle_beta_w(bl: float, bs: float) -> float:
-    """AISC 360-22 Commentary Table C-F10.1: magnitude of beta_w (in.) for single angles; zero for equal-leg angles."""
+def angle_beta_w(bl: float, bs: float, tolerance: float = 0.05) -> float:
+    """AISC 360-22 Commentary Table C-F10.1: magnitude of beta_w (in.) for single angles; zero for equal-leg angles.
+
+    Args:
+        bl, bs: Leg lengths (in); matched to the table within `tolerance`, so soft-converted metric legs e.g 203 mm = 7.99 in. find L8
+        tolerance: Absolute tolerance on the leg lengths (in)
+    """
     bl, bs = max(bl, bs), min(bl, bs)
-    if math.isclose(bl, bs):
+    if math.isclose(bl, bs, abs_tol=tolerance):
         return 0.0
     for (long_leg, short_leg), beta_w in BETA_W_ANGLES.items():
-        if math.isclose(long_leg, bl) and math.isclose(short_leg, bs):
+        if math.isclose(long_leg, bl, abs_tol=tolerance) and math.isclose(short_leg, bs, abs_tol=tolerance):
             return beta_w
     raise ValueError(f"No tabulated beta_w for an L{bl}x{bs}; pass beta_w explicitly.")
 

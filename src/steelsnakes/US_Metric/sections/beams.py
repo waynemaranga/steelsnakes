@@ -11,16 +11,16 @@ class Beam(BaseSection):
     T_F: str = ""
 
     # 
-    W: float = 0.0 # Nominal weight (lb/ft)
-    A: float = 0.0 # Area (in²)
-    d: float = 0.0 # Depth (in)
+    W: float = 0.0 # Nominal weight (kg/m)
+    A: float = 0.0 # Area (mm²)
+    d: float = 0.0 # Depth (mm)
     ddet: float = 0.0 #
-    bf: float = 0.0 # Flange width (in)
+    bf: float = 0.0 # Flange width (mm)
     bfdet: float = 0.0 # 
-    tw: float = 0.0 # Web thickness (in)
+    tw: float = 0.0 # Web thickness (mm)
     twdet: float = 0.0 #
     twdet_2: float = 0.0 #
-    tf: float = 0.0 # Flange thickness (in)
+    tf: float = 0.0 # Flange thickness (mm)
     tfdet: float = 0.0
     kdes: float = 0.0 #
     kdet: float = 0.0 
@@ -30,18 +30,18 @@ class Beam(BaseSection):
     bf_2tf: float = 0.0 #
     h_tw: float = 0.0
 
-    Ix: float = 0.0 # Moment of inertia, major axis (in^4)
-    Zx: float = 0.0 # Plastic section modulus, major axis (in^3)
-    Sx: float = 0.0 # Elastic section modulus, major axis (in^3)
+    Ix: float = 0.0 # Moment of inertia, major axis (10⁶ mm⁴)
+    Zx: float = 0.0 # Plastic section modulus, major axis (10³ mm³)
+    Sx: float = 0.0 # Elastic section modulus, major axis (10³ mm³)
     rx: float = 0.0 # Radius of gyration
 
-    Iy: float = 0.0 # Moment of inertia, minor axis (in^4)
-    Zy: float = 0.0 # Plastic section modulus, minor axis (in^3)
-    Sy: float = 0.0 # Elastic section modulus, minor axis (in^3)
+    Iy: float = 0.0 # Moment of inertia, minor axis (10⁶ mm⁴)
+    Zy: float = 0.0 # Plastic section modulus, minor axis (10³ mm³)
+    Sy: float = 0.0 # Elastic section modulus, minor axis (10³ mm³)
     ry: float = 0.0 # Radius of gyration
 
-    J: float = 0.0 # Torsional constant (in^4)
-    Cw: float = 0.0 # Warping constant (in^6)
+    J: float = 0.0 # Torsional constant (10³ mm⁴)
+    Cw: float = 0.0 # Warping constant (10⁹ mm⁶)
     Wno: float = 0.0
     Sw1: float = 0.0
     Qf: float = 0.0
