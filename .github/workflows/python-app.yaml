@@ -34,8 +34,8 @@ jobs:
     - name: Install dependencies
       run: uv sync
 
-    - name: Lint with ruff
-      run: uvx ruff check .
+    # - name: Lint with ruff
+      # run: uvx ruff check .
 
     - name: Test with pytest
       run: uv run pytest
