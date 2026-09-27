@@ -2,9 +2,12 @@
 
 $steelsnakes$ references codes and standards divided by **region**. Each region contains **specification** standards that contain steel profile properties and dimensions, and **design** standards that contain design rules and verification checks.
 
-## Current coverage (March 21, 2026)
+## Current coverage (September 26, 2026)
 
-- **EU / UK / US**: The packaged datasets already cover universal sections, beams, channels, angles, hollow sections, and piles; UK/US checks for ULS, stability, classification, and LRFD are available with more metadata to be completed.
+- **EU / UK / US**: The packaged datasets already cover universal sections, beams, channels, angles, hollow sections, and piles.
+    - EN 1993-1-1 classification, 5.5 and Table 5.2, is implemented for EU and UK sections.
+    - AISC 360-22 member design, Chapters C to H with Appendices 7 and 8 (LRFD), is implemented for US sections and validated against the AISC Design Examples v16.0.
+- **BS**: BS 5950-1:2000 Section 3.5 classification runs on the UK sections.
 - **IN**: IS 808:2021 data ingestion is in progress; clamp-to-table helpers and clause references are on the roadmap (look for TODO markers in `src/steelsnakes/IN/checks/__init__.py`).
 - **AU / NZ / JP / MX / SA / CN / CA / KR**: These regions remain on the roadmap. SectionType enums already reference the expected series (`AS/NZS`, `JIS`, `NMX`, etc.), so adding the data is mostly a matter of aligning the JSON assets and connectors.
 
@@ -55,6 +58,12 @@ The United Kingdom the Eurocode suite of standards with the UK National Annex. T
 - BS EN 10219-2: 2006 - Cold formed welded structural hollow sections of non-alloy and fine grain steels - Part 2: Technical delivery conditions [↗](https://knowledge.bsigroup.com/products/cold-formed-welded-structural-hollow-sections-of-non-alloy-and-fine-grain-steels-technical-delivery-requirements)
 - BS EN ISO 4016: 2022 - Fasteners — Hexagon head bolts — Product grade C [↗](https://www.iso.org/standard/72580.html) [↗](https://knowledge.bsigroup.com/products/fasteners-hexagon-head-bolts-product-grade-c-1)
 - BS EN ISO 4018: 2022 - Fasteners — Hexagon head screws — Product grade C [↗](https://www.iso.org/standard/72581.html) [↗](https://knowledge.bsigroup.com/products/fasteners-hexagon-head-screws-product-grade-c-1)
+
+### `BS` - Legacy British Standard
+
+BS 5950 was withdrawn in 2010 but is still widely used. Its classification rules are implemented under `steelsnakes.BS`, which runs on the UK section objects.
+
+- BS 5950-1:2000 - Structural use of steelwork in building - Part 1: Code of practice for design - Rolled and welded sections (Section 3.5, Tables 9, 11 and 12)
 
 ## 🇺🇸 `US` - United States
 

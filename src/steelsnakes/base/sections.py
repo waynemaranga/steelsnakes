@@ -215,5 +215,5 @@ class BaseSection(ABC):
         return properties_list
 
 if __name__ == "__main__":
-    
+    # TODO: IMPLEMENT PLATE GIRDER/BUILT-UP MEMBER CHECKS
     logger.info("🐬")

@@ -9,8 +9,9 @@ from steelsnakes.UK.checks import (
     ClassificationResult,
     ElementClassification,
     ElementInput,
-    ElementStressCase,
+    ElementStressDistribution,
     StressPattern,
+    outstand_buckling_factor,
     classify_circular_hollow,
     classify_element,
     classify_elements,
@@ -18,7 +19,6 @@ from steelsnakes.UK.checks import (
     classify_outstand_flange,
     classify_section,
     classify_section_from_dict,
-    register_section_adapter,
 )
 from steelsnakes.UK.database import UKSectionDatabase, get_UK_database
 from steelsnakes.UK.factory import UKSectionFactory, get_UK_factory
@@ -86,8 +86,9 @@ __all__: list[str] = [
     "UKSectionDatabase",
     "get_UK_database",
     "ElementInput",
-    "ElementStressCase",
+    "ElementStressDistribution",
     "StressPattern",
+    "outstand_buckling_factor",
     "ElementClassification",
     "ClassificationResult",
     "classify_circular_hollow",
@@ -97,7 +98,6 @@ __all__: list[str] = [
     "classify_elements",
     "classify_section",
     "classify_section_from_dict",
-    "register_section_adapter",
     "create_section",
     "UniversalSection",
     "UniversalBeam",

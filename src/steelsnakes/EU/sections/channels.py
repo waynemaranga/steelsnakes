@@ -19,9 +19,6 @@ class ParallelFlangeChannel(BaseSection):
 
     C-shaped section with parallel flanges, commonly used for
     secondary beams, purlins, and cladding rails.
-
-    Supports both PFC and UPE section types through factory registration.
-    The factory will register this class for both SectionType.PFC and SectionType.UPE.
     """
 
     serial_size: str = ""
@@ -70,6 +67,15 @@ class ParallelFlangeChannel(BaseSection):
         from dataclasses import asdict
 
         return asdict(self)
+
+
+@dataclass
+class ParallelFlangeChannelUPE(ParallelFlangeChannel):
+    """Parallel Flange Channel (UPE) section; same geometry as PFC, loaded from UPE.json."""
+
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.UPE
 
 
 @dataclass
@@ -129,10 +135,10 @@ def PFC(designation: str, data_directory: Optional[Path] = None) -> ParallelFlan
     return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.PFC))
 
 
-def UPE(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannel:
-    """Create a Parallel Flange Channel section by designation."""
+def UPE(designation: str, data_directory: Optional[Path] = None) -> ParallelFlangeChannelUPE:
+    """Create a UPE Parallel Flange Channel section by designation."""
     factory: EUSectionFactory = get_EU_factory(data_directory)
-    return cast(ParallelFlangeChannel, factory.create_section(designation, SectionType.UPE))
+    return cast(ParallelFlangeChannelUPE, factory.create_section(designation, SectionType.UPE))
 
 
 def UPN(designation: str, data_directory: Optional[Path] = None) -> TaperedFlangeChannel:
@@ -142,7 +148,10 @@ def UPN(designation: str, data_directory: Optional[Path] = None) -> TaperedFlang
 
 
 if __name__ == "__main__":
-    from steelsnakes.EU.checks.classification import StressPattern, classify_section
+    from steelsnakes.EU.checks.classification import (
+        ElementStressDistribution,
+        classify_section,
+    )
 
     section = UPE("UPE-400")
     print(section.get_properties())
@@ -153,6 +162,6 @@ if __name__ == "__main__":
     bending_result = classify_section(
         section=section,
         fy_mpa=355.0,
-        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+        stress_pattern=ElementStressDistribution.BENDING,
     )
     print(f"Major-axis bending class: {bending_result.section_class}")

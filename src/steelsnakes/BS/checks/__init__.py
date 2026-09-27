@@ -1,6 +1,51 @@
 # Legacy BS5950; since many people still use it anyway...
-# How to export BS to UK modules:...
+# BS 5950-1:2000 checks run on the UK module's section objects; see steelsnakes.BS for the re-exported constructors.
+from steelsnakes.BS.checks.classification import (
+    CLASS_NAMES,
+    ClassificationResult,
+    EffectivePlasticModulusResult,
+    ElementClassification,
+    ElementInput,
+    ElementKind,
+    ElementLimits,
+    ElementStressDistribution,
+    StressPattern,
+    StressRatios,
+    classify_element,
+    classify_elements,
+    classify_section,
+    classify_section_from_dict,
+    compound_flange_elements,
+    design_strength,
+    effective_plastic_modulus,
+    effective_plastic_modulus_i_section,
+    element_limits,
+    epsilon,
+    render_classification,
+    stress_ratios,
+)
 
-if __name__ == "__main__":
-    print("🐬")
-    
+__all__: list[str] = [
+    "CLASS_NAMES",
+    "ClassificationResult",
+    "EffectivePlasticModulusResult",
+    "ElementClassification",
+    "ElementInput",
+    "ElementKind",
+    "ElementLimits",
+    "ElementStressDistribution",
+    "StressPattern",
+    "StressRatios",
+    "classify_element",
+    "classify_elements",
+    "classify_section",
+    "classify_section_from_dict",
+    "compound_flange_elements",
+    "design_strength",
+    "effective_plastic_modulus",
+    "effective_plastic_modulus_i_section",
+    "element_limits",
+    "epsilon",
+    "render_classification",
+    "stress_ratios",
+]

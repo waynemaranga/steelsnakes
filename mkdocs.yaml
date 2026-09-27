@@ -1,5 +1,5 @@
 # mkdocs: https://www.mkdocs.org/user-guide/configuration/
-# MkDocs-Shadcn: https://www.mkdocs-shadcn.org/reference/admonitions
+# Material for MkDocs: https://squidfunk.github.io/mkdocs-material/
 # mkdocstrings: https://mkdocstrings.github.io/usage/
 
 
@@ -12,21 +12,31 @@ repo_name: steelsnakes
 repo_url: https://github.com/waynemaranga/steelsnakes
 edit_uri: edit/main/docs/
 
-copyright: Copyright &copy; 2025 Wayne Maranga
+copyright: Copyright &copy; 2026 Wayne Maranga
 
 theme:
-  name: shadcn
-  show_title: true # show the title in the top bar
-  show_stargazers: true # show the stargazers in the top bar
-  pygments_style: # https://pygments.org/styles/
-        light: abap
-        dark: monokai
-  topbar_sections: false # Keep sections in sidebar for better nested navigation
-  katex_options: # optional
-    macros: # example of macros
-      "\\RR": "\\mathbb{R}" 
-      "\\dx": "\\mathrm{d}x"
-  show_datetime: false 
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: blue
+      accent: blue
+      toggle:
+        icon: material/weather-night
+        name: switch to dark mode
+    - scheme: slate
+      primary: blue
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: switch to light mode
+
+  font:
+    text: Bricolage Grotesque
+    code: Cascadia Mono
+
+  icon:
+    repo: fontawesome/brands/github
   # language: en
   
   features:
@@ -75,21 +85,27 @@ plugins:
 
 markdown_extensions:
   admonition:
-  codehilite:
+  attr_list:
+  md_in_html:
   fenced_code:
   footnotes:
   extra:
-  pymdownx.blocks.details:
+  pymdownx.details:
+  pymdownx.highlight:
+    anchor_linenums: true
+    line_spans: __span
+    pygments_lang_class: true
+  pymdownx.inlinehilite:
   pymdownx.tabbed:
+    alternate_style: true
   pymdownx.blocks.tab:
     combine_header_slug: true
     separator: ___
-  pymdownx.progressbar:
   pymdownx.snippets:
   pymdownx.arithmatex:
     generic: true
-  shadcn.extensions.echarts.alpha: # probably built-in
-  shadcn.extensions.codexec: # probably built-in
+  toc:
+    permalink: true
 
 extra:
   social:
@@ -124,4 +140,8 @@ nav:
     - Section Database & Factory: 02-api-reference/02-database.md
     - UK Classification: 02-api-reference/04-uk-classification.md
     - US Classification: 02-api-reference/03-us-classification.md
+    - US Member Checks: 02-api-reference/05-us-member-checks.md
+    - EU Member Checks: 02-api-reference/07-eu-member-checks.md
+    - EU Serviceability Checks: 02-api-reference/08-eu-serviceability-checks.md
+    - BS 5950 Classification: 02-api-reference/06-bs-classification.md
   - References: 99-references.md

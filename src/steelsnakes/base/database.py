@@ -5,11 +5,15 @@ import logging
 from pathlib import Path
 import json
 import difflib
-from typing import Any, Optional
+from sqlite3 import Cursor
+from typing import Any, LiteralString, Optional
 
 from steelsnakes.base.sections import SectionType
 
 logger: logging.Logger = logging.getLogger(__name__)
+
+# Package folders whose names differ from the upper-cased region code; matters on case-sensitive file systems e.g CI
+REGION_DIRECTORIES: dict[str, str] = {"US_METRIC": "US_Metric"}
 
 
 class SectionDatabase:
@@ -18,17 +22,19 @@ class SectionDatabase:
     for steel sections across different regions.
     """
 
-    def __init__(self, data_directory: Optional[Path] = None, region: str = "EU", use_sqlite: bool = False) -> None:
+    def __init__(self, data_directory: Optional[Path] = None, region: str = "EU", use_sqlite: bool = False, sqlite_db_path: Optional[Path] = None) -> None:
         """Initialize the database with the data directory.
-        
+
         Args:
             data_directory: Path to data directory containing JSON files
-            region: Region code (EU, UK, US, etc.) for auto-discovery
-            use_sqlite: If `True`, prefer SQLite database over JSON files (experimental)
+            region: Region code (EU, UK, US, US_METRIC etc.) for auto-discovery
+            use_sqlite: If `True`, fall back to the SQLite database for section types without a JSON file (experimental)
+            sqlite_db_path: Path to a database built by `build_regional_sqlite_db()`; only read when `use_sqlite` is `True`
         """
-        self.region = region.upper()
+        self.region: str = region.upper()
         self.data_directory: Path = self._resolve_data_directory(data_directory, region)
         self.use_sqlite: bool = use_sqlite
+        self._sqlite_db_path: Optional[Path] = sqlite_db_path.resolve() if sqlite_db_path is not None else None
         self._cache: dict[SectionType, dict[str, dict[str, Any]]] = {}
         self._supported_types: list[SectionType] = self._get_region_supported_types()
         self._load_sections()
@@ -40,29 +46,30 @@ class SectionDatabase:
             
         # Auto-discovery based on region
         current_file: Path = Path(__file__).resolve()
-        region_upper = region.upper()
-        
-        possible_paths: list[Path] = [          
-            Path.cwd() / f"src/steelsnakes/{region_upper}/data/",  # from project root
-            current_file.parent.parent / f"{region_upper}/data/",  # from package installation
-            current_file.parent.parent.parent / f"data/{region_upper}/",  # from development environment
-            current_file.parent.parent.parent / f"src/steelsnakes/{region_upper}/data/",  # from source directory
-            current_file.parent.parent.parent.parent / f"data/{region_upper}/"  # from parent directory
+        region_upper: str = region.upper()
+        region_directory: str = REGION_DIRECTORIES.get(region_upper, region_upper)
+
+        possible_paths: list[Path] = [
+            Path.cwd() / f"src/steelsnakes/{region_directory}/data/",  # from project root
+            current_file.parent.parent / f"{region_directory}/data/",  # from package installation
+            current_file.parent.parent.parent / f"data/{region_directory}/",  # from development environment
+            current_file.parent.parent.parent / f"src/steelsnakes/{region_directory}/data/",  # from source directory
+            current_file.parent.parent.parent.parent / f"data/{region_directory}/"  # from parent directory
         ]
-        
+
         for path in possible_paths:
-            resolved_path = path.resolve()
+            resolved_path: Path = path.resolve()
             if resolved_path.exists() and resolved_path.is_dir():
                 return resolved_path
-                
+
         # Fallback - create region-specific path
-        return current_file.parent.parent / f"{region_upper}/data/"
+        return current_file.parent.parent / f"{region_directory}/data/"
 
     def _get_region_supported_types(self) -> list[SectionType]:
         """Get supported section types for the region."""
         # Define region-specific supported types
-        region_types = {
-            # TODO: double-check...
+        region_types: dict[str, list[SectionType]] = {
+            # Each list mirrors the section JSON files in the region's data directory
             "EU": [
                 # Beams
                 SectionType.IPE, SectionType.HE, SectionType.HL, SectionType.HLZ, SectionType.UB,
@@ -77,8 +84,6 @@ class SectionDatabase:
                 SectionType.HD, SectionType.UC,
                 # Bearing Piles
                 SectionType.HP, SectionType.UBP,
-                # Flats
-                SectionType.Sigma, SectionType.Zed, 
             ],
             "UK": [
                 # Universal
@@ -132,7 +137,8 @@ class SectionDatabase:
         #     "CA":[],
         #     "KR":[],
         }
-        
+        region_types["US_METRIC"] = region_types["US"] # same AISC shapes, in SI units and designations e.g W310X38.7
+
         return region_types.get(self.region, [])
 
     # ------- Standard Interface Methods -------
@@ -147,7 +153,7 @@ class SectionDatabase:
 
         for section_type in self._supported_types:
             try:
-                section_data = self._load_section_type(section_type)
+                section_data: Optional[dict[str, dict[str, Any]]] = self._load_section_type(section_type)
                 if section_data:
                     # Adding metadata for each section...
                     for designation, properties in section_data.items():
@@ -179,7 +185,7 @@ class SectionDatabase:
         
         # Try SQLite if enabled (experimental; keeping  existing SQLite support)
         if self.use_sqlite:
-            sqlite_data = self._load_from_sqlite(section_type)
+            sqlite_data: Optional[dict[str, dict[str, Any]]] = self._load_from_sqlite(section_type)
             if sqlite_data is not None:
                 return sqlite_data
             
@@ -188,18 +194,18 @@ class SectionDatabase:
     def _load_from_sqlite(self, section_type: SectionType) -> Optional[dict[str, dict[str, Any]]]:
         """Load section data from SQLite database (if SQLite support is enabled)."""
         # Simplified implementation - can be extended later if needed
-        if not hasattr(self, '_sqlite_db_path') or self._sqlite_db_path is None:  # type: ignore[reportAttributeAccess]
-            # FIXME: handle sqlite_db_path properly
+        if self._sqlite_db_path is None or not self._sqlite_db_path.is_file():
+            # sqlite3.connect() would silently create an empty database at a missing path
             return None
-            
+
         try:
             import sqlite3
-            with sqlite3.connect(self._sqlite_db_path) as conn: # type: ignore[reportAttributeAccess]
+            with sqlite3.connect(self._sqlite_db_path) as conn:
                 conn.row_factory = sqlite3.Row
-                cursor = conn.cursor()
+                cursor: Cursor = conn.cursor()
                 
                 # Table name is the section type in uppercase
-                table_name = section_type.value.upper()
+                table_name: LiteralString = section_type.value.upper()
                 
                 # Check if table exists
                 cursor.execute(
@@ -211,14 +217,14 @@ class SectionDatabase:
                 
                 # Load all sections from the table
                 cursor.execute(f"SELECT * FROM {table_name}")
-                rows = cursor.fetchall()
+                rows: list[Any] = cursor.fetchall()
                 
-                sections = {}
+                sections: dict[str, dict[str, Any]] = {}
                 for row in rows:
                     # Parse the JSON data column which contains the full section data
                     import json
-                    section_data = json.loads(row['data'])
-                    designation = row['designation']
+                    section_data: dict[str, Any] = json.loads(row['data'])
+                    designation: str = row['designation']
                     sections[designation] = section_data
                     
                 return sections
@@ -252,17 +258,17 @@ class SectionDatabase:
     # - Fuzzy find section
     def _fuzzy_find_section(self, designation: str) -> Optional[tuple[SectionType, dict[str, Any]]]:
         """Robust fuzzy section finding with multiple strategies."""
-        designation_clean = designation.strip()
+        designation_clean: str = designation.strip()
         
         # 1: Case-insensitive exact match
         for section_type in self._supported_types:
-            sections = self._cache.get(section_type, {})
+            sections: dict[str, dict[str, Any]] = self._cache.get(section_type, {})
             for stored_designation, section_data in sections.items():
                 if stored_designation.lower() == designation_clean.lower():
                     return section_type, section_data
         
         # 2: Normalize spaces, hyphens, and separators
-        normalized_input = self._normalize_designation(designation_clean)
+        normalized_input: str = self._normalize_designation(designation_clean)
         for section_type in self._supported_types:
             sections = self._cache.get(section_type, {})
             for stored_designation, section_data in sections.items():
@@ -281,22 +287,29 @@ class SectionDatabase:
         
         # Find close matches with reasonable cutoff
         close_matches = difflib.get_close_matches(
-            designation_clean, 
-            all_designations, 
-            n=1, 
+            designation_clean,
+            all_designations,
+            n=2, # the runner-up is only used to reject ties
             cutoff=0.8  # High cutoff to avoid false positives
         )
-        
+
         if close_matches:
-            best_match = close_matches[0]
+            best_match: str = close_matches[0]
+            # Only accept an unambiguous match; '254x146x30' is as close to '254x146x31' as to '254x146x37',
+            # and silently picking one would hand back a different section
+            if len(close_matches) > 1:
+                best_ratio: float = difflib.SequenceMatcher(None, best_match, designation_clean).ratio()
+                runner_up_ratio: float = difflib.SequenceMatcher(None, close_matches[1], designation_clean).ratio()
+                if runner_up_ratio >= best_ratio:
+                    return None
             return designation_map[best_match]
-        
+
         return None
 
     def _normalize_designation(self, designation: str) -> str:
         """Normalize designation for fuzzy matching."""
         # Convert to lowercase and normalize common separators
-        normalized = designation.lower().strip()
+        normalized: str = designation.lower().strip()
         # Replace various separators with standard format
         normalized = normalized.replace(' ', '').replace('-', '').replace('_', '')
         # Handle 'x' separators consistently  
@@ -373,20 +386,20 @@ class SectionDatabase:
     # - Get similar sections using fuzzy matching
     def get_similar_sections(self, designation: str, section_type: Optional[SectionType] = None, n: int = 5) -> list[str]:
         """Get similar section designations using fuzzy matching."""
-        all_sections = []
+        all_sections: list[str] = []
         
         if section_type:
             # Search within specific type
-            sections = self.list_sections(section_type)
-            all_sections = sections
+            sections: list[str] = self.list_sections(section_type)
+            all_sections: list[str] = sections
         else:
             # Search across all types
             for st in self.get_available_section_types():
-                sections = self.list_sections(st)
+                sections: list[str] = self.list_sections(st)
                 all_sections.extend(sections)
         
         # Use difflib to find close matches
-        close_matches = difflib.get_close_matches(
+        close_matches: list[str] = difflib.get_close_matches(
             designation, 
             all_sections, 
             n=n, 

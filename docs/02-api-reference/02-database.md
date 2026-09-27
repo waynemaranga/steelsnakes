@@ -44,9 +44,13 @@ The lookup behavior is intentionally forgiving:
 
 - exact designation first
 - then normalized matching
-- then fuzzy similarity matching
+- then fuzzy similarity matching, only when one designation is clearly the closest
 
 That is useful when incoming labels vary slightly between spreadsheets, analysis exports, and hand-entered names.
+
+A typo that is equally close to two sections is not guessed: `find_section("254x146x30")` returns `None` because
+254x146x31 and 254x146x37 are both one character away, and `create_section()` raises `SectionNotFoundError` listing
+both as suggestions.
 
 ## `SectionFactory`
 

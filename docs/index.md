@@ -16,12 +16,18 @@ A python package for structural steel design. $steelsnakes$ aims to provide a un
 $steelsnakes$ is currently under active development. Please report any issues or feature requests on the GitHub [ISSUES](https://github.com/waynemaranga/steelsnakes/issues) page.
 <!-- prettier-ignore-end -->
 
-## Latest Progress (March 21, 2026)
+## Latest Progress (September 26, 2026)
+
+- `US` now covers AISC 360-22 member design end to end: tension (D), compression (E), flexure (F), shear (G), combined forces and torsion (H), and stability (Chapter C notional loads and stiffness reduction; Appendix 7 and Appendix 8 B1/B2). The test suite reproduces the AISC Design Examples v16.0; see [US Member Checks](02-api-reference/05-us-member-checks.md).
+- New `BS` module: BS 5950-1:2000 Section 3.5 classification (Tables 11 and 12, stress ratios r1/r2, effective plastic modulus) on UK sections; see [BS 5950 Classification](02-api-reference/06-bs-classification.md).
+- `EU`/`UK` classification restores the `StressPattern` presets and adds Table 5.2 Sheet 2/3 outstands in combined bending and compression (α, kσ), clause 5.5.2(9) (σcom,Ed) and a 5.5.2(11) note.
+
+## Earlier Progress (March 21, 2026)
 
 - `SectionDatabase` now auto-discovers regional JSON files, keeps the cache keyed by `SectionType`, and exposes both fuzzy lookups and comparison-based search helpers so you can handle designations that vary in case, hyphenation, or separator characters.
 - `SectionFactory` wires that cache to concrete section classes for `UK`, `EU`, and `US` while gracefully warning when the region linked in `SectionDatabase` does not yet have a corresponding module; extension hooks for `AU`/`NZ` are already in place.
 - Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
-- Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, `src/steelsnakes/US/checks/classification.py`, and `lrfd.py` already capture clauses for limit state verifications; expect more worked examples and metadata refinement as the TODO comments are closed.
+- Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, and `src/steelsnakes/US/checks/` already capture clauses for limit state verifications; `US/checks/lrfd.py` is the legacy prototype, superseded by the chapter modules `tension`, `compression`, `flexure`, `shear`, `combined` and `stability`.
 - `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
 - The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
@@ -33,13 +39,13 @@ $steelsnakes$ is currently under active development. Please report any issues or
 $steelsnakes$ is divided into `regions`, and is currently developing support for the following regional standards:
 
 1. 🇪🇺 `EU` European Union - Eurocode 3
-2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA (Heavily considering BS 5950 due to common use and redundancy of 2 Eurocode checks)
+2. 🇬🇧 `UK` United Kingdom - Eurocode 3 with UK NA; legacy BS 5950-1:2000 classification under `BS`, on the same UK sections
 3. 🇺🇸 `US` United States - AISC & ASTM, under `US` for imperial units and `US_Metric` for SI units.
 4. 🇮🇳 `IN` India - IS 800 & IS 808
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
 6. 🇳🇿 `NZ` New Zealand - NZS 3404 & AS/NZS 5131
 
-See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs+mkdocs-shadcn supports simple relative links -->
+See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs-material supports simple relative links -->
 
 ## Quick Start
 
@@ -71,11 +77,11 @@ For available steel profiles implemented in $steelsnakes$, properties can be acc
 See the [Profiles](02-api-reference/02-database.md) for all available steel profiles.
 
 ```python
-from steelsnakes.UK.universal import UB, UniversalBeam
-from steelsnakes.US.beams import W, WideFlangeBeam
+from steelsnakes.UK import UB, UniversalBeam
+from steelsnakes.US.sections.beams import W_beam, WideFlangeBeam
 
 beam_1 = UB(designation="1016x305x438")
-beam_2 = W("W44X335")
+beam_2 = W_beam("W44X335")
 
 print(beam_1.h)
 print(beam_2.d)

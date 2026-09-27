@@ -179,5 +179,70 @@ class TestErrorHandling:
         assert "No registered class for section type 'UC'" in str(exc_info.value)
 
 
+class TestSectionTypeValues:
+    """Test section types given as their string value."""
+
+    @pytest.fixture
+    def factory(self, tmp_path):
+        """Create a factory with mock data."""
+        data_dir = tmp_path / "data"
+        data_dir.mkdir()
+
+        ub_data = {"254x146x31": {"designation": "254x146x31", "mass_per_metre": 31.0}}
+        with open(data_dir / "UB.json", "w") as f:
+            json.dump(ub_data, f)
+
+        database = SectionDatabase(data_directory=data_dir, region="UK")
+        return SectionFactory(database, {SectionType.UB: MockUniversalBeam})
+
+    def test_create_section_with_type_value(self, factory):
+        """Test "UB" behaves like SectionType.UB."""
+        section = factory.create_section("254x146x31", "UB")
+        assert isinstance(section, MockUniversalBeam)
+        assert section.mass_per_metre == 31.0
+
+    def test_missing_section_with_type_value(self, factory):
+        """Test the not-found message still names the type when given as a string."""
+        with pytest.raises(SectionNotFoundError) as exc_info:
+            factory.create_section("254x146x30", "UB")
+
+        assert "Section '254x146x30' of type 'UB' not found" in str(exc_info.value)
+
+    def test_unknown_type_value(self, factory):
+        """Test an unknown type string raises SectionTypeNotRegisteredError, not AttributeError."""
+        with pytest.raises(SectionTypeNotRegisteredError) as exc_info:
+            factory.create_section("254x146x31", "NOT_A_TYPE")
+
+        assert "Unknown section type 'NOT_A_TYPE'. Available types: ['UB']" in str(exc_info.value)
+
+
+# Every (region, section type) pair shipped with the package
+PACKAGED_SECTION_TYPES: list[tuple[str, SectionType]] = [
+    (region, section_type)
+    for region in ("UK", "EU", "US", "US_METRIC")
+    for section_type in SectionDatabase(region=region).get_supported_types()
+]
+
+
+class TestPackagedData:
+    """Test every packaged section builds into its registered class."""
+
+    @pytest.mark.parametrize(
+        ("region", "section_type"),
+        PACKAGED_SECTION_TYPES,
+        ids=[f"{region}-{section_type.value}" for region, section_type in PACKAGED_SECTION_TYPES],
+    )
+    def test_every_packaged_section_can_be_created(self, region, section_type):
+        """Test JSON keys match dataclass fields, and each section reports its own type (e.g HLZ, not HL)."""
+        factory = SectionFactory(SectionDatabase(region=region))
+        designations = factory.database.list_sections(section_type)
+        assert designations, f"No {region} {section_type.value} sections loaded"
+
+        for designation in designations:
+            section = factory.create_section(designation, section_type)
+            assert section.designation == designation
+            assert section.get_section_type() == section_type
+
+
 if __name__ == "__main__":
     pytest.main([__file__, "-v"])

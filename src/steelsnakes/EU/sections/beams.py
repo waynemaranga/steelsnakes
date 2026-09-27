@@ -86,17 +86,17 @@ class WideFlangeBeam(Beam):
 
 @dataclass
 class ExtraWideFlangeBeam(Beam):
-    """Extra Wide Flange Beam section.
-    
-    Supports both HL and HLZ section types through manual factory registration.
-    The factory will register this class for both SectionType.HL and SectionType.HLZ.
-    """
+    """Extra Wide Flange Beam (HL) section."""
     @classmethod
     def get_section_type(cls) -> SectionType:
-        # //return Union[SectionType.HL, SectionType.HLZ] # Pylance[reportReturnType]: https://github.com/microsoft/pylance-release/blob/main/docs/diagnostics/reportReturnType.md
-
-        # Return HL as the primary type - factory will handle both HL and HLZ registration
         return SectionType.HL
+
+@dataclass
+class ExtraWideFlangeBeamHLZ(ExtraWideFlangeBeam):
+    """Extra Wide Flange Beam (HLZ) section; same geometry as HL, loaded from HLZ.json."""
+    @classmethod
+    def get_section_type(cls) -> SectionType:
+        return SectionType.HLZ
 
 @dataclass
 class UniversalBeam(Beam):
@@ -122,16 +122,14 @@ def HE(designation: str) -> WideFlangeBeam:
 
 def HL(designation: str) -> ExtraWideFlangeBeam:
     """HL section - inherits HL type from parent."""
-    # TODO: handle HL/HLZ differentiator, since file-name factory system expects HL.json and HLZ.json
     factory: EUSectionFactory = get_EU_factory()
     return cast(ExtraWideFlangeBeam, factory.create_section(designation, SectionType.HL))
 
 
-def HLZ(designation: str) -> ExtraWideFlangeBeam:
+def HLZ(designation: str) -> ExtraWideFlangeBeamHLZ:
     """HLZ section."""
-    # TODO: handle HL/HLZ differentiator, since file-name factory system expects HL.json and HLZ.json
     factory: EUSectionFactory = get_EU_factory()
-    return cast(ExtraWideFlangeBeam, factory.create_section(designation, SectionType.HLZ))
+    return cast(ExtraWideFlangeBeamHLZ, factory.create_section(designation, SectionType.HLZ))
     
 
 def UB(designation: str) -> UniversalBeam:
@@ -152,7 +150,10 @@ if __name__ == "__main__":
 
     # Classification examples. Geometry stays here in the section module,
     # while the stress case is selected in the classification check.
-    from steelsnakes.EU.checks.classification import StressPattern, classify_section
+    from steelsnakes.EU.checks.classification import (
+        ElementStressDistribution,
+        classify_section,
+    )
     section = IPE("IPE-750x220")
     classification_result = classify_section(section=section, fy_mpa=355.0)
 
@@ -164,7 +165,7 @@ if __name__ == "__main__":
     classification_result_2 = classify_section(
         section=section_2,
         fy_mpa=355.0,
-        stress_pattern=StressPattern.MAJOR_AXIS_BENDING,
+        stress_pattern=ElementStressDistribution.BENDING,
     )
     print(f"Major-axis bending class: {classification_result_2.section_class}")
     for element in classification_result_2.elements:
