@@ -15,6 +15,7 @@ This page collects the trusted references that the project is currently aligning
 - IS 808:2021 / IS 800:2007 (India) and AS/NZS 3679.1 + AS/NZS 5131 (Australia / New Zealand) where those profiles are planned.
 
 <!-- prettier-ignore-start -->
-!!!info "Reminder"
+```{note} Reminder
     This reference list is a work in progress. Always consult the official document from the issuing standards body before making design decisions.
+```
 <!-- prettier-ignore-end -->
