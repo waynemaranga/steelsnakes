@@ -1,5 +1,6 @@
 # TODO
 
+- [ ] Normalize line endings across docs/assets (e.g. add repo-level `.gitattributes` with LF defaults) to avoid noisy CRLF diffs and keep Markdown/Sphinx files consistent across platforms
 - [ ] Add comprehensive disclaimer i.e professional/erroneous
 - [ ] Implement aliases again when double checking the modules
 - [ ] Parse/Wrangle and document how non-preloaded bolts were done
@@ -18,6 +19,7 @@
 - [ ] Use actual names in SQLite, and revise api to work between aliases
 - [ ] To beat SQLite's case (insensitivity) add units to the column names, e.g. h_mm, b_mm, t_mm, A_cm2, Iyy_cm4, etc.
 - [ ] Have a dev, test and docs and full version to trim the dependencies
+- [ ] Split runtime vs docs/test dependencies into optional extras (e.g. docs, test, dev) so the library install stays lean; leave this for later unless needed for packaging work
 - [ ] Merge pilcrow features from old docs to new docs with Material
 - [ ] implement mermaid diagrams
 - [ ] Try edit fonts
