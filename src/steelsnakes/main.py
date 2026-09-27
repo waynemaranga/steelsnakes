@@ -102,7 +102,7 @@ def main() -> None:
     print("UK examples\n")
     uk_beam = UB("457x191x67")
     _print_eu_result("6. UK UB section in compression", uk_classify_section(section=uk_beam, fy_mpa=355.0))
-    _print_eu_result("6. UK UB section in major-axis bending", uk_classify_section(section=uk_beam, fy_mpa=355.0, stress_pattern=ElementStressDistribution.BENDING))
+    _print_eu_result("UK UB section in major-axis bending", uk_classify_section(section=uk_beam, fy_mpa=355.0, stress_pattern=ElementStressDistribution.BENDING))
 
 
     uk_rhs = HFRHS("50x30x3.2")
