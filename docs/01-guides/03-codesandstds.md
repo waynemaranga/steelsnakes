@@ -81,8 +81,8 @@ The United States the AISC suite of standards for design and ASTM standards for 
 
 Uses the IS suite of standards. Look out for IS 800:2025 which is currently under development.
 
-- IS 800:2007 - General Construction in Steel - Code of Practice [↗]()
-- IS 808:2021 - Dimensions for Hot Rolled Steel Sections [↗]()
+- IS 800:2007 - General Construction in Steel - Code of Practice
+- IS 808:2021 - Dimensions for Hot Rolled Steel Sections
 
 ## 🇦🇺 `AU` - Australia
 
