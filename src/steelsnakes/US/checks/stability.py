@@ -32,6 +32,7 @@ STIFFNESS_REDUCTION = 0.8 # C2.3(a)
 DRIFT_RATIO_LIMIT_DIRECT_ANALYSIS = 1.7 # C2.1(b), C2.2a, C2.2b(d); with stiffnesses reduced per C2.3
 DRIFT_RATIO_LIMIT_ELASTIC = 1.5 # App. 7.2.1(b), 7.3.1(c); nominal stiffnesses
 DRIFT_RATIO_LIMIT_K_EQUALS_1 = 1.1 # App. 7.2.3(b) exception
+REDISTRIBUTION_FY_LIMIT = 65.0 # ksi [is 450 MPa in US_Metric module]; App. 8.2, no moment redistribution above this Fy
 
 
 class DesignMethod(str, Enum):
@@ -337,17 +338,26 @@ def amplified_required_strengths(Mnt: float, Mlt: float = 0.0, Pnt: float = 0.0,
 
 
 # --- Appendix 8.2 Approximate Inelastic Moment Redistribution ---
-def moment_redistribution_Lm(M1: float, M2: float, ry: float, Fy: float, shape: Literal["i-shape", "box"] = "i-shape", E: float = E_STEEL) -> float:
+def moment_redistribution_Lm(
+    M1: float,
+    M2: float,
+    ry: float,
+    Fy: float,
+    shape: Literal["i-shape", "box"] = "i-shape",
+    E: float = E_STEEL,
+    Fy_limit: float = REDISTRIBUTION_FY_LIMIT,
+) -> float:
     """AISC 360-22 Equations A-8-9 and A-8-10: limiting unbraced length Lm for 10% negative moment redistribution.
 
     (a) I-shaped beams, Iyc >= Iyt: Lm = [0.12 + 0.076(M1/M2)](E/Fy)*ry (A-8-9)
     (b) solid rectangular bars, rectangular HSS and symmetric box beams, major axis:
         Lm = [0.17 + 0.10(M1/M2)](E/Fy)*ry >= 0.10(E/Fy)*ry (A-8-10)
 
-    M1/M2 is positive for reverse curvature and negative for single curvature. Not permitted for Fy > 65 ksi.
+    M1/M2 is positive for reverse curvature and negative for single curvature. Not permitted for Fy > 65 ksi [450 MPa];
+    pass Fy_limit=450.0 with Fy and E in MPa.
     """
-    if Fy > 65.0:
-        raise ValueError("Moment redistribution is not permitted for Fy exceeding 65 ksi (450 MPa).")
+    if Fy > Fy_limit:
+        raise ValueError(f"Moment redistribution is not permitted for Fy exceeding {Fy_limit:g} (65 ksi, 450 MPa).")
     if M2 == 0.0 or abs(M1) > abs(M2):
         raise ValueError("M2 must be the larger, non-zero end moment.")
     base = (E / _require_positive(Fy, "Fy")) * _require_positive(ry, "ry")

@@ -36,6 +36,8 @@ from steelsnakes.EU.checks.classification import (
     StressPattern,
     _class_rank,
     _epsilon,
+    _rectangular_hollow_elements_from_dict,
+    _square_hollow_elements_from_dict,
     channel_section_elements,
     classify_elements,
     classify_section,
@@ -285,8 +287,10 @@ def _class_for_actions(
     """5.5: class of the cross-section under the given actions (compression positive); None under tension and/or shear only.
 
     Compression with major-axis bending on I-sections and channels treats the web as a part in bending and compression,
-    with the plastic alpha = (1 + N_Ed/(c*t_w*fy))/2 and the elastic psi = 2N_Ed/(A*fy) - 1; other combinations with
-    compression use the uniform-compression limits, which is conservative.
+    with the plastic alpha = (1 + N_Ed/(c*t_w*fy))/2 and the elastic psi = 2N_Ed/(A*fy) - 1. Compression with bending
+    about one axis of an RHS or SHS does the same for the two walls in bending, alpha = (1 + N_Ed/(2c*t*fy))/2, with the
+    other two walls in compression. Other combinations with compression use the uniform-compression limits, which is
+    conservative.
     """
     if section_class is not None:
         return _as_section_class(section_class)
@@ -304,17 +308,42 @@ def _class_for_actions(
         return max(classes, key=_class_rank)
 
     family: str = _family(section_type)
+    psi: float = max(min(2.0 * N_Ed / (data["A"] * fy) - 1.0, 1.0), -1.0) if "A" in data else -1.0 # elastic, extreme fibre at fy
     if M_z_Ed == 0.0 and family in ("I", "channel") and all(key in data for key in ("d", "t_w", "b", "t_f", "A")):
+        # Table 5.2 Sheet 1/3: web in bending and compression; Sheet 2/3: flanges in compression
         c, t_w = data["d"], data["t_w"]
-        alpha: float = min(0.5 * (1.0 + N_Ed / (c * t_w * fy)), 1.0)
-        psi: float = max(min(2.0 * N_Ed / (data["A"] * fy) - 1.0, 1.0), -1.0)
-        builder = i_section_elements if family == "I" else channel_section_elements
-        elements: list[ElementInput] = [
+        alpha: float = min(0.5 * (1.0 + N_Ed / (c * t_w * fy)), 1.0) # plastic neutral axis in the web
+        r: float = 0.0 if section_type == SectionType.UPN else data.get("r", 0.0) # flange c = (b - tw - 2r)/2 or b - tw - r
+        if family == "I":
+            elements: list[ElementInput] = i_section_elements(d_mm=c, tw_mm=t_w, b_mm=data["b"], tf_mm=data["t_f"], r_mm=r)
+        else:
+            elements = channel_section_elements(d_mm=c, tw_mm=t_w, b_mm=data["b"], tf_mm=data["t_f"], r_mm=r)
+        elements = [
             element.model_copy(update={"stress": ElementStressDistribution.COMBINED, "alpha": alpha, "psi": psi}) if element.name == "web" else element
-            for element in builder(d_mm=c, tw_mm=t_w, b_mm=data["b"], tf_mm=data["t_f"])
+            for element in elements
+        ]
+        return _classify(section, section_type, raw, fy, StressPattern.COMBINED, custom_elements=elements)
+    if family == "RHS" and (M_y_Ed == 0.0) != (M_z_Ed == 0.0) and all(key in data for key in ("t", "A")):
+        # Table 5.2 Sheet 1/3: the two walls parallel to the plane of bending in bending and compression, the others in compression
+        walls: list[ElementInput] = _hollow_walls(section, section_type, raw)
+        bending_wall: str = "web_wall" if M_y_Ed != 0.0 else "flange_wall" # h walls for M_y, b walls for M_z
+        c_wall: float = next(wall.c_mm for wall in walls if wall.name == bending_wall)
+        alpha = min(0.5 * (1.0 + N_Ed / (2.0 * c_wall * data["t"] * fy)), 1.0) # plastic neutral axis in the two walls
+        elements = [
+            wall.model_copy(update={"stress": ElementStressDistribution.COMBINED, "alpha": alpha, "psi": psi}) if wall.name == bending_wall else wall
+            for wall in walls
         ]
         return _classify(section, section_type, raw, fy, StressPattern.COMBINED, custom_elements=elements)
     return _classify(section, section_type, raw, fy, StressPattern.COMPRESSION)
+
+
+def _hollow_walls(section: Optional[BaseSection], section_type: Optional[SectionType], raw: dict[str, Any]) -> list[ElementInput]:
+    """web_wall (h walls) and flange_wall (b walls) of an RHS or SHS, Table 5.2 Sheet 1/3, with c = h - 3t and b - 3t as tabulated."""
+    if section is not None:
+        return list(section.classification_elements())
+    if section_type in SQUARE_HOLLOW_SECTION_TYPES:
+        return _square_hollow_elements_from_dict(raw)
+    return _rectangular_hollow_elements_from_dict(raw)
 
 
 def _class_4_value(value: Optional[float], name: str, clause: str) -> float:
@@ -660,9 +689,15 @@ def section_modulus_for_class(
     W_el: Optional[float] = None,
     W_eff: Optional[float] = None,
 ) -> tuple[float, str]:
-    """EN 1993-1-1 6.2.5(2): (W, equation); W_pl for Class 1 or 2 (6.13), W_el,min for Class 3 (6.14), W_eff,min for Class 4 (6.15)."""
+    """EN 1993-1-1 6.2.5(2): (W, equation); W_pl for Class 1 or 2 (6.13), W_el,min for Class 3 (6.14), W_eff,min for Class 4 (6.15).
+
+    Class 1 or 2 without a plastic modulus, e.g angles, whose tables give W_el only, take W_el,min (6.14): the elastic
+    verification of 6.2.1(4) is permitted for all classes, and is conservative.
+    """
     match _as_section_class(section_class):
         case SectionClass.CLASS_1 | SectionClass.CLASS_2:
+            if W_pl is None and W_el is not None:
+                return _require_positive(W_el, "W_el,min"), "6.14" # 6.2.1(4)
             return _require_positive(W_pl, "W_pl (Class 1 or 2)"), "6.13"
         case SectionClass.CLASS_3:
             return _require_positive(W_el, "W_el,min (Class 3)"), "6.14"
@@ -1402,6 +1437,10 @@ def check_cross_section(
         if N_Ed != 0.0:
             checks[axial_name] = (compute_utilisation(abs(N_Ed), N_Rd), "6.2.4" if compression else "6.2.3", "6.9" if compression else "6.5")
         if M_y_Ed != 0.0 or M_z_Ed != 0.0:
+            if family == "angle":
+                # 6.2.1(4): angle tables give W_el only; the elastic resistance is used, which is conservative
+                data = {**data, "W_pl_y": data.get("W_pl_y") or data.get("W_el_y", 0.0), "W_pl_z": data.get("W_pl_z") or data.get("W_el_z", 0.0)}
+                notes.append("6.2.1(4): W_pl is not tabulated for angles; W_el used for Class 1 and 2.")
             M_pl_y: float = _get(data, "W_pl_y") * fy / gamma_M0 if M_y_Ed != 0.0 else data.get("W_pl_y", 0.0) * fy / gamma_M0 # (6.13)
             M_pl_z: float = _get(data, "W_pl_z") * fy / gamma_M0 if M_z_Ed != 0.0 else data.get("W_pl_z", 0.0) * fy / gamma_M0 # (6.13)
             # 6.2.8 Bending and shear

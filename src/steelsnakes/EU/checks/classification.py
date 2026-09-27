@@ -183,24 +183,33 @@ def _normalize_stress_pattern(value: StressPattern | ElementStressDistribution |
     )
 
 # --- I-sections/H-sections ---
-def i_section_elements(d_mm: float, tw_mm: float, b_mm: float, tf_mm: float) -> list[ElementInput]:
-    """Build classification elements for doubly-symmetric hot-rolled I/H sections."""
+def i_section_elements(d_mm: float, tw_mm: float, b_mm: float, tf_mm: float, r_mm: float = 0.0) -> list[ElementInput]:
+    """Build classification elements for doubly-symmetric hot-rolled I/H sections.
+
+    Table 5.2 Sheet 1/3: web c = d, the depth between the root radii. Sheet 2/3, rolled sections: flange c = (b - tw - 2r)/2,
+    from the toe of the root radius to the tip, as the tabulated cf/tf. With r_mm = 0, c = (b - tw)/2, which is conservative.
+    """
     return [
         ElementInput(name="web", kind="internal", c_mm=d_mm, t_mm=tw_mm), # Table 5.2 Sheet 1/3
         ElementInput(
             name="flange",
             kind="outstand",
-            c_mm=(b_mm - tw_mm) / 2.0,
+            c_mm=(b_mm - tw_mm - 2.0 * r_mm) / 2.0,
             t_mm=tf_mm,
         ), # Table 5.2 Sheet 2/3
     ]
 
 # --- Channel sections ---
-def channel_section_elements(d_mm: float, tw_mm: float, b_mm: float, tf_mm: float) -> list[ElementInput]:
-    """Build classification elements for channel sections."""
+def channel_section_elements(d_mm: float, tw_mm: float, b_mm: float, tf_mm: float, r_mm: float = 0.0) -> list[ElementInput]:
+    """Build classification elements for channel sections.
+
+    Table 5.2 Sheet 1/3: web c = d. Sheet 2/3, rolled sections: flange c = b - tw - r, one root radius, as the tabulated
+    cf/tf of parallel flange channels. Tapered flange channels (UPN) keep r_mm = 0, i.e c = b - tw with the mean flange
+    thickness; Table 5.2 has no rule for tapered flanges, and the producer's tabulated UPN cf/tf follows no single one.
+    """
     return [
         ElementInput(name="web", kind="internal", c_mm=d_mm, t_mm=tw_mm),
-        ElementInput(name="flange", kind="outstand", c_mm=b_mm - tw_mm, t_mm=tf_mm), # Table 5.2 Sheet 2/3
+        ElementInput(name="flange", kind="outstand", c_mm=b_mm - tw_mm - r_mm, t_mm=tf_mm), # Table 5.2 Sheet 2/3
     ]
 
 # --- Angle sections ---
@@ -222,17 +231,21 @@ def angle_section_elements(leg_1_mm: float, leg_2_mm: float, t_mm: float) -> lis
 
 # --- RHS and SHS sections ---
 def rectangular_hollow_section_elements(cw_t: float, cf_t: float, t_mm: float) -> list[ElementInput]:
-    """Build classification elements for rectangular hollow sections from stored c/t ratios."""
+    """Build classification elements for rectangular hollow sections from stored c/t ratios.
+
+    web_wall: the two h walls, cw = h - 3t; flange_wall: the two b walls, cf = b - 3t (Table 5.2 Sheet 1/3, as tabulated).
+    Under bending, one pair of walls is in bending and the other in compression; see _hollow_axis_bending_element().
+    """
 
     return [
-        ElementInput(name="web_wall", kind="internal", c_mm=cw_t * t_mm, t_mm=t_mm),
+        ElementInput(name="web_wall", kind="internal", c_mm=cw_t * t_mm, t_mm=t_mm), # h walls
         ElementInput(
             name="flange_wall",
             kind="internal",
             c_mm=cf_t * t_mm,
             t_mm=t_mm,
-        ),
-    ] # FIXME: URGENT
+        ), # b walls
+    ]
 
 
 def square_hollow_section_elements(c_t: float, t_mm: float) -> list[ElementInput]:
@@ -695,23 +708,39 @@ def _get_section_elements(section: BaseSection) -> list[ElementInput]:
 def _hollow_axis_bending_element(
     stress_pattern: StressPattern | ElementStressDistribution | str,
 ) -> str | None:
-    """Map hollow-section axis aliases to the wall that uses bending limits.
+    """Map a bending stress pattern to the hollow-section walls that use the bending limits.
 
-    This stays private and hollow-only so the geometry builders remain purely
-    geometric and non-hollow section behavior is unchanged.
+    Table 5.2 Sheet 1/3: in bending about either axis, one pair of walls are webs, "part subject to bending", and the other
+    pair are flanges, "part subject to compression". Major-axis bending puts the h walls (web_wall) in bending and the b
+    walls in compression; minor-axis bending the reverse. An axis-free "bending" is taken as major-axis bending, as for
+    I-sections; bending limits on all four walls would be unconservative for the flanges.
+    This stays private and hollow-only so the geometry builders remain purely geometric.
     """
-    if isinstance(stress_pattern, ElementStressDistribution):
-        return None
-    if isinstance(stress_pattern, StressPattern):
+    if isinstance(stress_pattern, (StressPattern, ElementStressDistribution)):
         stress_pattern = stress_pattern.value
 
     normalized = stress_pattern.strip().lower().replace("_", "-").replace(" ", "-")
     normalized = "-".join(part for part in normalized.split("-") if part)
-    if normalized in {"major-axis-bending", "bending-major-axis"}:
+    if normalized in {"bending", "major-axis-bending", "bending-major-axis"}:
         return "web_wall"
     if normalized in {"minor-axis-bending", "bending-minor-axis"}:
         return "flange_wall"
     return None
+
+
+def _angle_leg_outstands(element: ElementInput) -> list[ElementInput]:
+    """Table 5.2 Sheet 3/3, angles in bending: "Refer also to outstand flanges (see sheet 2 of 3)".
+
+    Each leg is an outstand, taken over its full width with the whole leg in compression (alpha = 1, tip in compression),
+    i.e c/t against 9ε, 10ε and 14ε; this covers either sense of bending about either axis and is conservative, since the
+    leg in a stress gradient has alpha < 1 and a higher k_sigma.
+    """
+    legs: tuple[tuple[str, Optional[float]], ...] = (("leg_h", element.h_mm), ("leg_b", element.b_mm))
+    return [
+        ElementInput(name=name, kind="outstand", stress=ElementStressDistribution.BENDING, c_mm=leg_mm, t_mm=element.t_mm)
+        for name, leg_mm in legs
+        if leg_mm
+    ]
 
 
 def _apply_stress_pattern(
@@ -743,16 +772,13 @@ def _apply_stress_pattern(
                 for element in elements
             ]
 
-        return [
-            element.model_copy(
-                update={
-                    "stress": ElementStressDistribution.BENDING,
-                    "alpha": None,
-                    "psi": None,
-                }
-            )
-            for element in elements
-        ]
+        bent: list[ElementInput] = []
+        for element in elements:
+            if element.kind == "angle":
+                bent.extend(_angle_leg_outstands(element)) # Sheet 3/3 -> Sheet 2/3
+            else:
+                bent.append(element.model_copy(update={"stress": ElementStressDistribution.BENDING, "alpha": None, "psi": None}))
+        return bent
 
     if stress_pattern == ElementStressDistribution.COMBINED:
         raise NotImplementedError(
@@ -933,7 +959,8 @@ def classify_section_from_dict(
         tw = float(data.get("tw", 0.0) or 0.0)
         b = float(data.get("b", 0.0) or 0.0)
         tf = float(data.get("tf", 0.0) or 0.0)
-        elements = i_section_elements(d_mm=d, tw_mm=tw, b_mm=b, tf_mm=tf)
+        r = float(data.get("r", 0.0) or 0.0) # root radius; flange c = (b - tw - 2r)/2
+        elements = i_section_elements(d_mm=d, tw_mm=tw, b_mm=b, tf_mm=tf, r_mm=r)
         return classify_elements(
             _apply_stress_pattern(
                 elements,
@@ -949,7 +976,8 @@ def classify_section_from_dict(
         tw = float(data.get("tw", 0.0) or 0.0)
         b = float(data.get("b", 0.0) or 0.0)
         tf = float(data.get("tf", 0.0) or 0.0)
-        elements = channel_section_elements(d_mm=d, tw_mm=tw, b_mm=b, tf_mm=tf)
+        r = 0.0 if section_type == SectionType.UPN else float(data.get("r", 0.0) or 0.0) # flange c = b - tw - r; UPN tapered
+        elements = channel_section_elements(d_mm=d, tw_mm=tw, b_mm=b, tf_mm=tf, r_mm=r)
         return classify_elements(
             _apply_stress_pattern(
                 elements,
@@ -961,16 +989,11 @@ def classify_section_from_dict(
         )
 
     if section_type in ANGLE_SECTION_TYPES:
-        if pattern != ElementStressDistribution.COMPRESSION:
-            raise NotImplementedError(
-                f"Stress pattern '{pattern.value}' is not implemented for section type '{section_type.value}'. "
-                "Use custom_elements for explicit control."
-            )
         t = float(data.get("t", 0.0) or 0.0)
         h = float(data.get("h", 0.0) or 0.0)
         b = float(data.get("b", h) or 0.0)
         return classify_elements(
-            angle_section_elements(leg_1_mm=h, leg_2_mm=b, t_mm=t), fy_mpa
+            _apply_stress_pattern(angle_section_elements(leg_1_mm=h, leg_2_mm=b, t_mm=t), section_type, pattern), fy_mpa
         )
 
     if section_type in RECTANGULAR_HOLLOW_SECTION_TYPES:

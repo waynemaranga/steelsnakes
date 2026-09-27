@@ -329,14 +329,20 @@ def test_classify_section_from_dict_for_custom_column() -> None:
     assert {item.name for item in result.elements} == {"web", "flange"}
 
 
-def test_classify_section_from_dict_rejects_bending_for_angle_sections() -> None:
+def test_classify_section_from_dict_angle_bending_uses_outstand_legs() -> None:
+    # Table 5.2 Sheet 3/3 refers angles to the outstand flanges of Sheet 2/3; each full leg against 9ε, 10ε and 14ε
+    result = classify_section_from_dict(
+        section_type=SectionType.L_EQUAL,
+        data={"h": 100.0, "t": 10.0},
+        fy_mpa=355.0,
+        stress_pattern="bending-major-axis",
+    )
+
+    assert {item.name: item.kind for item in result.elements} == {"leg_h": "outstand", "leg_b": "outstand"}
+    assert result.elements[0].c_over_t == pytest.approx(10.0)
+    assert result.section_class == SectionClass.CLASS_3 # 10ε = 8.14 < 10 <= 14ε = 11.4
     with pytest.raises(NotImplementedError):
-        classify_section_from_dict(
-            section_type=SectionType.L_EQUAL,
-            data={"h": 100.0, "t": 10.0},
-            fy_mpa=355.0,
-            stress_pattern="bending-major-axis",
-        )
+        classify_section_from_dict(SectionType.L_EQUAL, {"h": 100.0, "t": 10.0}, fy_mpa=355.0, stress_pattern="combined")
 
 
 def test_classify_section_from_dict_rejects_unsupported_section_type() -> None:
@@ -442,6 +448,7 @@ def test_rhs_compression_s275() -> None:
 
 
 def test_rhs_bending() -> None:
+    # Table 5.2 Sheet 1/3: an axis-free "bending" is major-axis bending; the h walls bend, the b walls are in compression
     result = classify_section_from_dict(
         section_type=SectionType.HFRHS,
         data={"cw_t": 50.0, "cf_t": 18.0, "t": 10.0},
@@ -452,8 +459,24 @@ def test_rhs_bending() -> None:
     assert {item.name for item in result.elements} == {"web_wall", "flange_wall"}
     stress_cases = {item.name: item.stress for item in result.elements}
     assert stress_cases["web_wall"] == ElementStressDistribution.BENDING
-    assert stress_cases["flange_wall"] == ElementStressDistribution.BENDING
+    assert stress_cases["flange_wall"] == ElementStressDistribution.COMPRESSION
     assert result.section_class == SectionClass.CLASS_1
+
+
+def test_rhs_bending_keeps_the_flange_walls_in_compression() -> None:
+    # cf/t = 30 at S355 (ε = 0.814): Class 2 as a flange in compression, 33ε = 26.8 < 30 <= 38ε = 30.9, where the bending
+    # ... limits (72ε = 58.6) would have made it Class 1
+    result = classify_section_from_dict(
+        section_type=SectionType.HFRHS,
+        data={"cw_t": 40.0, "cf_t": 30.0, "t": 5.0},
+        fy_mpa=355.0,
+        stress_pattern="bending",
+    )
+
+    flange = next(item for item in result.elements if item.name == "flange_wall")
+    assert flange.stress == ElementStressDistribution.COMPRESSION
+    assert flange.section_class == SectionClass.CLASS_2
+    assert result.section_class == SectionClass.CLASS_2
 
 
 def test_rhs_major_axis_alias_rotates_bending_to_web_wall() -> None:
@@ -626,3 +649,31 @@ def test_clause_5_5_2_11_note_for_class_3_web_with_class_1_or_2_flanges() -> Non
         355.0,
     )
     assert flange_governs.notes == []
+
+
+# --- Table 5.2 Sheet 2/3: c of rolled outstands excludes the root radius ---
+def test_rolled_flange_outstand_is_measured_from_the_root_radius() -> None:
+    # IPE 300: c = (b - tw - 2r)/2 = (150 - 7.1 - 30)/2 = 56.45 mm; c/t = 5.28 as tabulated (cf/tf)
+    section = IPE("IPE-300")
+    flange = next(item for item in classify_section(section=section, fy_mpa=355.0).elements if item.name == "flange")
+
+    assert flange.c_mm == pytest.approx(56.45)
+    assert flange.c_over_t == pytest.approx(section.cf_tf, abs=0.01)
+
+
+def test_channel_flange_outstand_excludes_one_root_radius() -> None:
+    from steelsnakes.EU.sections.channels import PFC
+
+    # PFC 430x100x64: c = b - tw - r = 100 - 11 - 15 = 74 mm; c/t = 3.89 as tabulated
+    section = PFC("430x100x64")
+    flange = next(item for item in classify_section(section=section, fy_mpa=355.0).elements if item.name == "flange")
+    assert flange.c_mm == pytest.approx(74.0)
+    assert flange.c_over_t == pytest.approx(section.cf_tf, abs=0.01)
+
+
+def test_i_section_elements_without_root_radius_stay_conservative() -> None:
+    from steelsnakes.EU.checks.classification import channel_section_elements, i_section_elements
+
+    assert i_section_elements(248.6, 7.1, 150.0, 10.7)[1].c_mm == pytest.approx((150.0 - 7.1) / 2.0)
+    assert i_section_elements(248.6, 7.1, 150.0, 10.7, r_mm=15.0)[1].c_mm == pytest.approx(56.45)
+    assert channel_section_elements(362.0, 11.0, 100.0, 19.0, r_mm=15.0)[1].c_mm == pytest.approx(74.0)

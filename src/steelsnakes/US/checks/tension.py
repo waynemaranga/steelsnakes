@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import math
 from enum import Enum
+from fractions import Fraction
 from typing import Any, Optional, Sequence
 
 from pydantic import BaseModel, Field
@@ -31,7 +32,16 @@ PHI_BEARING = 0.75 # J7; bearing on the projected area of the pin (D5.1(c))
 
 HOLE_ALLOWANCE = 1 / 16 # in. [is 2 mm in US_Metric module]; B4.3b, added to nominal hole dimension
 PIN_BE_OFFSET = 0.63 # in. [is 16 mm in US_Metric module]; D5.1, be = 2t + 0.63
+PIN_CLEARANCES = (1 / 32, 1 / 16) # in. [is (1, 2) mm in US_Metric module]; D5.1(b), dh - d limits for Cr = 1.0 and Cr = 0.95
+EYEBAR_T_MIN = 0.5 # in. [is 13 mm in US_Metric module]; D6.2(e), thinner eyebars need external nuts
+EYEBAR_HOLE_CLEARANCE = 1 / 32 # in. [is 1 mm in US_Metric module]; D6.2(c), dh <= d + 1/32
+EYEBAR_FY_LIMIT = 70.0 # ksi [is 485 MPa in US_Metric module]; D6.2(d), dh <= 5t above this Fy
 TENSION_SLENDERNESS_LIMIT = 300 # User Note D1; preferably not exceeded, does not apply to rods
+
+
+def _dimension(value: float, unit: str) -> str:
+    # 1/32 in., 1/2 in., 13 mm; for messages and requirement labels
+    return f"{Fraction(value).limit_denominator(64)} {unit}"
 
 
 class TensionResult(BaseModel):
@@ -47,8 +57,8 @@ class TensionResult(BaseModel):
     limit_state: LimitState # governing limit state; TENSILE_YIELDING or TENSILE_RUPTURE
     Pn_yielding: float # D2-1, kips [N]
     Pn_rupture: float # D2-2, kips [N]
-    Fy: float # Specified minimum yield strength of the material, ksi [MPa] # TODO: use this notation to prepare for US_Metric module
-    Fu: float # Specified minimum tensile strength of the material, ksi MPa]
+    Fy: float # Specified minimum yield strength of the material, ksi [MPa]
+    Fu: float # Specified minimum tensile strength of the material, ksi [MPa]
     Ag: float # Gross area, in^2 [mm^2]
     Ae: float # Effective net area, in^2 [mm^2]
     # D3. Effective Net Area; per B4.3
@@ -441,6 +451,8 @@ def check_pin_connected_member(
     w: Optional[float] = None,
     Ag: Optional[float] = None,
     be_actual: Optional[float] = None,
+    be_offset: float = PIN_BE_OFFSET,
+    clearances: tuple[float, float] = PIN_CLEARANCES,
 ) -> PinConnectedMemberResult:
     """AISC 360-22 Section D5: Pin-connected members.
 
@@ -457,6 +469,8 @@ def check_pin_connected_member(
         w: Width of plate at the pin hole (in); hole assumed midway between the edges (D5.2(a))
         Ag: Gross area of the member (in²); defaults to w*t
         be_actual: Actual distance from edge of hole to edge of part normal to the force (in); defaults to (w - dh)/2
+        be_offset: 0.63 in. [16 mm] in be = 2t + 0.63
+        clearances: dh - d limits (in) for Cr = 1.0 and Cr = 0.95; (1/32, 1/16) in. [(1, 2) mm]
     """
     t = _require_positive(t, "t")
     d = _require_positive(d, "d")
@@ -465,20 +479,21 @@ def check_pin_connected_member(
     if dh < d:
         raise ValueError("Hole diameter dh cannot be smaller than the pin diameter d.")
 
-    be = 2.0 * t + PIN_BE_OFFSET
+    be = 2.0 * t + be_offset # D5.1
     if be_actual is None and w is not None:
         be_actual = (w - dh) / 2.0
     if be_actual is not None:
         be = min(be, _require_positive(be_actual, "be_actual"))
 
     # Cr = 1.0 when dh - d <= 1/32 in. [1 mm]; 0.95 when 1/32 in. < dh - d <= 1/16 in. [1 mm < dh - d <= 2 mm]
-    clearance = dh - d
-    if clearance <= 1 / 32 + 1e-9:
+    clearance: float = dh - d
+    tight, loose = clearances
+    if clearance <= tight + 1e-9:
         Cr = 1.0
-    elif clearance <= 1 / 16 + 1e-9:
+    elif clearance <= loose + 1e-9:
         Cr = 0.95
     else:
-        raise ValueError("Cr is only defined for dh - d <= 1/16 in. per D5.1(b); see also D5.2(b).")
+        raise ValueError(f"Cr is only defined for dh - d <= {Fraction(loose).limit_denominator(64)} per D5.1(b); see also D5.2(b).")
 
     Asf = 2.0 * t * (a + d / 2.0)
     Pn_tensile_rupture = Fu * (2.0 * t * be) # D5-1
@@ -535,6 +550,10 @@ def check_eyebar(
     w: float,
     d: Optional[float] = None,
     dh: Optional[float] = None,
+    t_min: float = EYEBAR_T_MIN,
+    hole_clearance: float = EYEBAR_HOLE_CLEARANCE,
+    Fy_limit: float = EYEBAR_FY_LIMIT,
+    units: tuple[str, str] = ("in.", "ksi"),
 ) -> TensionResult:
     """AISC 360-22 Section D6: Eyebars; tensile strength per D2 with Ag taken as the gross area of the eyebar body.
 
@@ -547,18 +566,23 @@ def check_eyebar(
         w: Width of eyebar body (in)
         d: Pin diameter (in); optional, for D6.2(c)
         dh: Pin-hole diameter (in); optional, for D6.2(c) and D6.2(d)
+        t_min: 1/2 in. [13 mm]; D6.2(e)
+        hole_clearance: 1/32 in. [1 mm]; D6.2(c)
+        Fy_limit: 70 ksi [485 MPa]; D6.2(d)
+        units: (length, stress) units for the requirement labels; ("mm", "MPa") in the US_Metric module
     """
     t = _require_positive(t, "t")
-    w_calc = min(_require_positive(w, "w"), 8.0 * t)
+    w_calc = min(_require_positive(w, "w"), 8.0 * t) # D6.1, body width not more than 8t for calculation
     result = tension(Fy=Fy, Fu=Fu, Ag=w_calc * t)
 
-    requirements: dict[str, Optional[bool]] = {"t >= 1/2 in. (else external nuts required), D6.2(e)": t >= 0.5}
+    length_unit, stress_unit = units
+    requirements: dict[str, Optional[bool]] = {f"t >= {_dimension(t_min, length_unit)} (else external nuts required), D6.2(e)": t >= t_min}
     if d is not None:
         requirements["d >= 7/8 w, D6.2(c)"] = d >= 7.0 / 8.0 * w
     if d is not None and dh is not None:
-        requirements["dh <= d + 1/32 in., D6.2(c)"] = dh <= d + 1 / 32 + 1e-9
-    if dh is not None and Fy > 70.0:
-        requirements["dh <= 5t for Fy > 70 ksi, D6.2(d)"] = dh <= 5.0 * t
+        requirements[f"dh <= d + {_dimension(hole_clearance, length_unit)}, D6.2(c)"] = dh <= d + hole_clearance + 1e-9
+    if dh is not None and Fy > Fy_limit:
+        requirements[f"dh <= 5t for Fy > {Fy_limit:g} {stress_unit}, D6.2(d)"] = dh <= 5.0 * t
 
     return result.model_copy(
         update={

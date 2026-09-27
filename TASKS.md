@@ -114,7 +114,7 @@
  - [ ]`src/steelsnakes/US/checks/classification.py:11` document reproduction of tables B4.1a/b.
  - [ ]`src/steelsnakes/US/checks/classification.py:12` just expose case numbers/checks in docs.
  - [ ]`src/steelsnakes/US/checks/classification.py:13` tie section libs to equation references.
- - [ ]`src/steelsnakes/US/checks/classification.py:14` clarify stiffened vs unstiffened wording for UK/EU readers.
+ - [x]`src/steelsnakes/US/checks/classification.py:14` clarify stiffened vs unstiffened wording for UK/EU readers. _done: NOTE in the module header maps unstiffened to the EC3 outstand and stiffened to the internal part; case lines carry the Table B4.1 element descriptions_
  - [ ]`src/steelsnakes/US/checks/classification.py:46` enrich metadata with case detail.
  - [ ]`src/steelsnakes/US/checks/classification.py:48` same for slender-element branch.
  - [ ]`src/steelsnakes/US/checks/classification.py:58` find better approximation for kc limits.
@@ -132,8 +132,8 @@
  - [ ]`src/steelsnakes/US/checks/classification.py:133` slender metadata.
  - [ ]`src/steelsnakes/US/checks/classification.py:142` metadata.
  - [ ]`src/steelsnakes/US/checks/classification.py:144` slender metadata.
- - [ ]`src/steelsnakes/US/checks/classification.py:153` finish Case 16 notes (TODO).
- - [ ]`src/steelsnakes/US/checks/classification.py:159` implement Case 16 support (TODO).
+ - [x]`src/steelsnakes/US/checks/classification.py:153` finish Case 16 notes (TODO). _done: case 16 note gives lambda_p = (hc/hp)sqrt(E/Fy)/(0.54Mp/My - 0.09)^2 <= lambda_r with footnote [c]; footnote [b] FL note completed for case 11_
+ - [x]`src/steelsnakes/US/checks/classification.py:159` implement Case 16 support (TODO). _done: `classify_flexure("case16", hc=, hp=, Mp=, My=)` or `ElementInput.metadata={"hc_hp", "Mp_My"}`; also angles in flexure (case 12), HSS and round HSS minor-axis flexure_
  - [ ]`src/steelsnakes/US/checks/classification.py:231` reconcile HSS designation vs EDI naming (TODO).
  - [ ]`src/steelsnakes/US/checks/classification.py:232` set EDI_Nomenclature for round HSS (FIXME).
  - [ ]`src/steelsnakes/US/checks/classification.py:233` investigate designations for round sections (FIXME).
@@ -190,6 +190,8 @@
  - [ ]`src/steelsnakes/US/checks/lrfd.py:633` clarify 20% Tr provision (TODO).
 
 - **US_Metric**
+ - [x] AISC 360-22 checks in SI units (0.0.1a7: "added US AISC checks; not added to US_Metric"). _done: `steelsnakes.US_Metric.checks` (classification.py, members.py) reuses `steelsnakes.US.checks` with the metric tables converted to mm (I 10⁶ mm⁴, Z/S/C 10³ mm³, J 10³ mm⁴, Cw 10⁹ mm⁶) and the SI constants of B4.3b, D5, D6, App. 8.2 and Table C-F10.1; `tests/test_US_Metric_checks.py`_
+ - [x] unit comments in `US_Metric/sections/*.py` said in, in², lb/ft. _done: now mm, mm², kg/m, 10⁶ mm⁴, 10³ mm³, 10³ mm⁴ (J), 10⁹ mm⁶_
  - [x]`src/steelsnakes/US_Metric/factory.py:42` factory test must create real US Metric sections (FIXME). _done: US_METRIC region wired into the database and factory; `tests/test_US_Metric_module.py`_
  - [x]`src/steelsnakes/US_Metric/sections/angles.py:148` reconcile alternative LLBB/SLBB suggestions (FIXME). _done: suggestions stay within LLBB; the SLBB match shows as a Note_
  - [ ]`src/steelsnakes/US_Metric/sections/channels.py:10` rename `section_type` field in database (TODO).
@@ -197,6 +199,8 @@
  - [ ]`src/steelsnakes/US_Metric/sections/hollow.py:9` rename `section_type` field (TODO).
 
 - **EU**
+ - [x]`src/steelsnakes/EU/checks/classification.py:235` URGENT FIXME on `rectangular_hollow_section_elements`. _done: an axis-free BENDING pattern put all four RHS/SHS walls on the bending limits (72ε/83ε/124ε), unconservative for the flanges; it is now major-axis bending (h walls in bending, b walls in compression) per Table 5.2 Sheet 1_
+ - [x] flange outstand c of rolled I/H and channels ignored the root radius. _done: c = (b - tw - 2r)/2 and b - tw - r per Table 5.2 Sheet 2, matching the tabulated cf/tf of all 763 EU/UK rolled sections; UPN (tapered) keeps b - tw_
  - [ ]`src/steelsnakes/EU/MEMBERS.md:5` add analysis section for Chapter 5.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:6` document calculation processes once for all.
  - [ ]`src/steelsnakes/EU/MEMBERS.md:7` add textbook/published examples.

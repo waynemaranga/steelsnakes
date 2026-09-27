@@ -61,7 +61,7 @@ class ParallelFlangeChannel(BaseSection):
         """Return UK channel geometry as generic EC3 classification elements."""
         from steelsnakes.EU.checks.classification import channel_section_elements
 
-        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf)
+        return channel_section_elements(d_mm=self.d, tw_mm=self.tw, b_mm=self.b, tf_mm=self.tf, r_mm=self.r) # Table 5.2: c = b - tw - r
 
     @classmethod
     def get_section_type(cls) -> SectionType:
