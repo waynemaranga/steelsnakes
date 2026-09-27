@@ -25,7 +25,7 @@ A python library for structural steel.
 Currently supports 🇬🇧 UK, 🇪🇺 EU, 🇺🇸 US.
 Active development: 🇮🇳 IN.
 Legacy code: 🇬🇧 BS (BS 5950-1:2000 classification and member checks on UK sections).
-Sections only, no checks yet: 🇺🇸 US_Metric (AISC shapes in SI units).
+Checks available: 🇺🇸 US_Metric (AISC shapes and checks in SI units).
 Scaffolded/early modules: 🇦🇺 AU, 🇳🇿 NZ, 🇯🇵 JP.
 Future expansion candidates: 🇲🇽 MX, 🇿🇦 SA, 🇨🇳 CN, 🇨🇦 CA, 🇰🇷 KR.
 
