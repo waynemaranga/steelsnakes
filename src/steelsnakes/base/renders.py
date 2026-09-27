@@ -19,18 +19,13 @@ Template loop:
       {% endfor %}
     {% endfor %}
 
-//TODO: Units: forces kN, moments kN.m, lengths mm, stresses N/mm2, moduli cm3, I cm4.
+TODO: Units: forces kN, moments kN.m, lengths mm, stresses N/mm2, moduli cm3, I cm4.
 """
 
-import math
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from steelsnakes.base.sections import BaseSection
-
-# --- Constants ---
-E_STEEL = 205_000.0   # Young's Modulus N/mm2
-G_STEEL = 80_000.0    # Shear Modulus N/mm2
+# NOTE: material constants belong to each code's checks, e.g E = 205 000 N/mm² in BS 5950 3.1.3; see base/materials.py
 
 # --- Rendering primitives ---
 @dataclass
@@ -69,4 +64,5 @@ def _status(passed: bool) -> tuple[str, str]:
 
 
 if __name__ == "__main__":
-    assert 1
+    print(Row(expr=_m(_frac("M_{Ed}", "M_{c,Rd}")), value="0.85", clause="6.2.5", status="pass", badge="PASS"))
+    print("🐬")

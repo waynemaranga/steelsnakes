@@ -13,7 +13,7 @@ from typing import Any, Optional
 logger: logging.Logger = logging.getLogger(__name__)
 
 class ConnectorType(Enum):
-    """"""
+    """Global enumeration of all connector types (bolts and welds) in steelsnakes."""
     # --- 🇬🇧 UK ---
     WELDS = "WELDS"                 # Weld details
     BOLT_PRE_88 = "BOLT_PRE_88"     # Pre-loaded bolts (8.8 grade)

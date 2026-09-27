@@ -47,7 +47,7 @@
  - [x]`src/steelsnakes/base/factory.py:331` fix SectionType vs str handling in factory registry (FIXME). _done: `create_section()` takes a `SectionType` or its value e.g "UB"; unknown values raise `SectionTypeNotRegisteredError`_
  - [x]`src/steelsnakes/base/database.py:65` double-check TODO comment (needs clarity). _done: lists match each region's JSON files; EU listed Sigma and Zed twice_
  - [x]`src/steelsnakes/base/database.py:192` properly honour `sqlite_db_path` when injected (FIXME). _done: `SectionDatabase(..., use_sqlite=True, sqlite_db_path=...)`_
- - [ ]`src/steelsnakes/base/database.py:240` redocument “Find section” logic (TODO).
+ - [x]`src/steelsnakes/base/database.py:240` redocument “Find section” logic (TODO). _done: `find_section()` documents the exact match, then the case-insensitive, separator-free and unambiguous `difflib` matches_
  - [ ]`src/steelsnakes/base/exceptions.py:2` add custom exceptions for database/sections.
  - [ ]`src/steelsnakes/base/connectors.py:21` preload bolt data or support DataPrep for non-preloaded bolts.
  - [ ]`src/steelsnakes/base/connectors.py:44` collect universal connector properties (TODO).

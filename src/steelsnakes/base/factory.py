@@ -188,17 +188,6 @@ class SectionFactory:
                 SectionType.L2L_LLBB: LongLegBackToBackUnequalAngle,
                 SectionType.L2L_SLBB: ShortLegBackToBackUnequalAngle,
             })
-            # Channels
-            from steelsnakes.US.sections.channels import (
-                StandardChannel,
-                MiscellaneousChannel,
-                # DoubleStandardChannel,
-                # DoubleMiscellaneousChannel
-            )
-            self._section_classes.update({
-                SectionType.C: StandardChannel,
-                SectionType.MC: MiscellaneousChannel,
-            })
             # Hollow sections
             from steelsnakes.US.sections.hollow import (
                 RectangularHSS,
@@ -435,23 +424,29 @@ class SectionFactory:
         return section_class(**clean_data)
 
 
-# Convenience functions for creating region-specific factories
+# Convenience functions for creating region-specific factories; each region's own factory module is the source
 def get_UK_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for UK sections."""
-    database = SectionDatabase(data_directory, region="UK", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for UK sections; see `steelsnakes.UK.factory.get_UK_factory()`."""
+    from steelsnakes.UK.factory import get_UK_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 def get_EU_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for EU sections."""
-    database = SectionDatabase(data_directory, region="EU", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for EU sections; see `steelsnakes.EU.factory.get_EU_factory()`."""
+    from steelsnakes.EU.factory import get_EU_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 def get_US_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
-    """Create a factory configured for US sections."""
-    database = SectionDatabase(data_directory, region="US", use_sqlite=use_sqlite)
-    return SectionFactory(database)
+    """Create a factory configured for US sections; see `steelsnakes.US.factory.get_US_factory()`."""
+    from steelsnakes.US.factory import get_US_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
+
+
+def get_US_Metric_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
+    """Create a factory configured for US Metric sections; see `steelsnakes.US_Metric.factory.get_US_Metric_factory()`."""
+    from steelsnakes.US_Metric.factory import get_US_Metric_factory as get_factory
+    return get_factory(data_directory=data_directory, use_sqlite=use_sqlite)
 
 
 # def get_AU_factory(data_directory: Optional[Any] = None, use_sqlite: bool = False) -> SectionFactory:
