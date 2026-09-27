@@ -11,7 +11,7 @@
     <!-- pypi version -->
      <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a>
     <!-- documentation -->
-     <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-material-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-sphinx-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
     <!-- build status -->
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
     <!-- pypi stats -->
@@ -166,3 +166,8 @@ This project is licensed under the GNU General Public License v2.0. See the [LIC
 - SAISC (South African Institute of Steel Construction)
 
 ---
+
+## Python 3.13 migration
+- [ ] Validate Python 3.13 support.
+- [ ] Update CI and documentation.
+- [ ] Verify dependencies and test suite.

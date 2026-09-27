@@ -4,7 +4,7 @@
 
 <div align="center">
   <p>
-    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-mkdocs-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
+    <a href="https://python.org"><img src="https://img.shields.io/badge/python-3.11+-blue.svg" alt="Python Version" style="margin: 2px;"/></a> <a href="./LICENSE.md"><img src="https://img.shields.io/badge/license-GPLv2-blue.svg" alt="License" style="margin: 2px;"/></a> <a href="https://pypi.org/project/steelsnakes/"><img src="https://img.shields.io/pypi/v/steelsnakes.svg" alt="PyPI Version" style="margin: 2px;"/></a> <a href="https://steelsnakes.readthedocs.io/"><img src="https://img.shields.io/badge/docs-sphinx-blue.svg" alt="Documentation" style="margin: 2px;"/></a>
     <!-- <a href="#"><img src="https://img.shields.io/github/actions/workflow/status/steelsnakes/steelsnakes/ci.yml?branch=main" alt="Build Status" style="margin: 2px;</a> -->
   </p>
 </div>
@@ -29,7 +29,7 @@ $steelsnakes$ is currently under active development. Please report any issues or
 - Region coverage in this release: `UK`, `EU`, and `US` are the most mature, `IN` is under active proof-of-concept, and the pending list (`AU`, `NZ`, `JP`, `MX`, `SA`, `CN`, `CA`, `KR`) is closely tracked in the TBD section of the source documentation.
 - Built-in checks in `src/steelsnakes/UK/checks/uls.py`, `stability.py`, and `src/steelsnakes/US/checks/` already capture clauses for limit state verifications; `US/checks/lrfd.py` is the legacy prototype, superseded by the chapter modules `tension`, `compression`, `flexure`, `shear`, `combined` and `stability`.
 - `EU` classification now supports lean stress-aware Eurocode checks for compression, major-axis bending presets, and explicit combined cases through Pydantic-friendly inputs; see `01-guides/05-eu-classification.md`.
-- The MkDocs API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
+- The API reference now starts with dedicated pages for the shared base modules (`sections`, `database`, `factory`, `checks`) before branching into each region; see `02-api-reference/index.md` and the new `02-api-reference/02-database.md` deep dive for details.
 
 <!-- prettier-ignore-start -->
 !!! warning "Note"
@@ -45,7 +45,7 @@ $steelsnakes$ is divided into `regions`, and is currently developing support for
 5. 🇦🇺 `AU` Australia - AS 4100 & AS/NZS 5131
 6. 🇳🇿 `NZ` New Zealand - NZS 3404 & AS/NZS 5131
 
-See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information. <!-- TODO: check deployment and see if mkdocs-material supports simple relative links -->
+See the [Codes and Standards](01-guides/03-codesandstds.md) guide for more information.
 
 ## Quick Start
 
@@ -128,3 +128,38 @@ See [References](./99-references.md)
 ```
 
 ``` -->
+
+```{toctree}
+:maxdepth: 2
+:caption: Guides
+
+01-guides/index
+01-guides/01-first-steps
+01-guides/02-engineering-workflow
+01-guides/03-codesandstds
+01-guides/04-classification-architecture-decision
+01-guides/05-eu-classification
+```
+
+```{toctree}
+:maxdepth: 2
+:caption: API Reference
+
+02-api-reference/index
+02-api-reference/02-database
+02-api-reference/03-us-classification
+02-api-reference/04-uk-classification
+02-api-reference/05-us-member-checks
+02-api-reference/06-bs-classification
+02-api-reference/07-eu-member-checks
+02-api-reference/08-eu-serviceability-checks
+02-api-reference/09-bs-member-checks
+02-api-reference/10-section-analysis
+```
+
+```{toctree}
+:maxdepth: 1
+:caption: References
+
+99-references
+```

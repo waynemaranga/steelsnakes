@@ -11,17 +11,31 @@ requires-python = ">=3.11"
 dependencies = [
     "coverage==7.10.0",
     "matplotlib>=3.10.8",
-    "mkdocs>=1.6.1",
-    "mkdocs-material>=9.6.0",
-    "mkdocstrings[python]>=0.30.0",
     "numpy>=2.3.2",
     "plotly>=6.0.0",
     "pydantic>=2.11.7",
-    "pymdown-extensions>=10.16.1",
     "pytest>=8.4.1",
     "pytest-cov>=6.2.1",
     "sectionproperties>=3.10.2",
+    "shibuya>=2026.7.12",
+    "sphinx>=9.0.4",
+    "myst-parser>=4.0.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-design>=0.6.1",
+    "sphinxcontrib-mermaid>=1.0.0",
     "sqlalchemy>=2.0.43",
+    "sphinx-tabs>=3.5.0",
+    "sphinx-togglebutton>=0.4.5",
+    "jupyter-sphinx>=0.5.3",
+    "nbsphinx>=0.9.8",
+    "numpydoc>=1.11.0",
+    "sphinx-docsearch>=0.3.1",
+    "sphinx-click>=6.2.0",
+    "click-extra>=9.3.4",
+    "sphinx-contributors>=0.3.0",
+    "sphinx-autoapi>=3.8.1",
+    "sphinx-iconify>=0.3.0",
+    "sphinx-datatables>=1.0.0",
 ]
 
 # [project.optional-dependencies]
@@ -39,7 +53,7 @@ dependencies = [
 #     # "steelsnakes[extras]", # ... only if extras has been implemented, otherwise no.
 #     # ...plus...
 #     # - testing: pytest, pytest-cov, coverage
-#     # - documentation: mkdocs, mkdocs-material, mkdocstrings, pymdown-extensions
+#     # - documentation: sphinx, shibuya, myst-parser, sphinx-design, sphinxcontrib-mermaid
 # ]
 
 
@@ -69,4 +83,9 @@ ignore = [
     "E741", # Ambiguous variable name 'l'
     # "E742",  # Ambiguous class name 'l'
     # "E743"   # Ambiguous function name 'l'
+]
+
+[dependency-groups]
+dev = [
+    "sphinx-autobuild>=2025.8.25",
 ]
