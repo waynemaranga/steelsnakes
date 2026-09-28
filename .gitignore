@@ -1,3 +1,5 @@
+go-port/
+
 *.db-shm
 *.db-wal
 *.session.sql

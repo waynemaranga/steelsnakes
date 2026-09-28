@@ -1,0 +1,8 @@
+- [ ] Test suites should reproduce worked examples from the design manuals, 
+  - [ ] AISC Design Examples (D.1 to D.7) for US sections,
+  - [ ] Worked Examples to Eurocode 3 and SCI publications
+  - [ ] SCI Publications for UK sections and BS-5950
+- [ ] Update EC3 from BS EN 1993-1-1:2005 to BS EN 1993-1-1:2022 and update the design examples accordingly.
+- [ ] Make a contribution style for onboarding new contributors, 
+- [ ] Check LTB in EC3 for specific analysis not generalised/simplified.
+- [ ] Switch from JSON to Parquet for data storage to improve performance and reduce file size, especially for large datasets.

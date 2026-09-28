@@ -6,7 +6,7 @@ readme = { file = "README.md", content-type = "text/markdown" }
 license = "GPL-2.0 " # https://packaging.python.org/en/latest/glossary/#term-SPDX-Expression
 license-files = ["LICENSE.md"]
 authors = [{ name = "Wayne Maranga", email = "waynemaranga@gmail.com" }]
-requires-python = ">=3.11"
+requires-python = ">=3.14"
 
 dependencies = [
     "coverage==7.10.0",
